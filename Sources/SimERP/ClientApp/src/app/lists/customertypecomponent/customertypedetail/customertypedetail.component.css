@@ -1,0 +1,25 @@
+.row input {
+  box-shadow: none;
+  border-top: none;
+  border-left: none;
+  border-right: none
+}
+
+.row textarea {
+  box-shadow: none;
+  border-top: none;
+  border-left: none;
+  border-right: none
+}
+
+.is-invalid {
+  border-color: brown;
+}
+
+.form-control[disabled],
+fieldset[disabled] {
+  color: #9C9A9A;
+  background-color: transparent;
+  border-bottom-color: #F1F1F1;
+  /* cursor: not-allowed; */
+}

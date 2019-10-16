@@ -1,0 +1,25 @@
+.table-responsive {
+  padding: 0px;
+}
+
+.textvalidate {
+  border-color: red;
+}
+
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.wrapper {
+  cursor: not-allowed;
+}
+
+.DisplayField {
+  display:none;
+}
+
+.form-control[disabled], fieldset[disabled] {
+  color: #9C9A9A;
+  background-color: transparent;
+  border-bottom-color: #F1F1F1;
+}

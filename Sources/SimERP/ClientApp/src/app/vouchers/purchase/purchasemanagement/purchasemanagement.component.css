@@ -1,0 +1,49 @@
+.form_content {
+    width: 100%;
+    padding: 20px;
+    font-size: 12px;
+    margin: 0px;
+}
+
+.row label {
+    margin-top: auto;
+    margin-bottom: auto;
+    color: #555;
+    font-weight: bold;
+}
+
+.row input {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.table-responsive {
+    min-height: .01%;
+    overflow-x: auto;
+    line-height: 10px;
+    background-color: transparent;
+    border-spacing: 0;
+    font-size: 12px;
+    font-family: 'Lato', sans-serif;
+    color: #555;
+    text-align: center;
+}
+
+.table-responsive th {
+    color: #337ab7;
+    font-weight: bold;
+    text-align: center;
+}
+
+.table-bordered {
+    border-color: #e3e3e3;
+    border: 1px solid #ddd;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:active {
+    color: black;
+}

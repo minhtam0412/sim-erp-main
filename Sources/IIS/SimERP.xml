@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SimERP</name>
+    </assembly>
+    <members>
+        <member name="M:SimERP.Controllers.ListController.GetCustomerTypeData(SimERP.Business.Models.MasterData.ListDTO.ReqListSearch)">
+            <summary>
+            Lấy danh sách loại khách hàng
+            </summary>
+            <param name="objReqListSearch">Params tìm kiếm theo chuẩn hệ thống</param>
+            <returns>Danh sách loại khách hàng kiểu json</returns>
+        </member>
+        <member name="M:SimERP.Controllers.UserController.GenerateTokenOption(SimERP.Business.Models.System.UserResDTO)">
+            <summary>
+            Generate Token Options
+            </summary>
+            <param name="userRes">Object Usser Info</param>
+            <returns></returns>
+        </member>
+        <member name="M:SimERP.Controllers.UserController.GenerateTokenRefresh(System.String)">
+            <summary>
+            Generate the TokenRefresh Object
+            </summary>
+            <param name="userName">User Name request refresh token</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

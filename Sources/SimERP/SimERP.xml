@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SimERP</name>
+    </assembly>
+    <members>
+        <member name="M:SimERP.Controllers.ListController.GetCustomerTypeData(SimERP.Business.Models.MasterData.ListDTO.ReqListSearch)">
+            <summary>
+            Lấy danh sách loại khách hàng
+            </summary>
+            <param name="objReqListSearch">Params tìm kiếm theo chuẩn hệ thống</param>
+            <returns>Danh sách loại khách hàng kiểu json</returns>
+        </member>
+    </members>
+</doc>

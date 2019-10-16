@@ -1,0 +1,65 @@
+<form #form="ngForm">
+  <div class="modal-content">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h4 class="modal-title">{{isAddState ? 'Thêm mới' : 'Chỉnh sửa'}}</h4>
+      <button type="button" class="close" data-dismiss="modal" (click)="closeDialog()">&times;</button>
+    </div>
+
+    <!-- Modal body -->
+    <div class="modal-body">
+      <div class="form_content">
+        <div class="row">
+          <div class="col-sm-4 text-right"><label control-label>Mã loại khách hàng</label> <label
+            class="control-label-require">*</label></div>
+          <div class="col-sm-8">
+            <input type="text" #CustomerTypeCode='ngModel' maxlength="50" [disabled]="!isAddState"
+                   class="form-control form-control-sm" [(ngModel)]="model.CustomerTypeCode"
+                   name="CustomerTypeCode" required
+                   [ngClass]="{ 'is-invalid': CustomerTypeCode.touched  && CustomerTypeCode.invalid  }">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4 text-right"><label control-label>Tên loại khách hàng</label> <label
+            class="control-label-require">*</label></div>
+          <div class="col-sm-8">
+            <input type="text" class="form-control form-control-sm" #CustomerTypeId='ngModel'
+                   [(ngModel)]="model.CustomerTypeName" name="CustomerTypeName" required maxlength="250"
+                   [ngClass]="{ 'is-invalid': CustomerTypeId.touched  && CustomerTypeId.invalid  }">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4 text-right"><label control-label>Ghi chú</label></div>
+          <div class="col-sm-8">
+            <textarea type="text" class="form-control form-control-sm" [(ngModel)]="model.Notes"
+                      name="Notes"
+                      [ngClass]="{'is-invalid' : model.Notes!= undefined && model.Notes.length > 250}"></textarea>
+          </div>
+        </div>
+        <div class="row" [ngStyle]="{'margin-top':'10px', 'margin-left':'10px'}">
+          <label class="col-md-4 control-label"></label>
+          <div class="custom-control custom-checkbox mb-3">
+            <input type="checkbox" class="custom-control-input" id="IsActive" [(ngModel)]="model.IsActive"
+                   name="IsActive">
+            <label class="custom-control-label" for="IsActive">Sử dụng</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal footer -->
+    <div class="modal-footer">
+      <button type="button" name="btnSave"
+              [disabled]="form.invalid || (model.Notes != undefined && model.Notes.length > 250)"
+              class="btn btn-info btn-sm"
+              (click)="saveData(false)">
+        <i class="far fa-save"></i> Lưu
+      </button>&nbsp;
+      <button type="button" name="btnSaveContinue" [disabled]="form.invalid || (model.Notes != undefined && model.Notes.length > 250)" class="btn btn-info btn-sm"
+              (click)="saveData(true)">
+        <i class="far fa-save"></i> Lưu & Thêm mới
+      </button>&nbsp;
+      <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal" (click)="closeDialog()">Đóng
+      </button>
+    </div>
+  </div>
+</form>

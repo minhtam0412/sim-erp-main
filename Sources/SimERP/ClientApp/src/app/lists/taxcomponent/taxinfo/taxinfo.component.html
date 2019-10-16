@@ -1,0 +1,61 @@
+<div class="form_content">
+  <div class="modal-header" style="font-size: 12px">
+    <h4 class="modal-title custom-modal-title">{{isAddState ? 'Thêm mới' : 'Chỉnh sửa'}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="closeDialog()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="taxForm">
+      <div class="row">
+        <label class="col-md-3 text-right">Mã thuế <span class="control-label-require">*</span></label>
+        <input class="col-md-9 form-control" autofocus formControlName='TaxCode'
+               [ngClass]="{'is-invalid': (taxForm.controls.TaxCode?.hasError('required')
+               || taxForm.controls.TaxCode?.hasError('maxlength'))
+               && taxForm.controls.TaxCode?.touched}"
+               style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+      </div>
+      <div class="row">
+        <label class="col-md-3 control-label text-right">Tên thuế <span class="control-label-require">*</span></label>
+        <input class="form-control form-control-sm col-md-9" formControlName='TaxName'
+               [ngClass]="{'is-invalid': (taxForm.controls.TaxName?.hasError('required')
+               || taxForm.controls.TaxName.hasError('maxlength')) && taxForm.controls.TaxName?.touched}"
+               style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+      </div>
+      <div class="row">
+        <label class="col-md-3 control-label text-right">Thuế suất <span class="control-label-require">*</span></label>
+        <input class="form-control col-md-9" formControlName='TaxPercent' type="number"
+               [ngClass]="{'is-invalid': (taxForm.controls.TaxPercent?.hasError('required')
+               || taxForm.controls.TaxPercent?.hasError('max')
+               || taxForm.controls.TaxPercent?.hasError('min'))
+               && taxForm.controls.TaxPercent?.touched}"
+               style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+      </div>
+      <div class="row">
+        <label class="col-md-3 control-label text-right">Ghi chú</label>
+        <textarea class="form-control col-md-9" formControlName='Notes' rows="5"
+                  style="box-shadow: none; border-top: none; border-left: none; border-right: none"
+                  [ngClass]="{'is-invalid' : taxForm.controls.Notes.hasError('maxlength') && taxForm.controls.Notes.touched}"></textarea>
+      </div>
+      <div class="row" [ngStyle]="{'margin-top': '10px'}">
+        <label class="col-md-3 control-label"></label>
+        <div class="col-md-9">
+          <mdb-checkbox style="padding-left: 0px;" formControlName='IsActive'>Sử dụng</mdb-checkbox>
+        </div>
+      </div>
+      <div style="display: none">
+        <input formControlName='TaxId'>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer custom-modal-footer">
+    <button type="button" class="btn btn-primary" [disabled]="taxForm.invalid" (click)="saveData(false)"><i
+      class="far fa-save"></i> Lưu
+    </button>
+    <button type="button" class="btn btn-primary" [disabled]="taxForm.invalid" (click)="saveData(true)"><i
+      class="far fa-save"></i> Lưu & Thêm mới
+    </button>
+    <button type="button" class="btn btn-outline-dark" (click)="closeDialog()"><i class="far fa-window-close"></i> Đóng
+    </button>
+  </div>
+</div>

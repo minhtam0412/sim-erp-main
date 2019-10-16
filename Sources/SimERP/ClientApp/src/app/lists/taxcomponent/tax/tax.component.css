@@ -1,0 +1,17 @@
+.table-responsive {
+  padding: 0px;
+}
+
+.form_content {
+  padding-top: 0px;
+}
+
+a:hover {
+  cursor: pointer;
+}
+
+.table-responsive td {
+  vertical-align: middle;
+}
+
+

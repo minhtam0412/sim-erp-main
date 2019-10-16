@@ -1,0 +1,40 @@
+<div class="pagination" *ngIf="count > 0">
+  <form [formGroup]='myForm' class="row">
+    <div class="col-md-4 description text-left">
+      <div class="row">
+        <div class="col-md-3" style="margin-top: auto; margin-bottom:auto; text-align:right"><label>Số dòng</label></div>
+        <div class="col-md-2">
+          <select name="cars" formControlName='limit' class="form-control form-control-sm" style="width:65px"
+                  (change)="onChangeLimit()">
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+            <option value="300">300</option>
+            <option value="500">500</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8 d-flex">
+      <div class="ml-auto">
+        <label style="float:left; margin-top: 5px;">Tổng số dòng {{ count }} </label> 
+        <button class="btn btn-sm" (click)="onPrev()" [disabled]="page === 1 || loading"
+                [ngClass]="{ 'disabled': page === 1 || loading }">
+          &laquo;
+        </button>
+        <button class="btn btn-sm btnnumber" *ngFor="let pageNum of getPages()" (click)="onPage(pageNum)"
+                [ngClass]="{'active': pageNum === page, 'disabled': loading}">
+          {{ pageNum }}
+        </button>
+        <button class="btn btn-sm" (click)="onNext(true)" [disabled]="lastPage() || loading"
+                [ngClass]="{ 'disabled': lastPage() || loading }">
+          &raquo;
+        </button>
+      </div>
+
+    </div>
+  </form>
+</div>

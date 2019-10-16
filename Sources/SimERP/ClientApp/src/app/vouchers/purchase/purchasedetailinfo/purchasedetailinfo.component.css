@@ -1,0 +1,138 @@
+.form_content {
+    width: 100%;
+    padding: 20px;
+    font-size: 12px;
+}
+
+.row label {
+    margin-top: auto;
+    margin-bottom: auto;
+    color: #555;
+    font-weight: bold;
+}
+
+.row input {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.control-label-require {
+    color: #a94442 !important;
+}
+
+.nav-tabs .nav-link {
+    background-color: #dbdbdb;
+    padding: 3px 6px;
+    border-radius: 0;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: #4cae4c;
+    color: #fff;
+    border: 1px solid #4cae4c;
+}
+
+.tab-content {
+    border: 0.5px solid #ddd;
+}
+
+.table-responsive {
+    min-height: .01%;
+    overflow-x: auto;
+    line-height: 10px;
+    background-color: transparent;
+    border-spacing: 0;
+    font-size: 12px;
+    font-family: 'Lato', sans-serif;
+    color: #555;
+    text-align: center;
+    padding: 5px;
+}
+
+.table-responsive th {
+    color: #337ab7;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table-responsive td {
+    font-size: 12px;
+    vertical-align: inherit;
+    padding: 5px;
+}
+
+.table-bordered {
+    border-color: #e3e3e3;
+    border: 1px solid #ddd;
+}
+
+.lbadd a {
+    font-weight: bold;
+    cursor: pointer;
+    color: #337ab7;
+    text-decoration: none;
+}
+
+.total_group {
+    padding-top: 1%;
+}
+
+.input-file-app {
+    position: relative;
+    overflow: hidden;
+    width: 88.5px;
+}
+
+.input-file-app .btn-wrapper {
+    float: left;
+}
+
+.btn-xs {
+    padding: 2px 4px;
+}
+
+.input-file-app .file-path-wrapper {
+    overflow: hidden;
+}
+
+.input-file-app .btn-wrapper input[type="file"] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    font-size: 100px;
+    cursor: pointer;
+}
+
+select.form-control {
+    color: #495057;
+    padding-left: 0px;
+    outline: none;
+    border-bottom: 0.4px solid #ced4da;
+    border-radius: 0px;
+}
+
+.btn.btn-sm,
+.btn-group-sm>.btn {
+    font-size: 12px;
+    font-family: 'Times New Roman', Times, serif
+}
+
+.btn-outline-secondary {
+    border-color: #ced4da;
+}
+
+
+/* -------------------------------------- */
+
+.modal-title {
+    margin: 0;
+    line-height: 1.42857143;
+    font-size: 18px;
+    color: #555;
+    font-family: inherit;
+}

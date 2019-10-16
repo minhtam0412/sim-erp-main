@@ -1,0 +1,142 @@
+<div class="header_content">
+  <section class="form_content">
+    <form>
+      <div class="row">
+        <div class="col-md-12">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+              <li class="breadcrumb-item"><a href="#">Danh mục</a></li>
+              <li class="breadcrumb-item"><a href="#">Danh mục chung</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Hàng hoá</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4 text-left">
+          <p class="text-uppercase"
+             style="font-size:18px;color: #587792; font-weight:bold; font-family: 'Lato', sans-serif;">
+            <span>PAGE LIST</span></p>
+        </div>
+        <div class="col-sm-8 text-right">
+          <div class="form-group">
+            <button type="button" class="btn btn-success btn-sm" (click)="SearchAction()">
+              <i class="fab fa-searchengin"></i> Tìm kiếm
+            </button>&nbsp;
+            <button type="button" class="btn btn-primary btn-sm" (click)="showDialog()" data-toggle="modal"
+                    data-target="#formModal">
+              <i class="fas fa-plus-circle"></i> Thêm mới
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="row">
+            <label class="col-sm-12 control-label">Tìm kiếm</label>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="input-group mb-3 ">
+                <input type="text" [(ngModel)]="searchString" name="searchString" class="form-control form-control-sm"
+                       placeholder="Mã, tên hàng hoá">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="row">
+            <label class="col-sm-12 control-label">Ngành hàng</label>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="input-group mb-3 ">
+                <select class="browser-default form-control">
+                  <option value="-1">
+                    Tất cả
+                  </option>
+                  <option *ngFor="let item of lstProductCategory" value="{{item.ProductCategoryId}}">
+                    {{item.ProductCategoryName}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="row">
+            <label class="col-sm-12 control-label">Trạng thái</label>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="input-group mb-3 ">
+                <select [(ngModel)]="cboIsActive" name="cboIsActive" class="browser-default form-control">
+                  <option value="-1">Tất cả</option>
+                  <option value="1">Sử dụng</option>
+                  <option value="0">Ngưng</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>
+<div class="main_content">
+  <section class="form_content">
+    <div class="table-responsive">
+
+      <!-- Table  -->
+      <table class="table table-bordered table-striped table-hover table-fixed">
+
+        <!-- Table head -->
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Mã hàng hoá</th>
+          <th>Tên hàng hoá</th>
+          <th>ĐVT</th>
+          <th>Quy cách</th>
+          <th>Ngành hàng</th>
+          <th>Xuất xứ</th>
+          <th>Nhà cung cấp</th>
+          <th>Trạng thái</th>
+          <th></th>
+        </tr>
+        </thead>
+        <!-- Table head -->
+
+        <!-- Table body -->
+        <tbody>
+        <tr *ngIf="lstDataResult.length <= 0">
+          <td colspan="10" class="datarow-null">Dữ liệu không tồn tại</td>
+        </tr>
+        <tr *ngFor="let row of lstDataResult; let i = index">
+          <td class="order-number">{{i + 1}}</td>
+          <td class="col-code"><a (click)="showDialog(row.ProductId)"
+                                  style="cursor: pointer; color: #337ab7">{{row.ProductCode}}</a></td>
+          <td class="col-name">{{row.ProductName}}</td>
+          <td class="col-name">{{row.UnitName}}</td>
+          <td class="col-name">{{row.PackageUnitName}}</td>
+          <td class="col-name">{{row.ProductCategoryName}}</td>
+          <td class="col-name">{{row.CountryName}}</td>
+          <td class="col-name">{{row.VendorName}}</td>
+          <td class="col-active">
+            <i [ngClass]="{'fas fa-check-square':row.IsActive, 'far fa-square': !row.IsActive}"
+               [ngStyle]="{'color': '#337ab7'}"></i>
+          </td>
+          <td class="col-action">
+            <a (click)="showDialog(row.ProductId)" data-toggle="modal" data-target="#formModal"><i class="fas fa-edit"
+                                                                                                   style='color:#337ab7;'></i></a>&nbsp;&nbsp;&nbsp;
+            <a (click)="showDialog(row.ProductId)"><i class="far fa-trash-alt" style='color:#337ab7;'></i></a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <app-pagination (goPage)="goToPage($event)" (changeLimit)="changeLimit()" (goNext)="onNext()" (goPrev)="onPrev()"
+                    [pagesToShow]="5" [page]="page" [perPage]="limit" [count]="total"></app-pagination>
+  </section>
+</div>

@@ -1,0 +1,118 @@
+<div class="header_content">
+  <section class="form_content">
+    <form>
+      <div class="row">
+        <div class="col-md-12">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="#">Library</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Data</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4 text-left">
+          <p class="text-uppercase"
+             style="font-size:18px;color: #587792; font-weight:bold; font-family: 'Lato', sans-serif;">
+            <span>LOẠI KHÁCH HÀNG</span>
+          </p>
+        </div>
+        <div class="col-sm-8 text-right">
+          <div class="form-group">
+            <button type="button" class="btn btn-success btn-sm" (click)="searchData()">
+              <i class="fab fa-searchengin"></i> Tìm kiếm
+            </button>&nbsp;
+            <button type="button" class="btn btn-primary btn-sm" (click)="openDialog()">
+              <i class="fas fa-plus-circle"></i> Thêm mới
+            </button>&nbsp;
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="row">
+            <label class="col-md-3 control-label">Tìm kiếm</label>
+            <div class="col-md-9">
+              <div class="input-group ">
+                <input type="text" [(ngModel)]="searchString" name="searchString" class="form-control"
+                       (keydown.enter)="searchData()">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="row">
+            <label class="col-md-3 control-label">Trạng thái</label>
+            <div class="col-md-9">
+              <div class="input-group ">
+                <select name="IsActive" [(ngModel)]="isActive" class="browser-default form-control">
+                  <option value="-1">Tất cả</option>
+                  <option value="1">Sử dụng</option>
+                  <option value="0">Ngưng</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>
+<div class="main_content">
+  <section class="form_content">
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover table-striped">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>MÃ LOẠI KHÁCH HÀNG</th>
+            <th>TÊN LOẠI KHÁCH HÀNG</th>
+            <th>GHI CHÚ</th>
+            <th class="col-active">SỬ DỤNG</th>
+            <th class="col-sortorder">SORT ORDER</th>
+            <th class="col-action"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="!dataIsAvailable">
+            <td colspan="8" class="datarow-null">Không có dữ liệu</td>
+          </tr>
+          <tr *ngFor="let row of lstDataResult; let index = index">
+            <td class="order-number">{{index + 1}}</td>
+            <td class="col-code">
+              <a (click)="openDialog(row)"> {{row.CustomerTypeCode}}</a>
+            </td>
+            <td class="col-name">{{row.CustomerTypeName}}</td>
+            <td class="col-note">{{row.Notes}}</td>
+            <td>
+              <i [ngClass]="{'fas fa-check-square':row.IsActive, 'far fa-square': !row.IsActive}"
+                 [ngStyle]="{'color': '#337ab7'}"></i>
+            </td>
+            <td class="col-moveaction">
+              <a (click)="index == 0 ? 'javascript:void(0)' : moveUp(index)">
+                <i class="fas fa-arrow-alt-circle-up" style="color:forestgreen; font-size:14px;"></i>
+              </a>&nbsp;&nbsp;&nbsp;
+              <a (click)="index == pagingComponent.getLimit() - 1 ? 'javascript:void(0)' : moveDown(index)">
+                <i class="fas fa-arrow-alt-circle-down" style="color:forestgreen; font-size:14px;"></i>
+              </a>
+            </td>
+            <td class="col-action">
+              <a (click)="openDialog(row)">
+                <i class="fas fa-edit" style='color:#337ab7'></i>&nbsp;&nbsp;&nbsp;
+              </a>
+              <a (click)="showConfirmDeleteDialog(row)">
+                <i class="far fa-trash-alt " style='color:#337ab7'></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <app-pagination (goPage)="goToPage($event)" (changeLimit)="changeLimit()" (goNext)="onNext() " (goPrev)="onPrev() "
+                    [pagesToShow]="5 " [page]="page" [perPage]="limit" [count]="total"></app-pagination>
+    <!--  <ng4-loading-spinner></ng4-loading-spinner>-->
+  </section>
+</div>
+

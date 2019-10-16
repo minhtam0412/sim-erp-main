@@ -1,0 +1,361 @@
+.supperbody {
+    margin-top: 5%;
+    position: relative;
+}
+.container {
+	margin-top: 7%;
+    z-index: 1;
+    width: 100%;
+    background-color: transparent;
+    padding-right: 0px;
+}
+
+.main_header {
+    width: 100%;
+    z-index: 900;
+    position: fixed;
+    top: 0px;
+}
+
+.header_content {
+	position: fixed;
+	width: 100%;
+    background-color: white;
+	margin-top: -25px;
+}
+
+/* ------------------Form-------------------- */
+
+.main_content {
+	padding-top: 8%;
+}
+.header_content .form_content{
+	padding-bottom: 0px;
+	padding-top: 15px;
+	
+}
+
+.header_content .form_content .breadcrumb{
+	margin:0;
+	padding: 0;
+	background-color: white;
+	font-family: 'Lato', sans-serif;
+}
+
+.header_content .form_content .breadcrumb a{
+	font-family: 'Lato', sans-serif;
+}
+
+.header_content .form_content .breadcrumb-item.active {
+    color: #6c757d;
+	font-size: 14px;
+}
+.form_content {
+    width: 100%;
+    padding: 20px;
+	padding-top: 0px;
+    font-size: 12px;
+}
+
+.form_content .form-control {
+    height: 25px;
+    padding: 0px 10px;
+    border-width: 0.5px;
+	font-size: 12px;
+}
+
+.form_content .btn-outline-secondary {
+  border-color: #ced4da;
+}
+
+
+.row label {
+    margin-top: auto;
+    margin-bottom: auto;
+    color: #555;
+    font-weight: bold;
+}
+
+.row input {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.control-label-require {
+    color: #a94442 !important;
+}
+
+
+.input-file-app {
+    position: relative;
+    overflow: hidden;
+    width: 88.5px;
+}
+
+.input-file-app .btn-wrapper {
+    float: left;
+}
+
+.btn-xs {
+    padding: 2px 4px;
+}
+
+.input-file-app .file-path-wrapper {
+    overflow: hidden;
+}
+
+.input-file-app .btn-wrapper input[type="file"] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    font-size: 100px;
+    cursor: pointer;
+}
+
+.btn.btn-sm,
+.btn-group-sm>.btn {
+    font-size: 12px;
+    font-family: 'Times New Roman', Times, serif
+}
+
+.total_group {
+    padding-top: 1%;
+}
+/* ------------------Tab-------------------- */
+.form_content .tab-content {
+  border: 0.5px solid #ddd;
+}
+
+.form_content .tab-content .lbadd a {
+    font-weight: bold;
+    cursor: pointer;
+    color: #337ab7;
+    text-decoration: none;
+}
+
+.form_content .nav-tabs .nav-link {
+  background-color: #dbdbdb;
+  padding: 3px 6px;
+  border-radius: 0;
+}
+
+.form_content .nav-tabs .nav-link.active {
+    background-color: #4cae4c;
+    color: #fff;
+    border: 1px solid #4cae4c;
+}
+
+/* ------------------Table-------------------- */
+
+.table-responsive {
+    min-height: .01%;
+    line-height: 10px;
+    background-color: transparent;
+    border-spacing: 0;
+    font-size: 12px;
+    font-family: 'Lato', sans-serif;
+    color: #555;
+    text-align: center;
+	max-height:400px;
+	
+}
+
+.table-responsive table th {
+    color: #337ab7;
+    text-align: center;
+    vertical-align: middle;
+	padding: 5px;
+}
+
+.table-responsive tbody td {
+    font-size: 12px;
+	padding: 0 0 0 5px;
+	vertical-align: middle !important;
+}
+
+.table-responsive tbody a{
+    font-size: 12px;
+	font-family: 'Lato', sans-serif;
+}
+
+
+.table-responsive table > tbody > tr > td, .table-responsive table tfoot > tr > td {
+    white-space: nowrap;
+}
+
+.table-responsive table .order-number {
+    width: 38px;
+    min-width: 38px;
+    text-align: center;
+}
+
+.table-responsive table .col-code {
+    text-decoration: none;
+	color: #337ab7;
+	min-width: 50px;
+	max-width: 150px; 
+}
+
+.table-responsive table .col-code a {
+    cursor:pointer;
+}
+
+.table-responsive table .col-name {
+    min-width: 100px; 
+	text-align: left
+}
+
+.table-responsive table .col-address {
+    min-width: 100px; 
+	text-align: left
+}
+.table-responsive table .col-phone {
+    min-width: 100px; 
+	text-align: center;
+}
+
+.table-responsive table .col-note {
+    min-width: 300px; 
+	text-align: left
+}
+
+.table-responsive table .col-active {
+    min-width: 100px;
+	width: 100px;
+}
+
+.table-responsive table .col-sortorder {
+    min-width: 120px;
+	width: 120px;
+}
+
+.table-responsive table .col-action {
+    min-width: 80px;
+	width: 80px;
+}
+
+.table-responsive table .col-action a {
+    cursor: pointer;
+}
+
+.table-responsive table .col-moveaction {
+	cursor:pointer; 
+	
+}
+
+.table-responsive table .datarow-null {
+    text-align:left;
+	padding: 10px;
+	font-style: italic;
+}
+
+.table-bordered {
+    border-color: #e3e3e3;
+    border: 1px solid #ddd;
+}
+.table thead th {
+    border-bottom: none !important;
+}
+
+
+/* ------------------Modal-------------------- */
+
+.modal-title {
+    margin: 0;
+    line-height: 1.42857143;
+    font-size: 18px;
+    color: #555;
+    font-family: inherit;
+}
+
+.modal-body .form_content label{
+  margin-top: 5px;
+}
+
+.modal-body .form_content .form-control {
+    border-radius: 0;
+	box-shadow: none; 
+	border-top: none; 
+	border-left: none; 
+	border-right: none
+}
+
+.modal-content .form_content .form-control {
+    border-radius: 0;
+	box-shadow: none; 
+	border-top: none; 
+	border-left: none; 
+	border-right: none
+}
+.modal-body .form_content .form-control-sm {
+    border-radius: 0;
+}
+
+/*---------------Validate----------------*/
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.wrapper {
+  cursor: not-allowed;
+}
+
+.modal-body .form_content .row input {
+  box-shadow: none;
+  border-top: none;
+  border-left: none;
+  border-right: none
+}
+
+.modal-body .form_content.row textarea {
+  box-shadow: none;
+  border-top: none;
+  border-left: none;
+  border-right: none
+}
+
+.modal-body .form_content .is-invalid {
+  border-color: brown;
+}
+/*---------------Responsive-----------*/
+@media screen and (max-width: 768px) {
+	.supperbody {
+        margin-top: 15%;
+        position: relative;
+    }
+	.main_content {
+		padding-top: 12%;
+	}
+}
+
+@media (min-width: 1024px) {
+    .supperbody {
+        margin-top: 10%;
+        position: relative;
+    }
+	.main_content {
+		padding-top: 12%;
+	}
+}
+
+@media (min-width: 1440px) {
+    .supperbody {
+        margin-top: 7%;
+        position: relative;
+    }
+	
+	.main_content {
+		padding-top: 8%;
+	}
+}
+
+@media (min-width: 2000px) {
+    .supperbody {
+        margin-top: 5%;
+        position: relative;
+    }
+}

@@ -1,0 +1,45 @@
+.is-invalid {
+    border-color: brown;
+}
+
+.control-label-require {
+    color: #a94442 !important;
+}
+
+.form_content {
+    width: 100%;
+    font-size: 12px;
+}
+
+input {
+    font-size: 12px;
+}
+
+textarea {
+    font-size: 12px;
+}
+
+label {
+    margin: auto 0px;
+}
+
+.custom-modal-title {
+    font-size: 18px;
+}
+
+.custom-modal-footer .btn {
+    font-size: 12px;
+}
+
+.modal-body {
+    padding: 15px;
+    margin-right: 10px;
+}
+
+.form-control[disabled],
+fieldset[disabled] {
+    color: #9C9A9A;
+    background-color: transparent;
+    border-bottom-color: #F1F1F1;
+    /* cursor: not-allowed; */
+}

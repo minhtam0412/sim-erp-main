@@ -1,0 +1,250 @@
+<div class="header-wrapper">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" [routerLink]='[""]'><img src="../../assets/images/logo/SIMVNLOGOFINAL_PNG.png" width="150"/></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="nav navbar-nav ml-auto ">
+        <li class="nav-item dropdown">
+          <a class="nav-link" data-toggle="dropdown" style="cursor:pointer">
+            <img src="../../assets/images/avatars/{{sessionUser.Avatar}}" width="20px" height="20px"
+                 style="border-radius: 50%"> {{sessionUser.FullName}}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li>
+              <div class="navbar-login">
+                <div class="row">
+                  <div class="col-lg-4">
+                    <p class="text-center">
+                      <img src="../../assets/images/avatars/{{sessionUser.Avatar}}" width="100px" height="100px"
+                           style="border-radius: 50%">
+                    </p>
+                  </div>
+                  <div class="col-lg-8">
+                    <p class="text-left" style="font-size:12px;"><strong> {{sessionUser.FullName}}</strong></p>
+                    <p class="text-left small"><a href="javascript:void(0)" (click)="changePassworDialog()">Thay đổi mật
+                      khẩu </a></p>
+                    <p class="text-left">
+                      <a href="javascript:void(0)" class="btn btn-info btn-block btn-sm">Thông tin cá nhân</a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <div class="navbar-login navbar-login-session">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <p>
+                      <a href="javascript:void(0)" (click)="logout()" class="btn btn-danger btn-block">Đăng xuất</a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" style="cursor:pointer" data-toggle="dropdown"><i class="far fa-bell"></i><span
+            class="badge badge-danger badge-sm up m-l-n-sm ng-binding" ng-bind="3">3</span></a>
+          <div class="dropdown-menu dropdown-menu-right" style="padding:0px">
+            <a class="dropdown-item text-left" style="min-width: 400px; font-size:14px; font-weight:500">Bạn có 0 thông
+              báo mới</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a href="#" class="nav-link " data-toggle="dropdown" style="cursor:pointer"><i class="fas fa-cog"></i></a>
+          <div class="dropdown-menu dropdown-menu-right ">
+            <a href="#" class="dropdown-item"><i class="fas fa-cog"></i> Cấu hình</a>
+            <a href="javascript:void(0)" [routerLink]='["/user"]' class="dropdown-item"><i
+              class="fas fa-user"></i> Người dùng</a>
+            <a href="#" class="dropdown-item"><i class="fas fa-users"></i> Nhóm quyền</a>
+            <a href="#" class="dropdown-item"><i class="fas fa-key"></i> Phân quyền người dùng</a>
+            <a href="#" class="dropdown-item"><i class="fas fa-key"></i> Phân quyền sửa chứng từ</a>
+            <a href="javascript:void(0)" [routerLink]='["/pagelist"]' class="dropdown-item"><i
+              class="fas fa-file-alt"></i> Danh sách page</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>
+<nav id="main-nav" class="main-nav">
+  <ul id="main-menu" class="sm sm-blue">
+    <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+      <a style="color: white;" [routerLink]='[""]'><i class="fa fa-home"></i> Trang
+        chủ</a>
+    </li>
+    <li>
+      <a style="color: white;"><i class="fa fa-cart-plus"></i> Mua hàng</a>
+      <ul>
+        <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+          <a [routerLink]='["/purchase"]' [routerLinkActive]='["purchase"]'>Mua hàng</a>
+        </li>
+        <li><a>Trả hàng</a></li>
+      </ul>
+    </li>
+
+    <li>
+      <a style="color: white;"><i class="fa fa-bus"></i> Bán hàng</a>
+      <ul>
+        <li><a>Bán hàng</a></li>
+        <li><a>Trả hàng</a></li>
+      </ul>
+    </li>
+
+    <li>
+      <a style="color: white;"><i class="fa fa-university"></i> Kho</a>
+      <ul>
+        <li>
+          <a>Nhập kho</a>
+          <ul>
+            <li><a>Nhập mua hàng</a></li>
+            <li><a>Nhập trả hàng</a></li>
+            <li><a>Nhập chuyển kho</a></li>
+          </ul>
+        </li>
+        <li>
+          <a>Xuất kho</a>
+          <ul>
+            <li><a>Xuất bán hàng</a></li>
+            <li><a>Xuát trả hàng</a></li>
+            <li><a>Xuất chuyển kho</a></li>
+            <li><a>Xuất sử dụng</a></li>
+            <li><a>Xuất hủy</a></li>
+          </ul>
+        </li>
+        <li><a>Yêu cầu chuyển kho</a></li>
+        <li><a>Cơ số kho</a></li>
+        <li><a>Kiểm kho</a></li>
+      </ul>
+    </li>
+
+    <li>
+      <a style="color: white;"><i class="fa fa-building"></i> Thu/Chi</a>
+      <ul>
+        <li>
+          <a>Phiếu thu chi</a>
+        </li>
+        <li>
+          <a>Phiếu chi hủy dịch vụ</a>
+        </li>
+        <li><a>Phiếu thu</a></li>
+        <li><a>Phiếu chi</a></li>
+        <li>
+          <a>Chi phí</a>
+          <ul>
+            <li><a>Chi phí HĐKD</a></li>
+            <li><a>CP phân bổ hàng tháng</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+
+    <li>
+      <a style="color: white;"><i class="fas fa-chart-area"></i> Báo cáo</a>
+      <ul>
+        <li>
+          <a>Bán hàng</a>
+          <ul>
+            <li><a>TH Doanh thu</a></li>
+            <li><a>TH D.Thu theo HH</a></li>
+          </ul>
+        </li>
+        <li>
+          <a>Mua hàng</a>
+          <ul>
+            <li><a>Công nợ tổng hợp</a></li>
+            <li><a>Chi tiết công nợ</a></li>
+          </ul>
+        </li>
+        <li>
+          <a>Thu/Chi</a>
+          <ul>
+            <li><a>Thu/Chi</a></li>
+            <li><a>Thu/Chi theo nhân viên</a></li>
+          </ul>
+        </li>
+        <li>
+          <a>Phân tích</a>
+        </li>
+        <li>
+          <a>Kho vật lý</a>
+          <ul>
+            <li><a>Thẻ kho</a></li>
+            <li><a>Nhập xuất tồn</a></li>
+            <li><a>Nhật ký nhập xuất</a></li>
+            <li><a>Sử dụng vắc xin</a></li>
+            <li><a>Kiểm kho nhập</a></li>
+          </ul>
+        </li>
+        <li>
+          <a>Kho kế toán</a>
+          <ul>
+            <li><a>Bảng giá vốn</a></li>
+            <li><a>Nhập xuất tồn</a></li>
+          </ul>
+        </li>
+        <li>
+          <a>Lịch sử</a>
+          <ul>
+            <li><a>Nhật ký chứng từ</a></li>
+            <li><a>Cập nhật chứng từ</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+
+    <li>
+      <a style="color: white;"><i class="far fa-list-alt"></i> Danh mục</a>
+      <ul>
+        <li>
+          <a>Danh mục chung</a>
+          <ul>
+            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+              <a [routerLink]='["/tax"]' [routerLinkActive]='["tax"]'>Thuế VAT</a>
+            </li>
+            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+              <a [routerLink]='["/unit"]' [routerLinkActive]='["unit"]'>Đơn vị tính</a>
+            </li>
+            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+              <a [routerLink]='["/customertype"]' [routerLinkActive]='["customertype"]'>Loại khách hàng</a>
+            </li>
+            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+              <a [routerLink]='["/vendortype"]' [routerLinkActive]='["vendortype"]'>Loại nhà cung cấp</a>
+            </li>
+            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+              <a [routerLink]='["/productcategory"]' [routerLinkActive]='["productcategory"]'>Quản lý ngành hàng</a>
+            </li>
+            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+              <a [routerLink]='["/product"]'>Hàng hoá</a>
+            </li>
+            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+              <a [routerLink]='["/customer"]' [routerLinkActive]='["customer"]'>Quản lý khách hàng</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+
+    <li>
+      <a style="color: white;"><i class="fa fa-cog"></i> Hệ thống</a>
+      <ul>
+        <li>
+          <a>Kỳ kế toán</a>
+        </li>
+        <li>
+          <a>Misa Export </a>
+          <ul>
+            <li><a>Export danh mục</a></li>
+            <li><a>Mua hàng</a></li>
+            <li><a>Bán hàng</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>

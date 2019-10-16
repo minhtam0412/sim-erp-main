@@ -1,0 +1,31 @@
+﻿export class Customer {
+    CustomerId: number;
+    CustomerCode: string = "";
+    CustomerName: string = "";
+    Address: string;
+    PhoneNumber: string;
+    FaxNumber: string;
+    Email: string;
+    CustomerTypeId?: number;
+    CustomerTypeList: string;
+    DebtCeiling: number;
+    PaymentTermId?: number;
+    BankingNumber: string;
+    BankingName: string;
+    BankingNotes: string;
+    RepresentativeName: string;
+    RepresentativePhone: string;
+    RepresentativeAddress: string;
+    RepresentativeEmail: string;
+    CreatedBy: number;
+    CreatedDate: Date;
+    ModifyBy?: number;
+    ModifyDate?: Date;
+    CountryId: string;
+    ProvinceId?: number;
+    DistrictId?: number;
+    WardId?: number;
+    SearchString: string;
+    IsCompany: boolean;
+    IsActive: boolean;
+}

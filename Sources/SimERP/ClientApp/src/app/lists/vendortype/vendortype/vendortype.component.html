@@ -1,0 +1,164 @@
+<div class="header_content">
+  <section class="form_content">
+    <form>
+      <div class="row">
+        <div class="col-md-12">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="#">Library</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Data</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4 text-left">
+          <p class="text-uppercase" style="font-size:18px;color: #587792; font-weight:bold; font-family: 'Lato', sans-serif;"><span>DANH MỤC LOẠI NHÀ CUNG CẤP</span></p>
+        </div>
+        <div class="col-sm-8 text-right">
+          <div class="form-group">
+            <button type="button" class="btn btn-success btn-sm" (click)="SerachAction()">
+              <i class="fab fa-searchengin"></i> Tìm kiếm
+            </button>&nbsp;
+            <button type="button" class="btn btn-primary btn-sm" (click)="AddModel()" data-toggle="modal" data-target="#VendorTypeModal">
+              <i class="fas fa-plus-circle"></i> Thêm mới
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="row">
+            <label class="col-sm-12 control-label">Tìm kiếm</label>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="input-group mb-3 ">
+                <input type="text" [(ngModel)]="dataSerach" name="dataSerach" class="form-control form-control-sm" placeholder="Mã, Tên loại nhà cung cấp">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="row">
+            <label class="col-sm-12 control-label">Trạng thái</label>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="input-group mb-3 ">
+                <select [(ngModel)]="cboIsActive" name="cboIsActive" class="browser-default form-control">
+                  <option value="-1">Tất cả</option>
+                  <option value="1">Sử dụng</option>
+                  <option value="0">Ngưng</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </section>
+</div>
+<div class="main_content">
+  <section class="form_content">
+    <div class="table-responsive">
+      <!-- Table  -->
+      <table class="table table-bordered table-striped table-hover">
+        <!-- Table head -->
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Mã LNCC</th>
+            <th>Tên nhóm NCC</th>
+            <th>Ghi chú</th>
+            <th>Sort</th>
+            <th></th>
+          </tr>
+        </thead>
+        <!-- Table head -->
+        <!-- Table body -->
+        <tbody>
+          <tr *ngIf="lstDataResult.length <= 0">
+            <td colspan="6" class="datarow-null">Dữ liệu không tồn tại</td>
+          </tr>
+          <tr *ngFor="let row of lstDataResult; let i = index">
+            <td class="order-number">{{i + 1}}</td>
+            <td class="col-code"><a (click)="EditModel(i)" data-toggle="modal" data-target="#VendorTypeModal">{{row.VendorTypeCode}}</a></td>
+            <td class="col-name">{{row.VendorTypeName}}</td>
+            <td class="col-note">{{row.Notes}}</td>
+            <td class="col-moveaction">
+              <a (click)="actionUp(i)"><i class="fas fa-arrow-alt-circle-up" style="color:forestgreen; font-size:14px"></i></a>&nbsp;&nbsp;&nbsp;
+              <a (click)="actionDow(i)"><i class="fas fa-arrow-alt-circle-down" style="color:forestgreen; font-size:14px"></i></a>
+            </td>
+            <td class="col-action">
+              <a (click)="EditModel(i)" data-toggle="modal" data-target="#VendorTypeModal"><i class="fas fa-edit" style='color:#337ab7;'></i></a>&nbsp;&nbsp;&nbsp;
+              <a (click)="openDialog(row.VendorTypeId)"><i class="far fa-trash-alt" style='color:#337ab7;'></i></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <app-pagination (goPage)="goToPage($event)" (changeLimit)="changeLimit()" (goNext)="onNext()" (goPrev)="onPrev()" [pagesToShow]="5" [page]="page" [perPage]="limit" [count]="total"></app-pagination>
+  </section>
+</div>
+
+<!-- The Modal -->
+<div class="modal fade" id="VendorTypeModal">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">THÊM MỚI/CHỈNH SỬA LOẠI NHÀ CUNG CẤP</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="form_content">
+          <div class="row">
+            <div class="col-sm-3 text-right"><label control-label>Mã LNCC</label> <label class="control-label-require">*</label></div>
+            <div class="col-sm-9">
+              <input type="text" [ngClass]="{'textvalidate': objModel.VendorTypeCode.length <= 0}" [(ngModel)]="objModel.VendorTypeCode" class="form-control form-control-sm">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3 text-right"><label control-label>Tên loại NCC</label> <label class="control-label-require">*</label></div>
+            <div class="col-sm-9">
+              <input type="text" [ngClass]="{'textvalidate': objModel.VendorTypeName.length <= 0}" [(ngModel)]="objModel.VendorTypeName" class="form-control form-control-sm">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3 text-right"><label control-label>Ghi chú</label></div>
+            <div class="col-sm-9">
+              <textarea type="text" [(ngModel)]="objModel.Notes" class="form-control form-control-sm" rows="2"></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3 text-right"><label></label></div>
+            <div class="col-sm-9">
+              <div class="custom-control custom-checkbox mb-3">
+                <input type="checkbox" class="custom-control-input" [(ngModel)]="objModel.IsActive" id="IsActive" name="IsActive">
+                <label class="custom-control-label" for="IsActive">Sử dụng</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer" [ngClass]="{'wrapper': (objModel.VendorTypeCode.length <= 0 || objModel.VendorTypeName.length <= 0)}">
+        <button type="button" [ngClass]="{'pointer-events-none': (objModel.VendorTypeCode.length <= 0 || objModel.VendorTypeName.length <= 0)}" class="btn btn-info btn-sm" (click)="saveDataModel(true)">
+          <i class="far fa-save"></i> Lưu(F3)
+        </button>&nbsp;
+        <button type="button" [ngClass]="{'pointer-events-none': (objModel.VendorTypeCode.length <= 0 || objModel.VendorTypeName.length <= 0)}" class="btn btn-info btn-sm" (click)="saveDataModel(false)">
+          <i class="far fa-save"></i> Lưu & Thêm mới
+        </button>&nbsp;
+        <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal" #closeAddExpenseModal (click)="CloseModel()">Đóng</button>
+      </div>
+
+    </div>
+  </div>
+</div>

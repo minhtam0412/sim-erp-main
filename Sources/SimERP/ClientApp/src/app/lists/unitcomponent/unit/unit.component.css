@@ -1,0 +1,11 @@
+.table-responsive {
+    padding: 0px;
+}
+
+.modal-content {
+  width: 75%;
+}
+
+.textvalidate{
+  border-color: red;
+}

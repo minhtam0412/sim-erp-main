@@ -1,0 +1,227 @@
+<div class="header_content">
+  <section class="form_content">
+    <form>
+      <div class="row">
+        <div class="col-md-12">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="#">Library</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Data</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4 text-left">
+          <p class="text-uppercase" style="font-size:18px;color: #587792; font-weight:bold; font-family: 'Lato', sans-serif;"><span>PAGE LIST</span></p>
+        </div>
+        <div class="col-sm-8 text-right">
+          <div class="form-group">
+            <button type="button" class="btn btn-success btn-sm" (click)="SerachAction()">
+              <i class="fab fa-searchengin"></i> Tìm kiếm
+            </button>&nbsp;
+            <button type="button" class="btn btn-primary btn-sm" (click)="AddModel()" data-toggle="modal" data-target="#formModal">
+              <i class="fas fa-plus-circle"></i> Thêm mới
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="row">
+            <label class="col-sm-12 control-label">Tìm kiếm</label>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="input-group mb-3 ">
+                <input type="text" [(ngModel)]="dataSerach" name="dataSerach" class="form-control form-control-sm" placeholder="Mã, Tên loại nhà cung cấp">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="row">
+            <label class="col-sm-12 control-label">Module name</label>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="input-group mb-3 ">
+                <select [(ngModel)]="cboModule" name="cboModule" class="browser-default form-control">
+                  <option value="-1">
+                    Tất cả
+                  </option>
+                  <option *ngFor="let item of lstCboModule" value="{{item.ModuleId}}">
+                    {{item.ModuleName}}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="row">
+            <label class="col-sm-12 control-label">Trạng thái</label>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="input-group mb-3 ">
+                <select [(ngModel)]="cboIsActive" name="cboIsActive" class="browser-default form-control">
+                  <option value="-1">Tất cả</option>
+                  <option value="1">Sử dụng</option>
+                  <option value="0">Ngưng</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>
+<div class="main_content">
+  <section class="form_content">
+    <div class="table-responsive">
+      <!-- Table  -->
+      <table class="table table-bordered table-striped table-hover table-fixed">
+        <!-- Table head -->
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Page Name</th>
+            <th>Controller Name</th>
+            <th>Action</th>
+            <th>Module</th>
+            <th>Active</th>
+            <th>Sort</th>
+            <th></th>
+          </tr>
+        </thead>
+        <!-- Table head -->
+        <!-- Table body -->
+        <tbody>
+          <tr *ngIf="lstDataResult.length <= 0">
+            <td colspan="8" class="datarow-null">Dữ liệu không tồn tại</td>
+          </tr>
+          <tr *ngFor="let row of lstDataResult; let i = index">
+            <td class="order-number">{{i + 1}}</td>
+            <td class="col-name"><a (click)="EditModel(i)" data-toggle="modal" data-target="#formModal" style="cursor: pointer; color: #337ab7">{{row.PageName}}</a></td>
+            <td class="col-name">{{row.ControllerName}}</td>
+            <td class="col-note">{{row.ActionName}}</td>
+            <td class="col-note">{{row.ModuleName}}</td>
+            <td>
+              <i [ngClass]="{'fas fa-check-square':row.IsActive, 'far fa-square': !row.IsActive}" [ngStyle]="{'color': '#337ab7'}"></i>
+            </td>
+            <td class="col-moveaction">
+              <a (click)="actionUp(i)"><i class="fas fa-arrow-alt-circle-up" style="color:forestgreen; font-size:14px"></i></a>&nbsp;&nbsp;&nbsp;
+              <a (click)="actionDow(i)"><i class="fas fa-arrow-alt-circle-down" style="color:forestgreen; font-size:14px"></i></a>
+            </td>
+            <td class="col-action">
+              <a (click)="EditModel(i)" data-toggle="modal" data-target="#formModal"><i class="fas fa-edit" style='color:#337ab7;'></i></a>&nbsp;&nbsp;&nbsp;
+              <a (click)="openDialog(row.PageId)"><i class="far fa-trash-alt" style='color:#337ab7;'></i></a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <app-pagination (goPage)="goToPage($event)" (changeLimit)="changeLimit()" (goNext)="onNext()" (goPrev)="onPrev()" [pagesToShow]="5" [page]="page" [perPage]="limit" [count]="total"></app-pagination>
+  </section>
+</div>
+
+<!-- The Modal -->
+<div class="modal fade" id="formModal" data-backdrop="static">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">THÊM MỚI/CHỈNH SỬA</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <div class="form_content">
+          <div class="row">
+            <div class="col-sm-3 text-right"><label control-label>Page name</label> <label class="control-label-require">*</label></div>
+            <div class="col-sm-9">
+              <input type="text" #PageName='ngModel' [(ngModel)]="objModel.PageName"  name="PageName" class="form-control form-control-sm" required maxlength="250"
+                     [ngClass]="{ 'is-invalid': PageName.touched  && PageName.invalid  }" >
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3 text-right"><label control-label>Controller name</label> <label class="control-label-require">*</label></div>
+            <div class="col-sm-9">
+              <input type="text" #ControllerName='ngModel' [(ngModel)]="objModel.ControllerName" class="form-control form-control-sm" required maxlength="250"
+                     [ngClass]="{ 'is-invalid': ControllerName.touched  && ControllerName.invalid } ">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3 text-right"><label control-label>Action name</label> <label class="control-label-require">*</label></div>
+            <div class="col-sm-9">
+              <input type="text" #ActionName='ngModel' [(ngModel)]="objModel.ActionName" class="form-control form-control-sm" required maxlength="250"
+                     [ngClass]="{ 'is-invalid': ActionName.touched  && ActionName.invalid }" >
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3 text-right"><label control-label>Module name</label></div>
+            <div class="col-sm-9">
+              <select [(ngModel)]="objModel.ModuleId" name="objModel.ModuleId" class="browser-default form-control">
+                <option *ngFor="let item of lstCboModule" value="{{item.ModuleId}}">
+                  {{item.ModuleName}}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-3 text-right"><label></label></div>
+            <div class="col-sm-9">
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="custom-control custom-checkbox mb-3">
+                    <input type="checkbox" class="custom-control-input" [(ngModel)]="objModel.IsActive" id="IsActive" name="IsActive">
+                    <label class="custom-control-label" for="IsActive">Active</label>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="custom-control custom-checkbox mb-3">
+                    <input type="checkbox" class="custom-control-input" [(ngModel)]="objModel.IsCheckSecurity" id="IsCheckSecurity" name="IsCheckSecurity">
+                    <label class="custom-control-label" for="IsCheckSecurity">Check Securyti</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4 text-left">
+              <p class="text-uppercase" style="font-size:16px;color: #587792; font-weight:bold; font-family: 'Lato', sans-serif; margin-bottom: 0;"><span>FUNCTION LIST</span></p>
+            </div>
+            <div class="col-sm-12">
+              <div style="border-top:1px solid #d6d6d6; margin:3px 0"></div>
+            </div>
+          </div>
+          <div class="row" style="padding:10px">
+            <div class="col-sm-3" *ngFor="let item of objModel.lstFunction">
+              <div class="custom-control custom-checkbox mb-3">
+                <input type="checkbox" class="custom-control-input" [(ngModel)]="item.IsCheck" id="{{item.FunctionId}}" name="{{item.FunctionId}}">
+                <label class="custom-control-label" for="{{item.FunctionId}}">{{item.FunctionName}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer" [ngClass]="{'wrapper': checkValidateModel()}">
+        <button type="button" [ngClass]="{'pointer-events-none': checkValidateModel()}" class="btn btn-info btn-sm" (click)="saveDataModel(true)">
+          <i class="far fa-save"></i> Lưu(F3)
+        </button>&nbsp;
+        <button type="button" [ngClass]="{'pointer-events-none': checkValidateModel()}" class="btn btn-info btn-sm" (click)="saveDataModel(false)">
+          <i class="far fa-save"></i> Lưu & Thêm mới
+        </button>&nbsp;
+        <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal" #closeAddExpenseModal (click)="CloseModel()">Đóng</button>
+      </div>
+
+    </div>
+  </div>
+</div>

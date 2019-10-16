@@ -1,0 +1,1 @@
+Scaffold-DbContext "Data Source=192.168.1.8;Initial Catalog=SimERP;Persist Security Info=True;User ID=admin;Password=admin" Microsoft.EntityFrameworkCore.SqlServer -OutputDir "../SimERP.Data/DBEntities/" -ContextDir "../SimERP.Data/DBEntities/" -Project "SimERP.Data"  -Context "DBEntities" -f

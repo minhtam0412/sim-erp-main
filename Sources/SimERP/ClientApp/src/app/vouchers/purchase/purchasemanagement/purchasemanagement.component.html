@@ -1,0 +1,221 @@
+<div class="header_content">
+  <section class="form_content">
+    <form [formGroup]='frmSearch'>
+      <div class="row">
+        <div class="col-md-12">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="#">Library</a></li>
+              <li class="breadcrumb-item active" aria-current="page">Data</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4 text-left">
+          <p class="text-uppercase" style="font-size:18px;color: #587792; font-weight:bold; font-family: 'Lato', sans-serif;"><span>HÓA ĐƠN MUA HÀNG</span></p>
+        </div>
+        <div class="col-sm-8 text-right">
+          <div class="form-group">
+            <button type="button" class="btn btn-success btn-sm" style="border-top-right-radius: 0; border-bottom-right-radius: 0;">
+              <i class="fab fa-searchengin"></i> Tìm kiếm
+            </button>
+            <button type="button" class="btn btn-success btn-sm collapsed" data-toggle="collapse" data-target="#collapseExample" aria-controls="collapseExample" aria-expanded="false" style="border-top-left-radius: 0; border-bottom-left-radius: 0; border-color:darkgray">
+              <i class="fa fa-filter"></i>
+            </button>&nbsp;
+            <button type="button" class="btn btn-primary btn-sm" [routerLink]="['/purchaseinvoice']">
+              <i class="fas fa-plus-circle"></i> Thêm mới
+            </button>&nbsp;
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="row">
+            <label class="col-sm-12 control-label">Tìm kiếm</label>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="input-group mb-3 ">
+                <input type="text" class="form-control">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="row">
+            <label class="col-sm-12 control-label">Từ ngày</label>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="input-group mb-3 ">
+                <input class="form-control" placeholder="" name="dp" ngbDatepicker #dFrom="ngbDatepicker">
+                <div class="input-group-append">
+                  <button class="btn btn-sm btn-outline-secondary calendar" (click)="dFrom.toggle()" type="button">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="row">
+            <label class="col-sm-12 control-label">Đến ngày</label>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="input-group mb-3 ">
+                <input class="form-control" placeholder="" name="dp" ngbDatepicker #dTo="ngbDatepicker">
+                <div class="input-group-append">
+                  <button class="btn btn-sm btn-outline-secondary calendar" (click)="dTo.toggle()" type="button">
+                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="row">
+            <label class="col-sm-12 control-label">Ghi sổ</label>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="input-group mb-3 ">
+                <select class="browser-default form-control">
+                  <option selected>Tất cả</option>
+                  <option value="1">Ghi sổ</option>
+                  <option value="2">Chưa ghi sổ</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="collapse" id="collapseExample">
+        <div class="row">
+          <div class="col-md-3">
+            <div class="row">
+              <label class="col-sm-12 control-label">Người tạo</label>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="input-group mb-3 ">
+                  <select class="browser-default form-control">
+                    <option selected>Tất cả</option>
+                    <option value="1">Ngô Tuyết Nhi</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="row">
+              <label class="col-sm-12 control-label">Loại NCC</label>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="input-group mb-3 ">
+                  <select class="browser-default form-control">
+                    <option selected>Tất cả</option>
+                    <option value="1">Thuốc & dược</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="row">
+              <label class="col-sm-12 control-label">Tổng tiền nhỏ nhất</label>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="input-group mb-3 ">
+                  <input type="text" class="form-control">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <div class="row">
+              <label class="col-sm-12 control-label">Tổng tiền lớn nhất</label>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="input-group mb-3 ">
+                  <input type="text" class="form-control">
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="col-md-3">
+            <div class="row">
+              <label class="col-sm-12 control-label">Sắp xếp</label>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="input-group mb-3 ">
+                  <select class="browser-default form-control">
+                    <option selected>Tất cả</option>
+                    <option value="1">Số chứng từ giảm dần</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>
+<div class="main_content">
+  <section class="form_content">
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+          <tr>
+            <th *ngFor="let head of headElements" scope="col">{{head}} </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr mdbTableCol *ngFor="let purchaseElement of purchaseList; let i = index;">
+            <th scope="row">{{i+1}}</th>
+            <td><a> {{purchaseElement.PurchaseCode}}</a></td>
+            <td>{{purchaseElement.VoucherDate | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+            <td>{{purchaseElement.AccountingDate | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+            <td>{{purchaseElement.ReferenceCode}}</td>
+            <td>{{purchaseElement.VendorCode}}</td>
+            <td>{{purchaseElement.VendorName}}</td>
+            <td>{{purchaseElement.UserName | uppercase}}</td>
+            <td>{{purchaseElement.TotalAmount | number}}</td>
+            <td>
+              <input [disabled]="true" type="checkbox" [checked]="purchaseElement.IsPost">
+            </td>
+
+            <td style="width: 10%;">
+              <a [routerLink]="['/purchaseinvoice','123456']" style="text-decoration: none">
+                <i class="fas fa-edit" style='color:#337ab7'></i>&nbsp;&nbsp;&nbsp;
+              </a>
+              <a>
+                <i class="far fa-trash-alt" style='color:#337ab7'></i>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <app-pagination (goPage)="goToPage($event)" (changeLimit)="changeLimit()" (goNext)="onNext()" (goPrev)="onPrev()" [pagesToShow]="5" [page]="page" [perPage]="limit" [count]="total"></app-pagination>
+</div>

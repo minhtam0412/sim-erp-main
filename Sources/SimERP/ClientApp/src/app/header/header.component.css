@@ -1,0 +1,35 @@
+.header-wrapper .navbar {
+    height: 50px;
+    background-color: cadetblue;
+    color: white;
+    position: relative;
+    z-index: 9999 !important;
+}
+
+.header-wrapper .dropdown-menu a {
+    font-size: 12px;
+}
+
+.header-wrapper .dropdown-menu a:hover {
+    background-color: lavender;
+}
+
+.bg-light {
+  background-color: lightblue !important;
+}
+
+.navbar-login {
+  width: 305px;
+  padding: 10px;
+  padding-bottom: 0px;
+}
+
+.navbar-login-session {
+  padding: 10px;
+  padding-bottom: 0px;
+  padding-top: 0px;
+}
+
+.icon-size {
+  font-size: 87px;
+}

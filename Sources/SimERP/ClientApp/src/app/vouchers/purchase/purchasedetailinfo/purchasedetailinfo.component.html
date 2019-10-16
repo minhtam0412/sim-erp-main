@@ -1,0 +1,402 @@
+<section class="form_content">
+    <form (ngSubmit)="submitData()">
+        <div class="row">
+            <div class="col-sm-4 text-left">
+                <p class="text-uppercase" style="font-size:18px;color: #587792; font-weight:bold; font-family: 'Lato', sans-serif;"><span>HÓA ĐƠN MUA HÀNG</span></p>
+            </div>
+            <div class="col-sm-8 text-right">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success btn-sm" style="background-color: #5cb85c; border-color: #4cae4c">
+                        <i class="far fa-save"></i> Lưu (F3)
+                    </button>&nbsp;
+                    <button type="button" class="btn btn-success btn-sm" style="background-color: #5cb85c; border-color: #4cae4c">
+                        <i class="far fa-check-square"></i> Lưu & Ghi sổ (F4)
+                    </button>&nbsp;
+                    <button type="button" class="btn btn-success btn-sm" style="background-color: #5bc0de; border-color: #46b8da;">
+                        <i class="fas fa-check"></i> Kiểm tra HSD
+                    </button>&nbsp;
+                    <button type="button" class="btn btn-success btn-sm" style="background-color: #337ab7; border-color: #2e6da4;" [routerLink]="['/purchase']" routerLinkActive="router-link-active">
+                        <i class="fas fa-long-arrow-alt-left"></i> Trở về (F10)
+                    </button>&nbsp;
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div style="border-top:0.5px solid #d6d6d6; margin:3px 0"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right control-label-require">Nhà cung cấp<span class="control-label-require">*</span></label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">Địa chỉ<span class="control-label-require"></span></label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">Điện thoại<span class="control-label-require"></span></label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">Số CT tham chiếu<span class="control-label-require"></span></label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right" style="margin-top: inherit;">Ghi chú<span class="control-label-require"></span></label>
+                        <div class="col-sm-7">
+                            <textarea type="text" class="form-control form-control-sm" rows="5" style="box-shadow: none; border-top: none; border-left: none; border-right: none"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">Số chứng từ<span class="control-label-require">*</span></label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">Ngày chứng từ<span class="control-label-require">*</span></label>
+                        <div class="col-sm-7">
+                            <div class="input-group input-group-sm">
+                                <input class="form-control form-control-sm" placeholder="" name="NgayChungTu" ngbDatepicker #dNgayChungTu="ngbDatepicker" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm btn-outline-secondary calendar" (click)="dNgayChungTu.toggle()" type="button">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">Ngày hạch toán<span class="control-label-require">*</span></label>
+                        <div class="col-sm-7">
+                            <div class="input-group input-group-sm">
+                                <input class="form-control form-control-sm" placeholder="" name="NgayHoachToan" ngbDatepicker #dNgayHoachToan="ngbDatepicker" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm btn-outline-secondary calendar" (click)="dNgayHoachToan.toggle()" type="button">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">Ngày tạo<span class="control-label-require"></span></label>
+                        <div class="col-sm-7">
+                            <div class="input-group input-group-sm">
+                                <input class="form-control form-control-sm" placeholder="" name="NgayTao" ngbDatepicker #dNgayTao="ngbDatepicker" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm btn-outline-secondary calendar" (click)="dNgayTao.toggle()" type="button">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">Hình thức TT<span class="control-label-require"></span></label>
+                        <div class="col-sm-7">
+                            <select class="browser-default form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                <option value="1" selected>Tiền mặt</option>
+                                <option value="2">Ngân hàng</option>
+                                <option value="2">Thu khám đoàn</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">Hạn thanh toán<span class="control-label-require"></span></label>
+                        <div class="col-sm-7">
+                            <select class="browser-default form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                    <option value="1" selected>Thanh toán liền</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">Kho nhập<span class="control-label-require"></span></label>
+                        <div class="col-sm-7">
+                            <select class="browser-default form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                <option value="1" selected>[Tân Phú] Kho dược</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-5 control-label text-right">Công nợ<span class="control-label-require"></span></label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control form-control-sm text-right" style="box-shadow: none; border-top: none; border-left: none; border-right: none" value="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 text-left">
+                <div class="mt-3">
+                    <br>
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#home">Hàng hóa(s)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#menu1">Quy đổi</a>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        <div id="home" class="tab-pane active"><br>
+                            <div class="col-md-12">
+                                <div class="row table-responsive">
+                                    <!-- Table  -->
+                                    <table class="table table-bordered table-striped table-hover">
+                                        <!-- Table head -->
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Mã hàng</th>
+                                                <th style="width: 30%">Tên hàng</th>
+                                                <th>ĐVT</th>
+                                                <th>SL</th>
+                                                <th>Đơn giá</th>
+                                                <th>Thành tiền</th>
+                                                <th>Giảm giá</th>
+                                                <th>VAT(%)</th>
+                                                <th>Tổng tiền</th>
+                                                <th>QĐ/HSD</th>
+                                                <th>Hạn SD</th>
+                                                <th>Số lô</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <!-- Table head -->
+                                        <!-- Table body -->
+                                        <tbody>
+                                            <tr *ngIf="lst_Merchandise.length <= 0">
+                                                <td colspan="14" class="text-center">Dữ liệu không tồn tại</td>
+                                            </tr>
+                                            <tr *ngFor="let row of lst_Merchandise; let i = index">
+                                                <th>{{i + 1}}</th>
+                                                <td><input type="text" [(ngModel)]="row.Name" name="Name{{i}}" class="form-control form-control-sm" value="{{row.Code}}"></td>
+                                                <td>{{row.Name}}</td>
+                                                <td>{{row.Unit}}</td>
+                                                <td>{{row.Amount}}</td>
+                                                <td>{{row.Price}}</td>
+                                                <td>{{row.Money}}</td>
+                                                <td>{{row.Promotion}}</td>
+                                                <td>{{row.VAT}}</td>
+                                                <td>{{row.TotalMoney}}</td>
+                                                <td>{{row.QD_HSD}}</td>
+                                                <td>{{row.ExpiryDate | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
+                                                <td>{{row.TotalMoney}}</td>
+                                                <td>
+                                                    <a id="edit_exp"><i class="fas fa-edit" style='color:#337ab7' data-toggle="modal" data-target="#exampleModalCenter"></i></a>&nbsp;&nbsp;&nbsp;
+                                                    <a (click)="deleteRowGird_hanghoa(i)"><i class="far fa-trash-alt" style='color:#337ab7'></i></a>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="14" class="text-left lbadd"><a (click)="addRowGird_HangHoa()">Thêm (F12)</a> | <a data-toggle="modal" data-target="#myModal">Thêm nhiều</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="menu1" class="tab-pane fade"><br>
+                            <div class="col-md-12">
+                                <div class="row table-responsive">
+                                    <!-- Table  -->
+                                    <table class="table table-bordered table-striped table-hover">
+                                        <!-- Table head -->
+                                        <thead>
+                                            <tr>
+                                                <th rowspan="2" style="vertical-align: middle;">#</th>
+                                                <th rowspan="2" style="vertical-align: middle;">MÃ HH</th>
+                                                <th rowspan="2" style="width: 30%; vertical-align: middle;">TÊN HH</th>
+                                                <th colspan="3">QUY ĐỔI</th>
+                                                <th colspan="2">SỐ LƯỢNG</th>
+                                                <th colspan="2">THÀNH TIỀN</th>
+                                            </tr>
+                                            <tr>
+
+                                                <th>ĐVT(mua)</th>
+                                                <th>ĐVT(quy đổi)</th>
+                                                <th>Quy đổi<br><br>(1)</th>
+                                                <th>SL(mua)<br><br>(2)</th>
+                                                <th>SL(quy đổi)<br><br>(3=1x2)</th>
+                                                <th>Giá vốn<br><br>(4)</th>
+                                                <th>Thành tiền<br><br>(5=3x4)</th>
+                                            </tr>
+                                        </thead>
+                                        <!-- Table head -->
+                                        <!-- Table body -->
+                                        <tbody>
+                                            <tr>
+                                                <td colspan="10" class="text-center">Dữ liệu không tồn tại</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row total_group">
+            <div class="col-sm-8">
+                <div class="row">
+                    <div class="col-sm-5"></div>
+                    <div class="col-sm-7">
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" value="">Kiêm phiếu chi
+                            </label>
+                        </div>
+                        <div class="form-check-inline">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" value="">Kiêm phiếu nhập kho
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="padding: 10px">
+                    <div class="col-sm-5 text-right">
+                        <label>Files đính kèm</label>
+                    </div>
+                    <div class="col-sm-7">
+                        <div class="line-file"></div>
+                        <div class="input-file-app">
+                            <div class="btn-wrapper" (click)="chooseFile()"><span class="btn btn-info btn-sm btn-xs"> <i class="fa fa-paperclip" aria-hidden="true"></i> Attach file</span>
+                                <div ng-switch="" on="multi">
+                                    <div ng-switch-when="true" class="ng-scope">
+                                        <input type="file" hidden #fileInput (change)="onChangeFile($event)" />
+                                        <!-- <input id="srKRbuA5mS" name="srKRbuA5mS" type="file" ng-model="file.fileName" multiple="" ng-disabled="isPost" accept="*" class="ng-pristine ng-valid ng-not-modified ng-touched"> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <input type="file" multiple accept="*" class="ng-pristine ng-valid ng-not-modified ng-touched"> -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 text-right" style="font-weight: bold;">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <select class="browser-default form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                            <option value="1" selected>Giảm(%)</option>
+                            <option value="2">Giảm($)</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 text-left">Thành tiền</div>
+                    <div class="col-sm-8">0</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 text-left">Giảm giá</div>
+                    <div class="col-sm-8">0</div>
+                </div>
+                <div class="row" style="font-size: 14px;">
+                    <div class="col-sm-4 text-left">Tổng tiền</div>
+                    <div class="col-sm-8">0</div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <!-- The Modal -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Tìm kiếm hàng hóa</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="row">
+                            <label class="col-sm-2 control-label text-right">Tìm kiếm</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                            </div>
+                            <label class="col-sm-2 control-label text-right">Nhóm hàng hóa</label>
+                            <div class="col-sm-3">
+                                <select class="browser-default form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                    <option value="1" selected>--Tất cả--</option>
+                                    <option value="2">Ngân hàng</option>
+                                    <option value="2">Thu khám đoàn</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="button" class="btn btn-success btn-sm" style="background-color: #5bc0de; border-color: #46b8da;">
+                                    <i class="fas fa-search"></i> Tìm
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <br>
+                            <div class="row table-responsive">
+                                <!-- Table  -->
+                                <table class="table table-bordered table-striped table-hover">
+                                    <!-- Table head -->
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Mã</th>
+                                            <th>Tên hàng</th>
+                                            <th>Đơn vị tính</th>
+                                        </tr>
+
+                                    </thead>
+                                    <!-- Table head -->
+                                    <!-- Table body -->
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td>COS-0001</td>
+                                            <td>Bepanthen balm</td>
+                                            <td>Tuýp</td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>COS-0001</td>
+                                            <td>Bepanthen balm</td>
+                                            <td>Tuýp</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>

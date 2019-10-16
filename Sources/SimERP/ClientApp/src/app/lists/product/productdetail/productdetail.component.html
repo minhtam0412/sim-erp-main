@@ -1,0 +1,417 @@
+<form #form="ngForm">
+  <div class="modal-content">
+
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h4 class="modal-title">{{isAddState ? 'Thêm mới' : 'Chỉnh sửa'}}</h4>
+      <button type="button" class="close" (click)="closeModal()">&times;</button>
+    </div>
+
+    <!-- Modal body -->
+    <div class="modal-body">
+      <div class="form_content">
+        <div class="card" style="margin-bottom: 10px;">
+          <h5 class="card-header h5">Thông tin cơ bản</h5>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-7">
+                <div class="row">
+                  <div class="col-sm-3 text-right"><label control-label>Tên hàng hoá</label> <label
+                    class="control-label-require">*</label></div>
+                  <div class="col-sm-9">
+                    <input type="text" #ProductName='ngModel' [(ngModel)]="model.ProductName" name="ProductName"
+                           class="form-control form-control-sm" required maxlength="250"
+                           [ngClass]="{ 'is-invalid': ProductName.touched  && ProductName.invalid  }">
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-5">
+                <div class="row">
+                  <div class="col-sm-5 text-right"><label control-label>Mã hàng hoá</label> <label
+                    class="control-label-require">*</label></div>
+                  <div class="col-sm-7">
+                    <input type="text" #ProductCode='ngModel' [(ngModel)]="model.ProductCode" name="ProductCode"
+                           class="form-control form-control-sm" required maxlength="50" [disabled]="!isAddState"
+                           [ngClass]="{ 'is-invalid': ProductCode.touched  && ProductCode.invalid  }">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-7">
+                <div class="row">
+                  <div class="col-sm-3 text-right"><label>Tên viết tắt</label></div>
+                  <div class="col-sm-9">
+                    <input type="text" #ProductNameShort='ngModel' [(ngModel)]="model.ProductNameShort"
+                           name="ProductNameShort"
+                           class="form-control form-control-sm" maxlength="250"
+                           [ngClass]="{ 'is-invalid': ProductNameShort.touched  && ProductNameShort.invalid } ">
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-5">
+                <div class="row">
+                  <div class="col-sm-5 text-right"><label class="control-label">Mã vạch</label></div>
+                  <div class="col-sm-7">
+                    <input type="text" #Barcode='ngModel' [(ngModel)]="model.Barcode" name="Barcode"
+                           class="form-control form-control-sm" maxlength="50"
+                           [ngClass]="{ 'is-invalid': Barcode.touched  && Barcode.invalid  }">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-7">
+                <div class="row">
+                  <div class="col-sm-3 text-right"><label class="control-label">Đơn vị tính</label></div>
+                  <div class="col-sm-9">
+                    <select [(ngModel)]="model.UnitId" name="UnitId" class="browser-default form-control">
+                      <option value="-1">--Chọn đơn vị tính--</option>
+                      <option *ngFor="let item of lstUnit" value="{{item.UnitId}}">
+                        {{item.UnitName}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-5">
+                <div class="row">
+                  <div class="col-sm-5 text-right"><label class="control-label">Giá bán</label></div>
+                  <div class="col-sm-7">
+                    <input type="text" #Price='ngModel' [(ngModel)]="model.Price" pattern="[0-9]{0,15}"
+                           (ngModelChange)="model.Price=$event" name="Price"
+                           class="form-control form-control-sm" maxlength="21"
+                           [ngClass]="{ 'is-invalid': Price.touched  && Price.invalid  }">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-7">
+              </div>
+
+              <div class="col-md-5">
+                <div class="row">
+                  <div class="col-sm-5 text-right"><label control-label></label></div>
+                  <div class="col-sm-7">
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" class="custom-control-input" id="IsActive" [(ngModel)]="model.IsActive"
+                             name="IsActive">
+                      <label class="custom-control-label" for="IsActive">Sử dụng</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+        <ngb-tabset #tabset="ngbTabset">
+
+          <ngb-tab id="tab-ProductInfo">
+            <ng-template ngbTabTitle>Thông tin hàng hoá</ng-template>
+            <ng-template ngbTabContent>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="row">
+                      <div class="col-sm-3 text-right"><label class="control-label">Ngành hàng</label></div>
+                      <div class="col-sm-9">
+                        <select [(ngModel)]="model.ProductCategoryId" name="ProductCategoryId"
+                                class="browser-default form-control">
+                          <option value=undefined>--Chọn ngành hàng--</option>
+                          <option *ngFor="let item of lstProductCategory" value="{{item.ProductCategoryId}}">
+                            {{item.ProductCategoryName}}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-5">
+                    <div class="row">
+                      <div class="col-sm-5 text-right"><label class="control-label">Đơn vị đóng gói</label></div>
+                      <div class="col-sm-7">
+                        <select [(ngModel)]="model.PackageUnitId" name="PackageUnitId"
+                                class="browser-default form-control">
+                          <option value="-1">--Chọn Đơn vị đóng gói--</option>
+                          <option *ngFor="let item of lstPackageUnit" value="{{item.PackageUnitId}}">
+                            {{item.PackageUnitName}}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="row">
+                      <!--                      <div class="col-sm-3 text-right"><label class="control-label">Nhóm hàng hoá</label></div>-->
+                      <!--                      <div class="col-sm-9">-->
+                      <!--                        <select [(ngModel)]="model.ProductType" name="ProductType" class="browser-default form-control">-->
+                      <!--                          <option value=-1>&#45;&#45;Chọn nhóm hàng hoá&#45;&#45;</option>-->
+                      <!--                          <option *ngFor="let item of lstItemType" value="{{item.ItemTypeId}}">-->
+                      <!--                            {{item.ItemTypeName}}-->
+                      <!--                          </option>-->
+                      <!--                        </select>-->
+                      <!--                      </div>-->
+                    </div>
+                  </div>
+
+                  <div class="col-md-5">
+                    <div class="row">
+                      <div class="col-sm-5 text-right"><label control-label>Khối lượng tịnh</label></div>
+                      <div class="col-sm-7">
+                        <input type="text" #WeightUnit='ngModel' [(ngModel)]="model.WeightUnit" name="WeightUnit"
+                               class="form-control form-control-sm"
+                               [ngClass]="{ 'is-invalid': WeightUnit.touched  && WeightUnit.invalid  }">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="row">
+                      <div class="col-sm-3 text-right"><label class="control-label">Thuế VAT</label></div>
+                      <div class="col-sm-9">
+                        <select [(ngModel)]="model.TaxId" name="TaxId" class="browser-default form-control">
+                          <option value="-1">--Chọn thuế VAT--</option>
+                          <option *ngFor="let item of lstTax" value="{{item.TaxId}}">
+                            {{item.TaxName}}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-5">
+                    <div class="row">
+                      <div class="col-sm-5 text-right"><label control-label>Quy cách(bao/tấn)</label></div>
+                      <div class="col-sm-7">
+                        <input type="text" #WeightUnit='ngModel' [(ngModel)]="model.WeightUnit" name="WeightUnit"
+                               class="form-control form-control-sm"
+                               [ngClass]="{ 'is-invalid': WeightUnit.touched  && WeightUnit.invalid  }">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="row">
+                      <div class="col-sm-3 text-right"><label class="control-label">Thuế nhập khẩu</label></div>
+                      <div class="col-sm-9">
+                        <select [(ngModel)]="model.ImportTaxId" name="ImportTaxId" class="browser-default form-control">
+                          <option value="-1">--Chọn thuế nhập khẩu--</option>
+                          <option *ngFor="let item of lstTax" value="{{item.TaxId}}">
+                            {{item.TaxName}}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-5">
+                    <div class="row">
+                      <div class="col-sm-5 text-right"><label class="control-label">Loại hàng hoá</label></div>
+                      <div class="col-sm-7">
+                        <select [(ngModel)]="model.ItemType" name="ItemType" class="browser-default form-control">
+                          <option value=-1>--Chọn Loại hàng hoá--</option>
+                          <option *ngFor="let item of lstItemType" value="{{item.ItemTypeId}}">
+                            {{item.ItemTypeName}}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="row">
+                      <div class="col-sm-3 text-right"><label class="control-label">Lead time</label></div>
+                      <div class="col-sm-9">
+                        <input type="text" #WeightUnit='ngModel' [(ngModel)]="model.WeightUnit" name="WeightUnit"
+                               class="form-control form-control-sm"
+                               [ngClass]="{ 'is-invalid': WeightUnit.touched  && WeightUnit.invalid  }">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-5">
+                    <div class="row">
+                      <div class="col-sm-5 text-right"><label control-label>Xuất xứ</label></div>
+                      <div class="col-sm-7">
+                        <select [(ngModel)]="model.MadeIn" name="MadeIn" class="browser-default form-control">
+                          <option value="-1">--Chọn xuất xứ--</option>
+                          <option *ngFor="let item of lstCountry" value="{{item.CountryId}}">
+                            {{item.CountryName}}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-7">
+                    <div class="row">
+                      <div class="col-sm-3 text-right"><label control-label>Mô tả</label></div>
+                      <div class="col-sm-9">
+                        <textarea type="text" [(ngModel)]="model.WeightUnit" name="WeightUnit" rows="3"
+                                  class="form-control-plaintext"
+                                  [ngClass]="{ 'is-invalid': WeightUnit.touched  && WeightUnit.invalid  }"></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-5">
+                    <div class="row">
+                      <div class="col-sm-5 text-right"><label control-label></label></div>
+                      <div class="col-sm-7">
+                        <div class="custom-control custom-checkbox">
+                          <input type="checkbox" class="custom-control-input" id="IsUsingExpireDate"
+                                 [(ngModel)]="model.IsUsingExpireDate"
+                                 name="IsUsingExpireDate">
+                          <label class="custom-control-label" for="IsUsingExpireDate">Có hạn dùng không</label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="this.model.IsUsingExpireDate">
+                      <div class="col-sm-5 text-right"><label control-label>Quy định expire(ngày)</label></div>
+                      <div class="col-sm-7">
+                        <input type="text" #ExpireDays='ngModel' [(ngModel)]="model.ExpireDays" id="ExpireDays"
+                               name="ExpireDays"
+                               class="form-control form-control-sm" maxlength="4" pattern="[0-9]{0,4}"
+                               [ngClass]="{ 'is-invalid': ExpireDays.touched  && ExpireDays.invalid  }">
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
+
+          <ngb-tab id="tab-Supllier">
+            <ng-template ngbTabTitle>Thông tin nhà cung cấp</ng-template>
+            <ng-template ngbTabContent>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-2 text-right"><label control-label>Mã hàng hoá supplier</label><label
+                    class="control-label-require">*</label></div>
+                  <div class="col-sm-10">
+                    <input type="text" #SupplierProductCode='ngModel' [(ngModel)]="model.SupplierProductCode"
+                           name="SupplierProductCode"
+                           class="form-control form-control-sm"
+                           [ngClass]="{ 'is-invalid': SupplierProductCode.touched  && SupplierProductCode.invalid  }">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-2 text-right"><label control-label>Tên hàng hoá supplier</label><label
+                    class="control-label-require">*</label></div>
+                  <div class="col-sm-10">
+                    <input type="text" #SupplierProductName='ngModel' [(ngModel)]="model.SupplierProductName"
+                           name="SupplierProductName"
+                           class="form-control form-control-sm"
+                           [ngClass]="{ 'is-invalid': SupplierProductName.touched  && SupplierProductName.invalid  }">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-2 text-right"><label control-label>Term Condition</label></div>
+                  <div class="col-sm-10">
+                    <textarea type="text" #TermCondition='ngModel' [(ngModel)]="model.TermCondition"
+                              name="TermCondition" ProductValidator.TextAreaShouldBeValid
+                              rows="5" class="form-control-plaintext"
+                              [ngClass]="{ 'is-invalid': TermCondition.touched  && TermCondition.invalid  }"></textarea>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
+
+          <ngb-tab id="tab-Images">
+            <ng-template ngbTabTitle>Tài liêu/Hình ảnh</ng-template>
+            <ng-template ngbTabContent>
+              <div style="display: none">
+                <input type="file" #file placeholder="Choose file" (change)="changeFile(file.files)" multiple
+                       style="display:none;">
+              </div>
+
+              <div class="table-responsive">
+
+                <!-- Table  -->
+                <table class="table table-bordered table-striped table-hover table-fixed">
+
+                  <!-- Table head -->
+                  <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Image</th>
+                    <th>Tên hình ảnh/Tài liệu</th>
+                    <th>Ghi chú</th>
+                    <th>File Name</th>
+                    <th>Ngày update</th>
+                    <th></th>
+                  </tr>
+                  </thead>
+                  <!-- Table head -->
+
+                  <!-- Table body -->
+                  <tbody>
+                  <tr *ngIf="model.ListAttachFile.length < 1">
+                    <td colspan="10" class="datarow-null">Dữ liệu không tồn tại</td>
+                  </tr>
+                  <tr *ngFor="let row of model.ListAttachFile; let i = index">
+                    <td class="order-number">{{i + 1}}</td>
+                    <td><img [src]="row.FilePath" height="40px"></td>
+                    <td class="col-name"><input type="text"
+                                                [(ngModel)]="this.model.ListAttachFile[i].FileTitle"
+                                                name="FileTitle{{i}}"
+                                                class="form-control form-control-sm" maxlength="250"></td>
+                    <td class="col-name"><input type="text"
+                                                [(ngModel)]="this.model.ListAttachFile[i].Desctiption"
+                                                name="Desctiption{{i}}"
+                                                class="form-control form-control-sm" maxlength="500"></td>
+                    <td style="text-align: left" class="col-code"><a
+                      (click)="openAttachFile(row)">{{row.FileNameOriginal}}</a>
+                    </td>
+                    <td class="col-code">{{row["CreatedDate"] | date : "dd/MM/yyyy HH:mm:ss"}}</td>
+                    <td class="col-action">
+                      <a (click)="setCurrentAttachFileIndex(i) || file.click()"><i class="fas fa-edit"
+                                                                                   style='color:#337ab7;'></i></a>&nbsp;&nbsp;&nbsp;
+                      <a (click)="deleteAttachFile(i)"><i class="far fa-trash-alt" style='color:#337ab7;'></i></a>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <a href="javascript:void(0)" (click)="file.click()">Thêm tập tin</a>
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset>
+
+      </div>
+    </div>
+
+    <!-- Modal footer -->
+    <div class="modal-footer">
+      <button type="button" [disabled]="form.invalid" class="btn btn-info btn-sm"
+              (click)="saveDataModal(true)">
+        <i class="far fa-save"></i> Lưu(F3)
+      </button>&nbsp;
+      <button type="button" [disabled]="form.invalid" class="btn btn-info btn-sm"
+              (click)="saveDataModal(false)">
+        <i class="far fa-save"></i> Lưu & Thêm mới
+      </button>&nbsp;
+      <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal"
+              (click)="closeModal()">Đóng
+      </button>
+    </div>
+  </div>
+</form>
+<app-loading *ngIf="loaderService.isLoading$ | async"></app-loading>

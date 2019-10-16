@@ -1,0 +1,17 @@
+{
+  "UserId": 2,
+  "UserCode": "admin",
+  "UserName": "admin",
+  "FullName": "admin",
+  "Address": "TPHCM",
+  "PhoneNumber": "0963235324",
+  "Email": "admin@simmed.vn",
+  "DepartmentId": 1,
+  "Avatar": "tam.jpg",
+  "IsActive": true,
+  "UserTypeName": false,
+  "IsSystem": true,
+  "IsSecondPassword": false,
+  "IsFirstChangePassword": false,
+  "PageDefault": null
+}

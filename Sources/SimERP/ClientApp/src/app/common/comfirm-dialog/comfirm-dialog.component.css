@@ -1,0 +1,35 @@
+.modal-body {
+  font-family: 'Lato', sans-serif;
+  color: #555;
+  font-size: 12px;
+  text-align: left;
+  padding: 15px;
+}
+
+.modal-header .close {
+  margin-right: 5px;
+  margin-top: -2px;
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  float: right;
+  font-size: 21px;
+  font-weight: bold;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: .2;
+  outline: 0;
+}
+
+.modal-header .close :hover {
+    color: #333;
+}
+
+.modal-footer {
+  padding: 15px;
+  text-align: right;
+  border-top: 1px solid #e5e5e5;
+}
+
