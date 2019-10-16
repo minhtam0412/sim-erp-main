@@ -151,6 +151,7 @@
     <Compile Include="Businesses\List\ProductCategory.cs" />
     <Compile Include="Businesses\List\UnitBO.cs" />
     <Compile Include="Businesses\List\PageListBO.cs" />
+    <Compile Include="Businesses\List\VendorBO.cs" />
     <Compile Include="Businesses\List\VendorTypeBO.cs" />
     <Compile Include="Businesses\User\TokenRefreshBO.cs" />
     <Compile Include="Businesses\User\UserBO.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="Interfaces\List\ICustomer.cs" />
     <Compile Include="Interfaces\List\IPageList.cs" />
     <Compile Include="Interfaces\List\IProductCategory.cs" />
+    <Compile Include="Interfaces\List\IVendor.cs" />
     <Compile Include="Interfaces\List\IVendorType.cs" />
     <Compile Include="Interfaces\User\ITokenRefresh.cs" />
     <Compile Include="Interfaces\User\IUser.cs" />

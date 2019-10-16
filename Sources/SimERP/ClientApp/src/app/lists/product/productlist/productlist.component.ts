@@ -16,6 +16,7 @@ import {Tax} from '../../taxcomponent/models/Tax';
 import {ProductCategory} from '../../productcategory/model/ProductCategory';
 import {ProductService} from '../product.service';
 import {Product} from '../model/product';
+import {Vendor} from '../../vendor/model/vendor';
 
 @Component({
   selector: 'app-productlist',
@@ -33,7 +34,7 @@ export class ProductlistComponent implements OnInit, AfterViewInit {
   isNewModel: boolean;
   lstCountry: Country[];
   lstPackageUnit: Packageunit[];
-  lstVendorType: VendorType[];
+  lstVendor: Vendor[];
   lstUnit: Unit[];
   lstTax: Tax[];
   lstProductCategory: ProductCategory[];
@@ -56,7 +57,7 @@ export class ProductlistComponent implements OnInit, AfterViewInit {
       console.log(res);
       this.lstCountry = (res[0] as ResponeResult).RepData;
       this.lstPackageUnit = (res[1] as ResponeResult).RepData;
-      this.lstVendorType = (res[2] as ResponeResult).RepData;
+      this.lstVendor = (res[2] as ResponeResult).RepData;
       this.lstUnit = (res[3] as ResponeResult).RepData;
       this.lstTax = (res[4] as ResponeResult).RepData;
       this.lstProductCategory = (res[5] as ResponeResult).RepData;
@@ -69,11 +70,11 @@ export class ProductlistComponent implements OnInit, AfterViewInit {
   loadCommonData(): Observable<any[]> {
     const reqCountry = this.masterdataService.getCountryData();
     const reqPackageUnit = this.masterdataService.getPackageUnitData();
-    const reqVendorType = this.masterdataService.getVendorData();
+    const reqVendor = this.masterdataService.getVendorData();
     const reqUnit = this.masterdataService.getUnitData();
     const reqTax = this.masterdataService.getTaxData();
     const reqProductCategory = this.masterdataService.getProductCategoryData();
-    return forkJoin([reqCountry, reqPackageUnit, reqVendorType, reqUnit, reqTax, reqProductCategory]);
+    return forkJoin([reqCountry, reqPackageUnit, reqVendor, reqUnit, reqTax, reqProductCategory]);
   }
 
   SearchAction() {
@@ -90,7 +91,7 @@ export class ProductlistComponent implements OnInit, AfterViewInit {
 
     modalRef.componentInstance.lstCountry = this.lstCountry;
     modalRef.componentInstance.lstPackageUnit = this.lstPackageUnit;
-    modalRef.componentInstance.lstVendorType = this.lstVendorType;
+    modalRef.componentInstance.lstVendor = this.lstVendor;
     modalRef.componentInstance.lstUnit = this.lstUnit;
     modalRef.componentInstance.lstTax = this.lstTax;
     modalRef.componentInstance.lstProductCategory = this.lstProductCategory;

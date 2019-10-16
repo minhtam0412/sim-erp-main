@@ -33,8 +33,12 @@ export class MasterdataService {
     return this.getData('api/list/packageunit');
   }
 
-  getVendorData() {
+  getVendorTypeData() {
     return this.getData('api/list/vendortype');
+  }
+
+  getVendorData() {
+    return this.getData('api/list/vendor');
   }
 
   getUnitData() {

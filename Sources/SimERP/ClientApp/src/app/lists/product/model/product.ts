@@ -23,30 +23,30 @@ export class Product {
   ItemType = -1;
   ProductType = -1;
   CostMethod: number;
-  SupplierId: number;
+  SupplierId = -1;
   SupplierProductCode: string;
   SupplierProductName: string;
   SupplierNotes: string;
   TermCondition: string;
   ThumbnailPhoto: string;
   LargePhoto: string;
-  Image1: string;
-  Image2: string;
-  Image3: string;
-  Image4: string;
+  LeadTime: number;
   MadeIn = '-1';
   PackageUnitId = -1;
+  PackageUnit: number;
   WeightUnit: number;
   IsUsingExpireDate = false;
   ExpireDays: number;
   IsItemVirtual: boolean;
   IsPackage: boolean;
-  SearchString: string;
-  IsActive = false;
   CreatedDate: Date;
   CreatedBy: number;
   ModifyDate: Date;
   ModifyBy: number;
+  SearchString: string;
+  IsActive: boolean;
+  Note: string;
+
 
   // custom properties
   UnitName: string;

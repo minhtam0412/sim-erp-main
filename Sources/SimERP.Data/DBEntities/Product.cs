@@ -44,5 +44,6 @@ namespace SimERP.Data.DBEntities
         public int? ModifyBy { get; set; }
         public string SearchString { get; set; }
         public bool? IsActive { get; set; }
+        public string Note { get; set; }
     }
 }

@@ -380,6 +380,8 @@ namespace SimERP.Data.DBEntities
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Note).HasMaxLength(2000);
+
                 entity.Property(e => e.PackageUnit).HasColumnType("numeric(18, 2)");
 
                 entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
@@ -688,8 +690,6 @@ namespace SimERP.Data.DBEntities
             modelBuilder.Entity<Vendor>(entity =>
             {
                 entity.ToTable("Vendor", "list");
-
-                entity.Property(e => e.VendorId).ValueGeneratedNever();
 
                 entity.Property(e => e.Address).HasMaxLength(250);
 

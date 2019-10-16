@@ -124,6 +124,7 @@
                       <div class="col-sm-3 text-right"><label class="control-label">Ngành hàng</label></div>
                       <div class="col-sm-9">
                         <select [(ngModel)]="model.ProductCategoryId" name="ProductCategoryId"
+                                (change)="changeProductCategory($event.target.value)"
                                 class="browser-default form-control">
                           <option value=undefined>--Chọn ngành hàng--</option>
                           <option *ngFor="let item of lstProductCategory" value="{{item.ProductCategoryId}}">
@@ -140,7 +141,7 @@
                       <div class="col-sm-7">
                         <select [(ngModel)]="model.PackageUnitId" name="PackageUnitId"
                                 class="browser-default form-control">
-                          <option value="-1">--Chọn Đơn vị đóng gói--</option>
+                          <option value=-1>--Chọn Đơn vị đóng gói--</option>
                           <option *ngFor="let item of lstPackageUnit" value="{{item.PackageUnitId}}">
                             {{item.PackageUnitName}}
                           </option>
@@ -168,8 +169,8 @@
                     <div class="row">
                       <div class="col-sm-5 text-right"><label control-label>Khối lượng tịnh</label></div>
                       <div class="col-sm-7">
-                        <input type="text" #WeightUnit='ngModel' [(ngModel)]="model.WeightUnit" name="WeightUnit"
-                               class="form-control form-control-sm"
+                        <input type="number" #WeightUnit='ngModel' [(ngModel)]="model.WeightUnit" name="WeightUnit"
+                               class="form-control form-control-sm" max="999999" pattern="[0-9]{0,9}"
                                [ngClass]="{ 'is-invalid': WeightUnit.touched  && WeightUnit.invalid  }">
                       </div>
                     </div>
@@ -194,9 +195,9 @@
                     <div class="row">
                       <div class="col-sm-5 text-right"><label control-label>Quy cách(bao/tấn)</label></div>
                       <div class="col-sm-7">
-                        <input type="text" #WeightUnit='ngModel' [(ngModel)]="model.WeightUnit" name="WeightUnit"
+                        <input type="text" #PackageUnit='ngModel' [(ngModel)]="model.PackageUnit" name="PackageUnit"
                                class="form-control form-control-sm"
-                               [ngClass]="{ 'is-invalid': WeightUnit.touched  && WeightUnit.invalid  }">
+                               [ngClass]="{ 'is-invalid': PackageUnit.touched  && PackageUnit.invalid  }">
                       </div>
                     </div>
                   </div>
@@ -235,9 +236,9 @@
                     <div class="row">
                       <div class="col-sm-3 text-right"><label class="control-label">Lead time</label></div>
                       <div class="col-sm-9">
-                        <input type="text" #WeightUnit='ngModel' [(ngModel)]="model.WeightUnit" name="WeightUnit"
-                               class="form-control form-control-sm"
-                               [ngClass]="{ 'is-invalid': WeightUnit.touched  && WeightUnit.invalid  }">
+                        <input type="number" #LeadTime='ngModel' [(ngModel)]="model.LeadTime" name="LeadTime"
+                               class="form-control form-control-sm" max="9999"
+                               [ngClass]="{ 'is-invalid': LeadTime.touched  && LeadTime.invalid  }">
                       </div>
                     </div>
                   </div>
@@ -261,9 +262,9 @@
                     <div class="row">
                       <div class="col-sm-3 text-right"><label control-label>Mô tả</label></div>
                       <div class="col-sm-9">
-                        <textarea type="text" [(ngModel)]="model.WeightUnit" name="WeightUnit" rows="3"
-                                  class="form-control-plaintext"
-                                  [ngClass]="{ 'is-invalid': WeightUnit.touched  && WeightUnit.invalid  }"></textarea>
+                        <textarea type="text" [(ngModel)]="model.Note" name="Note" rows="3" #Note='ngModel'
+                                  class="form-control-plaintext" maxlength="2000"
+                                  [ngClass]="{ 'is-invalid': Note.touched  && Note.invalid  }"></textarea>
                       </div>
                     </div>
                   </div>
@@ -305,7 +306,7 @@
                     class="control-label-require">*</label></div>
                   <div class="col-sm-10">
                     <input type="text" #SupplierProductCode='ngModel' [(ngModel)]="model.SupplierProductCode"
-                           name="SupplierProductCode"
+                           name="SupplierProductCode" required
                            class="form-control form-control-sm"
                            [ngClass]="{ 'is-invalid': SupplierProductCode.touched  && SupplierProductCode.invalid  }">
                   </div>
@@ -315,16 +316,28 @@
                     class="control-label-require">*</label></div>
                   <div class="col-sm-10">
                     <input type="text" #SupplierProductName='ngModel' [(ngModel)]="model.SupplierProductName"
-                           name="SupplierProductName"
+                           name="SupplierProductName" required
                            class="form-control form-control-sm"
                            [ngClass]="{ 'is-invalid': SupplierProductName.touched  && SupplierProductName.invalid  }">
                   </div>
                 </div>
                 <div class="row">
+                  <div class="col-sm-2 text-right"><label class="control-label">Nhà cung cấp</label></div>
+                  <div class="col-sm-10">
+                    <select [(ngModel)]="model.SupplierId" name="SupplierId" class="browser-default form-control">
+                      <option value="-1">--Chọn nhà cung cấp--</option>
+                      <option *ngFor="let item of lstVendor" value="{{item.VendorId}}">
+                        {{item.VendorName}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row">
                   <div class="col-sm-2 text-right"><label control-label>Term Condition</label></div>
                   <div class="col-sm-10">
                     <textarea type="text" #TermCondition='ngModel' [(ngModel)]="model.TermCondition"
-                              name="TermCondition" ProductValidator.TextAreaShouldBeValid
+                              name="TermCondition"
                               rows="5" class="form-control-plaintext"
                               [ngClass]="{ 'is-invalid': TermCondition.touched  && TermCondition.invalid  }"></textarea>
                   </div>
@@ -367,7 +380,7 @@
                   </tr>
                   <tr *ngFor="let row of model.ListAttachFile; let i = index">
                     <td class="order-number">{{i + 1}}</td>
-                    <td><img [src]="row.FilePath" height="40px"></td>
+                    <td><img [src]="row.FilePathPreview" height="40px"></td>
                     <td class="col-name"><input type="text"
                                                 [(ngModel)]="this.model.ListAttachFile[i].FileTitle"
                                                 name="FileTitle{{i}}"
@@ -376,7 +389,7 @@
                                                 [(ngModel)]="this.model.ListAttachFile[i].Desctiption"
                                                 name="Desctiption{{i}}"
                                                 class="form-control form-control-sm" maxlength="500"></td>
-                    <td style="text-align: left" class="col-code"><a
+                    <td style="text-align: left; text-overflow: ellipsis" class="col-name"><a href="javascript:void(0)"
                       (click)="openAttachFile(row)">{{row.FileNameOriginal}}</a>
                     </td>
                     <td class="col-code">{{row["CreatedDate"] | date : "dd/MM/yyyy HH:mm:ss"}}</td>

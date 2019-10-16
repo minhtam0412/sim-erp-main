@@ -7,6 +7,7 @@ export class Attachfile {
   FileNameOriginal: string;
   FileName: string;
   FilePath: string;
+  FilePathPreview: string;
   FileSize: number;
   CreatedBy: number;
   CreatedDate: Date;

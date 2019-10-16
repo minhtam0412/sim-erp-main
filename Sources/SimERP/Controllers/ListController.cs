@@ -43,6 +43,7 @@ namespace SimERP.Controllers
         private IProductCategory productcategoryBO;
         private IAttachFile attachFileBO;
         private ICustomer customerBO;
+        private IVendor vendorBO;
 
 
         #endregion Variables
@@ -63,6 +64,7 @@ namespace SimERP.Controllers
             this.productcategoryBO = this.productcategoryBO ?? new ProductCategoryBO();
             this.attachFileBO = this.attachFileBO ?? new AttachFileBO();
             this.customerBO = this.customerBO ?? new CustomerBO();
+            this.vendorBO = this.vendorBO ?? new VendorBO();
         }
         #endregion Contructor
 
@@ -872,6 +874,43 @@ namespace SimERP.Controllers
                 return responeResult;
             }
         }
+        #endregion
+
+        #region Vendor
+
+        [HttpPost]
+        [Route("api/list/vendor")]
+        public ResponeResult GetVendorData([FromBody] ReqListSearch objReqListSearch)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckSign(objReqListSearch.AuthenParams,
+                    objReqListSearch.AuthenParams.ClientUserName, objReqListSearch.AuthenParams.ClientPassword,
+                    objReqListSearch.AuthenParams.Sign);
+                if (repData == null || !repData.IsOk)
+                    return repData;
+                var dataResult = vendorBO.GetData(objReqListSearch);
+                if (dataResult != null)
+                {
+                    repData.RepData = dataResult;
+                    repData.TotalRow = this.vendorBO.TotalRows;
+                }
+                else
+                    this.AddResponeError(ref repData, vendorBO.getMsgCode(),
+                        vendorBO.GetMessage(this.vendorBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+
         #endregion
 
         #region PackageUnit

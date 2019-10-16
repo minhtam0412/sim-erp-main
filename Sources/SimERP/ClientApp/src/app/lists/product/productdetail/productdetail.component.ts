@@ -4,7 +4,6 @@ import {NotificationService} from '../../../common/notifyservice/notification.se
 import {Product} from '../model/product';
 import {Country} from '../../country/model/country';
 import {Packageunit} from '../../packageunit/model/packageunit';
-import {VendorType} from '../../vendortype/model/vendortype';
 import {Unit} from '../../unitcomponent/model/Unit';
 import {Tax} from '../../taxcomponent/models/Tax';
 import {UploadfileService} from '../../../common/uploadfile/uploadfile.service';
@@ -13,6 +12,8 @@ import {ListItemType} from '../../../common/masterdata/models';
 import {Attachfile} from '../model/attachfile';
 import {ProductCategory} from '../../productcategory/model/ProductCategory';
 import {ProductService} from '../product.service';
+import {Vendor} from '../../vendor/model/vendor';
+import {Key_DefaultAttachFile} from '../../../common/config/globalconfig';
 
 @Component({
   selector: 'app-productdetail',
@@ -29,7 +30,7 @@ export class ProductdetailComponent implements OnInit, AfterViewInit {
   @Input() productId: number;
   @Input() lstCountry: Country[];
   @Input() lstPackageUnit: Packageunit[];
-  @Input() lstVendorType: VendorType[];
+  @Input() lstVendor: Vendor[];
   @Input() lstUnit: Unit[];
   @Input() lstTax: Tax[];
   lstItemType = ListItemType;
@@ -40,7 +41,7 @@ export class ProductdetailComponent implements OnInit, AfterViewInit {
   lstFileToUpload: File[] = [];
   currentIndexAttachFile = -1;
 
-  static checkIsImage(file: File) {
+  static checkIsImageFile(file: File) {
     const mimeType = file.type;
     return mimeType.match(/image\/*/) != null;
   }
@@ -70,6 +71,15 @@ export class ProductdetailComponent implements OnInit, AfterViewInit {
         next: res => {
           if (res && res.IsOk) {
             this.model = res.RepData;
+            if (this.model) {
+              this.model.ListAttachFile.forEach((attachfile) => {
+                if (!this.checkIsImageByExtension(attachfile.FilePath)) {
+                  attachfile.FilePathPreview = Key_DefaultAttachFile;
+                } else {
+                  attachfile.FilePathPreview = attachfile.FilePath;
+                }
+              });
+            }
           } else {
             console.log(res);
             this.notificationService.showError(res.MessageText);
@@ -162,33 +172,37 @@ export class ProductdetailComponent implements OnInit, AfterViewInit {
         currentAttachFile.FileSize = attachfile.FileSize;
         currentAttachFile.OptionName = attachfile.OptionName;
 
-        if (ProductdetailComponent.checkIsImage(file)) {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = () => {
-            imgURL = reader.result;
-            currentAttachFile.FilePath = imgURL;
-          };
-        } else {
-          currentAttachFile.FilePath = '../../../../assets/images/avatars/default-avatar.jpg';
-        }
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          imgURL = reader.result;
+          currentAttachFile.FilePath = imgURL;
+          if (ProductdetailComponent.checkIsImageFile(file)) {
+            currentAttachFile.FilePathPreview = imgURL;
+          } else {
+            currentAttachFile.FilePathPreview = Key_DefaultAttachFile;
+          }
+        };
+
         this.currentIndexAttachFile = -1;
       } else {
         // If current state is AddState => auto assign new SordOrder valua
         attachfile.SortOrder = this.getMaxSortOrder() + 1;
         attachfile.IsNew = true;
-        attachfile.FilePath = '../../../../assets/images/avatars/default-avatar.jpg';
-        if (ProductdetailComponent.checkIsImage(file)) {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = () => {
-            imgURL = reader.result;
-            attachfile.FilePath = imgURL;
-            this.model.ListAttachFile.push(attachfile);
-          };
-        } else {
+        attachfile.FilePathPreview = Key_DefaultAttachFile;
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          imgURL = reader.result;
+          attachfile.FilePath = imgURL;
+          if (ProductdetailComponent.checkIsImageFile(file)) {
+            attachfile.FilePathPreview = imgURL;
+          }
+
           this.model.ListAttachFile.push(attachfile);
-        }
+        };
       }
       this.lstFileToUpload.push(file);
     });
@@ -241,23 +255,68 @@ export class ProductdetailComponent implements OnInit, AfterViewInit {
     this.model.ListAttachFile.splice(index, 1);
   }
 
+  checkIsImageByExtension(data) {
+    const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i;
+    if (!allowedExtensions.exec(data)) {
+      return false;
+    }
+    return true;
+  }
+
   // handle on click open Attach File
   openAttachFile(row: Attachfile) {
     if (row) {
-      if (row.AttachId) {
-        // Attach File was uploaded into server
-        ProductdetailComponent.openInNewTab(row.FilePath);
-      } else {
-        // new Attach File
+      console.log(row);
+
+      if (row.FilePath.startsWith('data:')) {
         ProductdetailComponent.debugBase64(row.FilePath);
+      } else {
+        ProductdetailComponent.openInNewTab(row.FilePath);
       }
+
+
+      // if (row.FilePath.includes(Key_DefaultAttachFileName)) {
+      //   const fileName = row.FileNameOriginal;
+      //   const fileToUpload = this.lstFileToUpload.find((v) => {
+      //     return v.name === fileName;
+      //   });
+      //   if (fileToUpload) {
+      //     const reader = new FileReader();
+      //     reader.readAsDataURL(fileToUpload);
+      //     reader.onload = () => {
+      //       const data = reader.result;
+      //       ProductdetailComponent.debugBase64(data);
+      //     };
+      //   }
+      // } else {
+      //   if (this.checkIsImageByExtension(row.FilePath)) {
+      //     ProductdetailComponent.openInNewTab(row.FilePath);
+      //   } else {
+      //     ProductdetailComponent.debugBase64(row.FilePath);
+      //   }
+      // }
     }
   }
 
+  // handle validate data before save
   validateData() {
+
+    // check data Expiredday
     if (!this.model.IsUsingExpireDate) {
       this.model.ExpireDays = 0;
     }
+
     return true;
+  }
+
+  changeProductCategory(value) {
+    // assign ProductCategoryList for product
+    const productCategoryId = value;
+    const productCategory = this.lstProductCategory.find((v) => {
+      return v.ProductCategoryId === productCategoryId;
+    });
+    if (productCategory) {
+      this.model.ProductCategoryList = productCategory.ParentListId;
+    }
   }
 }
