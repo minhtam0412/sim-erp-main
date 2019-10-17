@@ -44,6 +44,7 @@ import { ProductCategoryComponent } from './lists/productcategory/product-catego
 import { CustomerComponent } from './lists/customer/customer/customer.component';
 import { ProductlistComponent } from './lists/product/productlist/productlist.component';
 import { ProductdetailComponent } from './lists/product/productdetail/productdetail.component';
+import {NgSelectModule} from '@ng-select/ng-select';
 
 
 export function tokenGetter() {
@@ -85,7 +86,7 @@ export function tokenGetter() {
     CustomerComponent
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
     HttpClientModule,
     FormsModule,
     ToastrModule.forRoot(),
@@ -106,7 +107,8 @@ export function tokenGetter() {
         whitelistedDomains: [''],
         blacklistedRoutes: ['']
       }
-    })
+    }),
+    NgSelectModule
   ],
   providers: [AuthGuard,
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

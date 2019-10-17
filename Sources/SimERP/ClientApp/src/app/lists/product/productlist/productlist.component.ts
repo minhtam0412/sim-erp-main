@@ -21,6 +21,7 @@ import {ProductCategoryService} from '../../productcategory/product-category.ser
 import {DropDowTree} from '../../productcategory/model/dropdowntree';
 import {ComfirmDialogComponent} from '../../../common/comfirm-dialog/comfirm-dialog.component';
 import {NotificationService} from '../../../common/notifyservice/notification.service';
+import {ListStatus} from '../../../common/masterdata/models';
 
 declare var jquery: any;
 declare var $: any;
@@ -51,7 +52,7 @@ export class ProductlistComponent implements OnInit, AfterViewInit {
   }
 
   searchString: string;
-  isActive: number;
+  isActive = -1;
   productCategory: Guid = undefined;
   lstDataResult: Product[] = [];
   lstFunction: Function[] = [];
@@ -64,6 +65,7 @@ export class ProductlistComponent implements OnInit, AfterViewInit {
   lstProductCategory: ProductCategory[];
 
   lstDataDropDown: ProductCategory[] = [];
+  lstStatus = ListStatus;
 
 
   total = 10;
@@ -82,7 +84,7 @@ export class ProductlistComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-
+    console.log(this.lstStatus);
   }
 
   loadDataDropDown() {
@@ -168,6 +170,7 @@ export class ProductlistComponent implements OnInit, AfterViewInit {
   }
 
   SearchAction() {
+    console.log(this.isActive);
     this.page = 1;
     this.LoadData(0);
   }
@@ -292,5 +295,9 @@ export class ProductlistComponent implements OnInit, AfterViewInit {
       console.log(err);
       this.toastr.error('Lỗi xoá thông tin! Vui lòng liên hệ quản trị hệ thống!');
     });
+  }
+
+  clearIsActive() {
+    this.isActive = -1;
   }
 }

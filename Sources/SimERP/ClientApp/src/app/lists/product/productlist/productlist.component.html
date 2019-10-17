@@ -64,11 +64,14 @@
           <div class="row">
             <div class="col-sm-12">
               <div class="input-group mb-3 ">
-                <select [(ngModel)]="isActive" name="isActive" class="browser-default form-control">
-                  <option value=-1>Tất cả</option>
-                  <option value=1>Sử dụng</option>
-                  <option value=0>Ngưng</option>
-                </select>
+                <ng-select [(ngModel)]="isActive" name="isActive" class="custom" autofocus (clear)="clearIsActive()">
+                  <ng-option *ngFor="let status of lstStatus" [value]="status.StatusId">{{status.StatusName}}</ng-option>
+                </ng-select>
+<!--                <select [(ngModel)]="isActive" name="isActive" class="browser-default form-control">-->
+<!--                  <option value=-1>Tất cả</option>-->
+<!--                  <option value=1>Sử dụng</option>-->
+<!--                  <option value=0>Ngưng</option>-->
+<!--                </select>-->
               </div>
             </div>
           </div>

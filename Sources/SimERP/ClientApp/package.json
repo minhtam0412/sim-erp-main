@@ -25,6 +25,7 @@
     "@auth0/angular-jwt": "^3.0.0",
     "@ncstate/sat-popover": "^4.0.0",
     "@ng-bootstrap/ng-bootstrap": "^5.1.1",
+    "@ng-select/ng-select": "^3.1.0",
     "@ngui/auto-complete": "^2.0.0",
     "@syncfusion/ej2-angular-dropdowns": "^17.2.49",
     "angular-bootstrap-md": "^8.3.0",

@@ -19,6 +19,7 @@ import { PagelistComponent } from '../lists/pagelist/pagelist/pagelist.component
 import {ProductlistComponent} from '../lists/product/productlist/productlist.component';
 import { ProductCategoryComponent } from '../lists/productcategory/product-category/product-category.component';
 import { CustomerComponent } from '../lists/customer/customer/customer.component';
+import {NgSelectModule} from '@ng-select/ng-select';
 
 const routes: Routes = [
   {
