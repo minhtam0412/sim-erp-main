@@ -123,14 +123,7 @@
                     <div class="row">
                       <div class="col-sm-3 text-right"><label class="control-label">Ngành hàng</label></div>
                       <div class="col-sm-9">
-                        <select [(ngModel)]="model.ProductCategoryId" name="ProductCategoryId"
-                                (change)="changeProductCategory($event.target.value)"
-                                class="browser-default form-control">
-                          <option value=undefined>--Chọn ngành hàng--</option>
-                          <option *ngFor="let item of lstProductCategory" value="{{item.ProductCategoryId}}">
-                            {{item.ProductCategoryName}}
-                          </option>
-                        </select>
+                        <input [(ngModel)]="model.ProductCategoryId" id="dropdowntreemodal" style="width: 100%; border-color: #6c757d" name="ProductCategoryId"/>
                       </div>
                     </div>
                   </div>
@@ -141,7 +134,7 @@
                       <div class="col-sm-7">
                         <select [(ngModel)]="model.PackageUnitId" name="PackageUnitId"
                                 class="browser-default form-control">
-                          <option value=-1>--Chọn Đơn vị đóng gói--</option>
+                          <option value=-1>--Chọn đơn vị đóng gói--</option>
                           <option *ngFor="let item of lstPackageUnit" value="{{item.PackageUnitId}}">
                             {{item.PackageUnitName}}
                           </option>
@@ -222,7 +215,7 @@
                       <div class="col-sm-5 text-right"><label class="control-label">Loại hàng hoá</label></div>
                       <div class="col-sm-7">
                         <select [(ngModel)]="model.ItemType" name="ItemType" class="browser-default form-control">
-                          <option value=-1>--Chọn Loại hàng hoá--</option>
+                          <option value=-1>--Chọn loại hàng hoá--</option>
                           <option *ngFor="let item of lstItemType" value="{{item.ItemTypeId}}">
                             {{item.ItemTypeName}}
                           </option>
@@ -414,11 +407,11 @@
     <!-- Modal footer -->
     <div class="modal-footer">
       <button type="button" [disabled]="form.invalid" class="btn btn-info btn-sm"
-              (click)="saveDataModal(true)">
+              (click)="saveDataModal(false)">
         <i class="far fa-save"></i> Lưu(F3)
       </button>&nbsp;
       <button type="button" [disabled]="form.invalid" class="btn btn-info btn-sm"
-              (click)="saveDataModal(false)">
+              (click)="saveDataModal(true)">
         <i class="far fa-save"></i> Lưu & Thêm mới
       </button>&nbsp;
       <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal"

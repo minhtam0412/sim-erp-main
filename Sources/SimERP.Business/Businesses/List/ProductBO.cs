@@ -38,6 +38,17 @@ namespace SimERP.Business.Businesses.List
                         param.Add("IsActive", reqListSearch.IsActive);
                     }
 
+                    if (reqListSearch.AddtionParams != null && reqListSearch.AddtionParams.Count > 0)
+                    {
+                        string productCategoryId = Convert.ToString(reqListSearch.AddtionParams["productCategory"]);
+                        if (!string.IsNullOrEmpty(productCategoryId) && !productCategoryId.Equals("undefined") && !productCategoryId.Equals("null"))
+                        {
+                            listCondition.Add("';' + p.ProductCategoryList +';' LIKE @ProductCategoryList OR p.ProductCategoryId = @ProductCategoryId");
+                            param.Add("ProductCategoryList", "%;" + productCategoryId + ";%");
+                            param.Add("ProductCategoryId", productCategoryId);
+                        }
+                    }
+
                     if (listCondition.Count > 0)
                     {
                         sqlWhere = "WHERE " + listCondition.Join(" AND ");
@@ -175,10 +186,30 @@ namespace SimERP.Business.Businesses.List
             {
                 using (var db = new DBEntities())
                 {
-                    //TODO LIST: Kiểm tra sử dụng trước khi xóa
-                    db.Product.Remove(db.Product.Find(id));
-                    db.SaveChanges();
-                    return true;
+                    using (var transaction = db.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            //TODO LIST: Kiểm tra sử dụng trước khi xóa
+                            var lstAttachFile = db.AttachFile.Where(x => x.KeyValue == Convert.ToString(id));
+                            foreach (var attachFile in lstAttachFile)
+                            {
+                                db.AttachFile.Remove(attachFile);
+                            }
+
+                            db.Product.Remove(db.Product.Find(id));
+
+                            db.SaveChanges();
+
+                            transaction.Commit();
+                            return true;
+                        }
+                        catch (Exception e)
+                        {
+                            transaction.Rollback();
+                            throw;
+                        }
+                    }
                 }
             }
             catch (Exception ex)

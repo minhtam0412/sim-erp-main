@@ -14,6 +14,11 @@ import {ProductCategory} from '../../productcategory/model/ProductCategory';
 import {ProductService} from '../product.service';
 import {Vendor} from '../../vendor/model/vendor';
 import {Key_DefaultAttachFile} from '../../../common/config/globalconfig';
+import {DropDowTree} from '../../productcategory/model/dropdowntree';
+import {Guid} from 'guid-typescript';
+
+declare var jquery: any;
+declare var $: any;
 
 @Component({
   selector: 'app-productdetail',
@@ -41,6 +46,8 @@ export class ProductdetailComponent implements OnInit, AfterViewInit {
   lstFileToUpload: File[] = [];
   currentIndexAttachFile = -1;
 
+  lstDataDropDown: ProductCategory[] = [];
+
   static checkIsImageFile(file: File) {
     const mimeType = file.type;
     return mimeType.match(/image\/*/) != null;
@@ -62,7 +69,75 @@ export class ProductdetailComponent implements OnInit, AfterViewInit {
 
   }
 
+  checkIssueParen(array: ProductCategory[], parenID: Guid) {
+    for (let i = 0; i < array.length; ++i) {
+      if (array[i].ParentId === parenID) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  getListSubItemLever(array: ProductCategory[], parenID: Guid) {
+
+    const listSubItem: DropDowTree[] = [];
+
+    array.forEach(element => {
+      if (element.ParentId === parenID) {
+
+        const subitem = new DropDowTree();
+        subitem.text = element.ProductCategoryName;
+        subitem.value = element.ProductCategoryId;
+
+        if (this.checkIssueParen(array, element.ProductCategoryId)) {
+          subitem.items = this.getListSubItemLever(array, element.ProductCategoryId);
+        }
+        listSubItem.push(subitem);
+      }
+    });
+
+    return listSubItem;
+  }
+
+  getListDropDownTree() {
+
+    const listItemLever = [];
+
+    this.lstDataDropDown.forEach(element => {
+
+      if (element.ParentId == null) {
+        const subitem = new DropDowTree();
+        subitem.text = element.ProductCategoryName;
+        subitem.value = element.ProductCategoryId;
+
+        subitem.items = this.getListSubItemLever(this.lstDataDropDown, element.ProductCategoryId);
+
+        listItemLever.push(subitem);
+      }
+    });
+    return listItemLever;
+  }
+
+  InitDropdown() {
+    const dataDropDown = this.getListDropDownTree();
+    $(document).ready(function () {
+      $('#dropdowntreemodal').kendoDropDownTree({
+        placeholder: 'Tất cả',
+        height: 'auto',
+        dataSource: dataDropDown,
+      });
+    });
+
+  }
+
+  loadDataDropDown() {
+    this.lstDataDropDown = this.lstProductCategory;
+    this.InitDropdown();
+  }
+
   ngAfterViewInit(): void {
+    this.loadDataDropDown();
+
     if (this.isAddState) {
       this.model = new Product();
     } else {
@@ -79,7 +154,13 @@ export class ProductdetailComponent implements OnInit, AfterViewInit {
                   attachfile.FilePathPreview = attachfile.FilePath;
                 }
               });
+
+              // set value for ProductCategory
+              const dropdowntree = $('#dropdowntreemodal').data('kendoDropDownTree');
+              dropdowntree.value(this.model.ProductCategoryId);
+              dropdowntree.trigger('change');
             }
+            console.log(this.model);
           } else {
             console.log(res);
             this.notificationService.showError(res.MessageText);
@@ -107,11 +188,19 @@ export class ProductdetailComponent implements OnInit, AfterViewInit {
       return formData.append(file.name, file, file.name);
     });
 
+    this.resultCloseDialog = false;
     this.service.saveData(this.model, formData, this.isAddState).subscribe(res => {
       if (res && res.IsOk) {
+        const message = (this.isAddState ? 'Thêm mới' : 'Chỉnh sửa') + ' thành công!';
+        this.notificationService.showSucess(message);
         this.resultCloseDialog = true;
-        this.closeModal();
-        this.notificationService.showSucess(this.isAddState ? 'Thêm mới' : 'Chỉnh sửa' + ' thành công!');
+        if (isContinue) {
+          this.isAddState = true;
+          this.lstFileToUpload = [];
+          this.model = new Product();
+        } else {
+          this.closeModal();
+        }
       } else {
         this.notificationService.showError('Lỗi thực hiện cập nhật thông tin. Vui lòng liên hệ quản trị hệ thống!');
       }
@@ -273,28 +362,6 @@ export class ProductdetailComponent implements OnInit, AfterViewInit {
       } else {
         ProductdetailComponent.openInNewTab(row.FilePath);
       }
-
-
-      // if (row.FilePath.includes(Key_DefaultAttachFileName)) {
-      //   const fileName = row.FileNameOriginal;
-      //   const fileToUpload = this.lstFileToUpload.find((v) => {
-      //     return v.name === fileName;
-      //   });
-      //   if (fileToUpload) {
-      //     const reader = new FileReader();
-      //     reader.readAsDataURL(fileToUpload);
-      //     reader.onload = () => {
-      //       const data = reader.result;
-      //       ProductdetailComponent.debugBase64(data);
-      //     };
-      //   }
-      // } else {
-      //   if (this.checkIsImageByExtension(row.FilePath)) {
-      //     ProductdetailComponent.openInNewTab(row.FilePath);
-      //   } else {
-      //     ProductdetailComponent.debugBase64(row.FilePath);
-      //   }
-      // }
     }
   }
 
@@ -306,12 +373,23 @@ export class ProductdetailComponent implements OnInit, AfterViewInit {
       this.model.ExpireDays = 0;
     }
 
+    // get data ProductCategory
+    const dropdowntree = $('#dropdowntreemodal').data('kendoDropDownTree');
+    this.model.ProductCategoryId = undefined;
+    this.model.ProductCategoryList = '';
+    if (dropdowntree !== undefined) {
+      const select = dropdowntree.value();
+      if (select != null) {
+        this.model.ProductCategoryId = select;
+        this.changeProductCategory(this.model.ProductCategoryId);
+      }
+    }
+
     return true;
   }
 
-  changeProductCategory(value) {
+  changeProductCategory(productCategoryId) {
     // assign ProductCategoryList for product
-    const productCategoryId = value;
     const productCategory = this.lstProductCategory.find((v) => {
       return v.ProductCategoryId === productCategoryId;
     });
@@ -319,4 +397,6 @@ export class ProductdetailComponent implements OnInit, AfterViewInit {
       this.model.ProductCategoryList = productCategory.ParentListId;
     }
   }
+
+
 }

@@ -50,6 +50,6 @@ export class MasterdataService {
   }
 
   getProductCategoryData() {
-    return this.getData('api/list/productcategory');
+    return this.getData('api/list/getalltproductcategory');
   }
 }

@@ -7,6 +7,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ROOT_URL} from '../../common/config/APIURLconfig';
 import {Product} from './model/product';
 import {ResponeResult} from '../../common/commomodel/ResponeResult';
+import {CustomerType} from '../customertypecomponent/models/customertype';
 
 @Injectable({
   providedIn: 'root'
@@ -24,14 +25,14 @@ export class ProductService {
     this.baseUrl = ROOT_URL;
   }
 
-  getData(searchString?: string, isActive?: any, startRow?: number, maxRow?: number) {
+  getData(searchString?: string, isActive?: any, productCategory?: any, startRow?: number, maxRow?: number) {
     this.reqListSearch.AuthenParams = this.authenParams;
     this.reqListSearch.MaxRow = maxRow;
     this.reqListSearch.IsActive = isActive;
     this.reqListSearch.StartRow = startRow;
     this.reqListSearch.SearchString = searchString;
     this.reqListSearch.AddtionParams = new Map<string, any>();
-    this.reqListSearch.AddtionParams['abc'] = '123';
+    this.reqListSearch.AddtionParams['productCategory'] = productCategory;
 
     const jsonString = JSON.stringify(this.reqListSearch);
     const headers = new HttpHeaders().set('content-type', 'application/json');
@@ -51,4 +52,13 @@ export class ProductService {
     this.reqListSearch.AddtionParams['ProductId'] = productId;
     return this.httpClient.post<ResponeResult>(this.baseUrl + 'api/list/getproductinfo', JSON.stringify(this.reqListSearch), {headers});
   }
+
+  deleteData(row: Product) {
+    const headers = new HttpHeaders().set('content-type', 'application/json');
+    this.reqListDelete.AuthenParams = this.authenParams;
+    this.reqListDelete.ID = row.ProductId;
+    const jsonString = JSON.stringify(this.reqListDelete);
+    return this.httpClient.post<ResponeResult>(this.baseUrl + 'api/list/deleteproduct', jsonString, {headers});
+  }
+
 }

@@ -17,7 +17,7 @@
         <div class="col-sm-4 text-left">
           <p class="text-uppercase"
              style="font-size:18px;color: #587792; font-weight:bold; font-family: 'Lato', sans-serif;">
-            <span>PAGE LIST</span></p>
+            <span>Hàng hoá</span></p>
         </div>
         <div class="col-sm-8 text-right">
           <div class="form-group">
@@ -52,14 +52,7 @@
           <div class="row">
             <div class="col-sm-12">
               <div class="input-group mb-3 ">
-                <select class="browser-default form-control">
-                  <option value="-1">
-                    Tất cả
-                  </option>
-                  <option *ngFor="let item of lstProductCategory" value="{{item.ProductCategoryId}}">
-                    {{item.ProductCategoryName}}
-                  </option>
-                </select>
+                <input [(ngModel)]="productCategory" id="dropdowntree" style="width: 100%; border-color: #6c757d" name="productCategory"/>
               </div>
             </div>
           </div>
@@ -71,10 +64,10 @@
           <div class="row">
             <div class="col-sm-12">
               <div class="input-group mb-3 ">
-                <select [(ngModel)]="cboIsActive" name="cboIsActive" class="browser-default form-control">
-                  <option value="-1">Tất cả</option>
-                  <option value="1">Sử dụng</option>
-                  <option value="0">Ngưng</option>
+                <select [(ngModel)]="isActive" name="isActive" class="browser-default form-control">
+                  <option value=-1>Tất cả</option>
+                  <option value=1>Sử dụng</option>
+                  <option value=0>Ngưng</option>
                 </select>
               </div>
             </div>
@@ -130,7 +123,7 @@
           <td class="col-action">
             <a (click)="showDialog(row.ProductId)" data-toggle="modal" data-target="#formModal"><i class="fas fa-edit"
                                                                                                    style='color:#337ab7;'></i></a>&nbsp;&nbsp;&nbsp;
-            <a (click)="showDialog(row.ProductId)"><i class="far fa-trash-alt" style='color:#337ab7;'></i></a>
+            <a (click)="showConfirmDeleteDialog(row)"><i class="far fa-trash-alt" style='color:#337ab7;'></i></a>
           </td>
         </tr>
         </tbody>

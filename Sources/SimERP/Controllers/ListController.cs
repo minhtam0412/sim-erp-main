@@ -1119,7 +1119,37 @@ namespace SimERP.Controllers
                 return responeResult;
             }
         }
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/deleteproduct")]
+        public ActionResult<ResponeResult> DeleteProduct([FromBody] ReqListDelete objReqListDelete)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckSign(objReqListDelete.AuthenParams,
+                    objReqListDelete.AuthenParams.ClientUserName, objReqListDelete.AuthenParams.ClientPassword,
+                    objReqListDelete.AuthenParams.Sign);
+                if (repData == null || !repData.IsOk)
+                    return repData;
 
+                var dataResult = this.productBO.Delete(Convert.ToInt32(objReqListDelete.ID));
+                if (dataResult)
+                    repData.RepData = dataResult;
+                else
+                    this.AddResponeError(ref repData, this.productBO.getMsgCode(),
+                        this.productBO.GetMessage(this.productBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
         #endregion
 
         #region ProductCategory

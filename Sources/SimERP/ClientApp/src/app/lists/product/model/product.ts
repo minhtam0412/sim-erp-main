@@ -44,7 +44,7 @@ export class Product {
   ModifyDate: Date;
   ModifyBy: number;
   SearchString: string;
-  IsActive: boolean;
+  IsActive = false;
   Note: string;
 
 
