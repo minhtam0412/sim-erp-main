@@ -15,7 +15,7 @@ export class Product {
   Price: number;
   StandardCost: number;
   PurchasePrice: number;
-  ProductCategoryId: Guid = undefined;
+  ProductCategoryId: Guid = null;
   ProductCategoryList: string;
   UnitId = -1;
   TaxId = -1;

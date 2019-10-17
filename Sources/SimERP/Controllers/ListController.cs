@@ -1399,7 +1399,7 @@ namespace SimERP.Controllers
 
         [Authorize]
         [HttpPost]
-        [Route("api/list/savepagelist")]
+        [Route("api/list/savecustomer")]
         public ActionResult<ResponeResult> SaveCustomer([FromBody] ReqListAdd reqData)
         {
             try

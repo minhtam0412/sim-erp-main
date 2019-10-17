@@ -5,9 +5,7 @@
         <div class="col-md-12">
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
               <li class="breadcrumb-item"><a href="#">Danh mục</a></li>
-              <li class="breadcrumb-item"><a href="#">Danh mục chung</a></li>
               <li class="breadcrumb-item active" aria-current="page">Hàng hoá</li>
             </ol>
           </nav>
@@ -40,7 +38,7 @@
             <div class="col-sm-12">
               <div class="input-group mb-3 ">
                 <input type="text" [(ngModel)]="searchString" name="searchString" class="form-control form-control-sm"
-                       placeholder="Mã, tên hàng hoá">
+                       placeholder="Mã, tên hàng hoá" (keydown.enter)="SearchAction()">
               </div>
             </div>
           </div>
@@ -52,7 +50,8 @@
           <div class="row">
             <div class="col-sm-12">
               <div class="input-group mb-3 ">
-                <input [(ngModel)]="productCategory" id="dropdowntree" style="width: 100%; border-color: #6c757d" name="productCategory"/>
+                <input [(ngModel)]="productCategory" id="dropdowntree" style="width: 100%; border-color: #6c757d"
+                       name="productCategory"/>
               </div>
             </div>
           </div>
@@ -64,14 +63,11 @@
           <div class="row">
             <div class="col-sm-12">
               <div class="input-group mb-3 ">
-                <ng-select [(ngModel)]="isActive" name="isActive" class="custom" autofocus (clear)="clearIsActive()">
-                  <ng-option *ngFor="let status of lstStatus" [value]="status.StatusId">{{status.StatusName}}</ng-option>
+                <ng-select [(ngModel)]="isActive" name="isActive" class="select-custom select-full-border" autofocus
+                           (clear)="clearIsActive()">
+                  <ng-option *ngFor="let status of lstStatus"
+                             [value]="status.StatusId">{{status.StatusName}}</ng-option>
                 </ng-select>
-<!--                <select [(ngModel)]="isActive" name="isActive" class="browser-default form-control">-->
-<!--                  <option value=-1>Tất cả</option>-->
-<!--                  <option value=1>Sử dụng</option>-->
-<!--                  <option value=0>Ngưng</option>-->
-<!--                </select>-->
               </div>
             </div>
           </div>
@@ -114,18 +110,17 @@
           <td class="col-code"><a (click)="showDialog(row.ProductId)"
                                   style="cursor: pointer; color: #337ab7">{{row.ProductCode}}</a></td>
           <td class="col-name">{{row.ProductName}}</td>
-          <td class="col-name">{{row.UnitName}}</td>
-          <td class="col-name">{{row.PackageUnitName}}</td>
-          <td class="col-name">{{row.ProductCategoryName}}</td>
-          <td class="col-name">{{row.CountryName}}</td>
+          <td class="col-name" style="text-align: center">{{row.UnitName}}</td>
+          <td class="col-name" style="text-align: center">{{row.PackageUnitName}}</td>
+          <td class="col-name" style="text-align: center">{{row.ProductCategoryName}}</td>
+          <td class="col-name" style="text-align: center">{{row.CountryName}}</td>
           <td class="col-name">{{row.VendorName}}</td>
           <td class="col-active">
             <i [ngClass]="{'fas fa-check-square':row.IsActive, 'far fa-square': !row.IsActive}"
                [ngStyle]="{'color': '#337ab7'}"></i>
           </td>
           <td class="col-action">
-            <a (click)="showDialog(row.ProductId)" data-toggle="modal" data-target="#formModal"><i class="fas fa-edit"
-                                                                                                   style='color:#337ab7;'></i></a>&nbsp;&nbsp;&nbsp;
+            <a (click)="showDialog(row.ProductId)"><i class="fas fa-edit" style='color:#337ab7;'></i></a>&nbsp;&nbsp;&nbsp;
             <a (click)="showConfirmDeleteDialog(row)"><i class="far fa-trash-alt" style='color:#337ab7;'></i></a>
           </td>
         </tr>

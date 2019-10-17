@@ -24,4 +24,8 @@ export class NotificationService {
   showError(content: string, title?: string) {
     this.toastrService.error(content, NotificationService.getTitleContent(title));
   }
+
+  showErrorBackend() {
+    this.toastrService.error('Đã xảy ra lỗi. Vui lòng liên hệ quản trị viên hệ thống!', 'Lỗi hệ thống');
+  }
 }

@@ -112,7 +112,7 @@
 
           </div>
         </div>
-        <ngb-tabset #tabset="ngbTabset">
+        <ngb-tabset #tabset="ngbTabset" (tabChange)="changeTab()">
 
           <ngb-tab id="tab-ProductInfo">
             <ng-template ngbTabTitle>Thông tin hàng hoá</ng-template>
@@ -123,7 +123,8 @@
                     <div class="row">
                       <div class="col-sm-3 text-right"><label class="control-label">Ngành hàng</label></div>
                       <div class="col-sm-9">
-                        <input [(ngModel)]="model.ProductCategoryId" id="dropdowntreemodal" style="width: 100%; border-color: #6c757d" name="ProductCategoryId"/>
+                        <input [(ngModel)]="model.ProductCategoryId" id="dropdowntreemodal"
+                               style="width: 100%; border-color: #6c757d" name="ProductCategoryId"/>
                       </div>
                     </div>
                   </div>
@@ -257,6 +258,7 @@
                       <div class="col-sm-9">
                         <textarea type="text" [(ngModel)]="model.Note" name="Note" rows="3" #Note='ngModel'
                                   class="form-control-plaintext" maxlength="2000"
+                                  style="border-bottom: 1px solid #ced4da;"
                                   [ngClass]="{ 'is-invalid': Note.touched  && Note.invalid  }"></textarea>
                       </div>
                     </div>
@@ -290,57 +292,8 @@
             </ng-template>
           </ngb-tab>
 
-          <ngb-tab id="tab-Supllier">
-            <ng-template ngbTabTitle>Thông tin nhà cung cấp</ng-template>
-            <ng-template ngbTabContent>
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-sm-2 text-right"><label control-label>Mã hàng hoá supplier</label><label
-                    class="control-label-require">*</label></div>
-                  <div class="col-sm-10">
-                    <input type="text" #SupplierProductCode='ngModel' [(ngModel)]="model.SupplierProductCode"
-                           name="SupplierProductCode" required
-                           class="form-control form-control-sm"
-                           [ngClass]="{ 'is-invalid': SupplierProductCode.touched  && SupplierProductCode.invalid  }">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-2 text-right"><label control-label>Tên hàng hoá supplier</label><label
-                    class="control-label-require">*</label></div>
-                  <div class="col-sm-10">
-                    <input type="text" #SupplierProductName='ngModel' [(ngModel)]="model.SupplierProductName"
-                           name="SupplierProductName" required
-                           class="form-control form-control-sm"
-                           [ngClass]="{ 'is-invalid': SupplierProductName.touched  && SupplierProductName.invalid  }">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-2 text-right"><label class="control-label">Nhà cung cấp</label></div>
-                  <div class="col-sm-10">
-                    <select [(ngModel)]="model.SupplierId" name="SupplierId" class="browser-default form-control">
-                      <option value="-1">--Chọn nhà cung cấp--</option>
-                      <option *ngFor="let item of lstVendor" value="{{item.VendorId}}">
-                        {{item.VendorName}}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="row">
-                  <div class="col-sm-2 text-right"><label control-label>Term Condition</label></div>
-                  <div class="col-sm-10">
-                    <textarea type="text" #TermCondition='ngModel' [(ngModel)]="model.TermCondition"
-                              name="TermCondition"
-                              rows="5" class="form-control-plaintext"
-                              [ngClass]="{ 'is-invalid': TermCondition.touched  && TermCondition.invalid  }"></textarea>
-                  </div>
-                </div>
-              </div>
-            </ng-template>
-          </ngb-tab>
-
           <ngb-tab id="tab-Images">
-            <ng-template ngbTabTitle>Tài liêu/Hình ảnh</ng-template>
+            <ng-template ngbTabTitle>Tài liệu/Hình ảnh</ng-template>
             <ng-template ngbTabContent>
               <div style="display: none">
                 <input type="file" #file placeholder="Choose file" (change)="changeFile(file.files)" multiple
@@ -383,9 +336,9 @@
                                                 name="Desctiption{{i}}"
                                                 class="form-control form-control-sm" maxlength="500"></td>
                     <td style="text-align: left; text-overflow: ellipsis" class="col-name"><a href="javascript:void(0)"
-                      (click)="openAttachFile(row)">{{row.FileNameOriginal}}</a>
+                                                                                              (click)="openAttachFile(row)">{{row.FileNameOriginal}}</a>
                     </td>
-                    <td class="col-code">{{row["CreatedDate"] | date : "dd/MM/yyyy HH:mm:ss"}}</td>
+                    <td class="col-code">{{row["CreatedDate"] | date : "dd/MM/yyyy"}}</td>
                     <td class="col-action">
                       <a (click)="setCurrentAttachFileIndex(i) || file.click()"><i class="fas fa-edit"
                                                                                    style='color:#337ab7;'></i></a>&nbsp;&nbsp;&nbsp;
@@ -396,9 +349,62 @@
                 </table>
               </div>
 
-              <a href="javascript:void(0)" (click)="file.click()">Thêm tập tin</a>
+              <button type="button" class="btn btn-info btn-sm" (click)="file.click()">
+                <i class="fas fa-plus"></i> Upload tài liệu/Hình ảnh
+              </button>&nbsp;
             </ng-template>
           </ngb-tab>
+
+          <ngb-tab id="tab-Supllier">
+            <ng-template ngbTabTitle>Nhà cung cấp</ng-template>
+            <ng-template ngbTabContent>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-2 text-right"><label control-label>Mã hàng hoá supplier</label><label
+                    class="control-label-require">*</label></div>
+                  <div class="col-sm-10">
+                    <input type="text" #SupplierProductCode='ngModel' [(ngModel)]="model.SupplierProductCode"
+                           name="SupplierProductCode" required
+                           class="form-control form-control-sm"
+                           [ngClass]="{ 'is-invalid': SupplierProductCode.touched  && SupplierProductCode.invalid  }">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-2 text-right"><label control-label>Tên hàng hoá supplier</label><label
+                    class="control-label-require">*</label></div>
+                  <div class="col-sm-10">
+                    <input type="text" #SupplierProductName='ngModel' [(ngModel)]="model.SupplierProductName"
+                           name="SupplierProductName" required
+                           class="form-control form-control-sm"
+                           [ngClass]="{ 'is-invalid': (SupplierProductName.touched || SupplierProductName.dirty)  && SupplierProductName.invalid  }">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-2 text-right"><label class="control-label">Tên nhà cung cấp</label></div>
+                  <div class="col-sm-10">
+                    <select [(ngModel)]="model.SupplierId" name="SupplierId" class="browser-default form-control">
+                      <option value="-1">--Chọn nhà cung cấp chính--</option>
+                      <option *ngFor="let item of lstVendor" value="{{item.VendorId}}">
+                        {{item.VendorName}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm-2 text-right"><label control-label>Term Conditions</label></div>
+                  <div class="col-sm-10">
+                    <textarea type="text" #TermCondition='ngModel' [(ngModel)]="model.TermCondition"
+                              style="border-bottom: 1px solid #ced4da;"
+                              name="TermCondition"
+                              rows="5" class="form-control-plaintext"
+                              [ngClass]="{ 'is-invalid': TermCondition.touched  && TermCondition.invalid  }"></textarea>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
+
         </ngb-tabset>
 
       </div>

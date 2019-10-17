@@ -1,5 +1,5 @@
-import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
-import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {NgbActiveModal, NgbTabset} from '@ng-bootstrap/ng-bootstrap';
 import {NotificationService} from '../../../common/notifyservice/notification.service';
 import {Product} from '../model/product';
 import {Country} from '../../country/model/country';
@@ -8,7 +8,7 @@ import {Unit} from '../../unitcomponent/model/Unit';
 import {Tax} from '../../taxcomponent/models/Tax';
 import {UploadfileService} from '../../../common/uploadfile/uploadfile.service';
 import {LoaderService} from '../../../common/loading/loader.service';
-import {ListItemType} from '../../../common/masterdata/models';
+import {ListItemType} from '../../../common/masterdata/commondata';
 import {Attachfile} from '../model/attachfile';
 import {ProductCategory} from '../../productcategory/model/ProductCategory';
 import {ProductService} from '../product.service';
@@ -16,6 +16,7 @@ import {Vendor} from '../../vendor/model/vendor';
 import {Key_DefaultAttachFile} from '../../../common/config/globalconfig';
 import {DropDowTree} from '../../productcategory/model/dropdowntree';
 import {Guid} from 'guid-typescript';
+import {NgForm} from '@angular/forms';
 
 declare var jquery: any;
 declare var $: any;
@@ -25,10 +26,10 @@ declare var $: any;
   templateUrl: './productdetail.component.html',
   styleUrls: ['./productdetail.component.css']
 })
-export class ProductdetailComponent implements OnInit, AfterViewInit {
+export class ProductdetailComponent implements OnInit, AfterViewInit, AfterContentChecked {
 
   constructor(private activeModal: NgbActiveModal, private notificationService: NotificationService, private service: ProductService,
-              private uploadfileService: UploadfileService, private loaderService: LoaderService) {
+              private uploadfileService: UploadfileService, private loaderService: LoaderService, private cdr: ChangeDetectorRef) {
   }
 
   @Input() isAddState = true;
@@ -46,7 +47,9 @@ export class ProductdetailComponent implements OnInit, AfterViewInit {
   lstFileToUpload: File[] = [];
   currentIndexAttachFile = -1;
 
-  lstDataDropDown: ProductCategory[] = [];
+  lstDataDropDown: ProductCategory[] = []; // List For Tree ProductCategoty
+  @ViewChild('form', {static: false}) MyForm: NgForm;
+  @ViewChild('ngbTabset', {static: true}) public tabs: NgbTabset;
 
   static checkIsImageFile(file: File) {
     const mimeType = file.type;
@@ -66,7 +69,7 @@ export class ProductdetailComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-
+    this.model = new Product();
   }
 
   checkIssueParen(array: ProductCategory[], parenID: Guid) {
@@ -160,7 +163,6 @@ export class ProductdetailComponent implements OnInit, AfterViewInit {
               dropdowntree.value(this.model.ProductCategoryId);
               dropdowntree.trigger('change');
             }
-            console.log(this.model);
           } else {
             console.log(res);
             this.notificationService.showError(res.MessageText);
@@ -174,6 +176,11 @@ export class ProductdetailComponent implements OnInit, AfterViewInit {
         }
       });
     }
+    this.cdr.markForCheck();
+  }
+
+  ngAfterContentChecked() {
+    this.cdr.detectChanges();
   }
 
 
@@ -367,6 +374,9 @@ export class ProductdetailComponent implements OnInit, AfterViewInit {
 
   // handle validate data before save
   validateData() {
+    if (this.model === undefined) {
+      return false;
+    }
 
     // check data Expiredday
     if (!this.model.IsUsingExpireDate) {
@@ -385,6 +395,13 @@ export class ProductdetailComponent implements OnInit, AfterViewInit {
       }
     }
 
+    if (this.model.SupplierProductCode === undefined || this.model.SupplierProductCode == null
+      || this.model.SupplierProductCode.length < 1) {
+      this.notificationService.showInfo('Vui lòng kiểm tra các trường dữ liệu bắt buộc nhập!');
+      // this.tabs.select('tab-Supllier');
+      return false;
+    }
+
     return true;
   }
 
@@ -398,5 +415,8 @@ export class ProductdetailComponent implements OnInit, AfterViewInit {
     }
   }
 
-
+  changeTab() {
+    console.log('change');
+    this.loadDataDropDown();
+  }
 }
