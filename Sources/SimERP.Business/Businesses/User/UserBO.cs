@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Dapper;
+using SimERP.Business.Models.MasterData.ListDTO;
 using SimERP.Business.Models.System;
 using SimERP.Data;
 using SimERP.Data.DBEntities;
@@ -24,14 +25,14 @@ namespace SimERP.Business
         public UserResDTO Login(string userName, string passWord)
         {
             try
-            {             
+            {
                 using (var db = new DBEntities())
                 {
                     string passwordEncode = this.CreateMD5(passWord);
                     User userInfo = new User();
 
-                    userInfo = db.User.Where(m => m.UserName == userName && m.Password == passwordEncode && m.IsActive).FirstOrDefault();
-                    if(userInfo!=null)
+                    userInfo = db.User.FirstOrDefault(m => m.UserName == userName && m.Password == passwordEncode && m.IsActive);
+                    if (userInfo != null)
                     {
                         //Login password chính thành công
                         return new UserResDTO()
@@ -49,13 +50,13 @@ namespace SimERP.Business
                             IsSystem = userInfo.IsSystem ?? false,
                             IsSecondPassword = false,
                             IsFirstChangePassword = userInfo.IsFirstChangePassword,
-                            PageDefault = userInfo.PageDefault
+                            PageDefault = userInfo.PageDefault,
                         };
                     }
                     else
                     {
-                        userInfo = db.User.Where(m => m.UserName == userName && m.SecondPassword == passwordEncode && m.IsActive).FirstOrDefault();
-                        if(userInfo!=null)
+                        userInfo = db.User.FirstOrDefault(m => m.UserName == userName && m.SecondPassword == passwordEncode && m.IsActive);
+                        if (userInfo != null)
                         {
                             //Login bằng second password
                             return new UserResDTO()
@@ -71,7 +72,7 @@ namespace SimERP.Business
                                 Avatar = userInfo.Avatar,
                                 IsActive = userInfo.IsActive,
                                 IsSystem = userInfo.IsSystem ?? false,
-                                IsSecondPassword = true
+                                IsSecondPassword = true,
                             };
                         }
                         else
@@ -81,7 +82,7 @@ namespace SimERP.Business
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 this.AddMessage("USE-004", "Đổi mật khẩu không thành công: " + ex.Message);
                 Logger.Error(GetType(), ex);
@@ -144,6 +145,73 @@ namespace SimERP.Business
                 {
                     return new UserResDTO();
                 }
+            }
+        }
+
+        public List<PermissionUser> GetListPermission(int userId)
+        {
+            try
+            {
+                using (IDbConnection conn = IConnect.GetOpenConnection())
+                {
+                    DynamicParameters param = new DynamicParameters();
+                    param.Add("UserId", userId);
+                    string sqlQuery = @" SELECT
+                                                      u.UserName
+                                                     ,u.UserId
+                                                     ,ur.RoleId
+                                                     ,r.RoleName
+                                                     ,rp.PermissionId
+                                                     ,p.PageId
+                                                     ,p1.PageName
+                                                     ,p.FunctionId
+                                                     ,p1.ControllerName
+                                                     ,1 IsFromRole
+                                                    FROM acc.[User] u
+                                                    JOIN sec.UserRole ur
+                                                      ON u.UserId = ur.UserId
+                                                    JOIN sec.Role r
+                                                      ON ur.RoleId = r.RoleId
+                                                    JOIN sec.RolePermission rp
+                                                      ON ur.RoleId = rp.RoleId
+                                                    JOIN sec.Permission p
+                                                      ON rp.PermissionId = p.PermissionId
+                                                    JOIN sec.Page p1
+                                                      ON p.PageId = p1.PageId
+                                                    WHERE u.UserId = @UserId
+
+                                                    UNION
+                                                    SELECT
+                                                      UserName
+                                                     ,u.UserId
+                                                     ,0 RoleId
+                                                     ,'' RoleName
+                                                     ,up.PermissionId
+                                                     ,p.PageId
+                                                     ,PageName
+                                                     ,FunctionId
+                                                     ,ControllerName
+                                                     ,0 IsFromRole
+                                                    FROM acc.[User] u
+                                                    JOIN sec.UserPermission up
+                                                      ON u.UserId = up.UserId
+                                                    JOIN sec.Permission p
+                                                      ON up.PermissionId = p.PermissionId
+                                                    JOIN sec.Page p1
+                                                      ON p.PageId = p1.PageId
+                                                    WHERE u.UserId = @UserId";
+
+                    using (var multiResult = conn.QueryMultiple(sqlQuery, param))
+                    {
+                        return multiResult.Read<PermissionUser>().ToList();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                this.AddMessage(MessageCode.MSGCODE_001, ex.Message);
+                Logger.Error(GetType(), ex);
+                return null;
             }
         }
 
@@ -271,14 +339,14 @@ namespace SimERP.Business
                 {
                     DynamicParameters param = new DynamicParameters();
                     param.Add("UserID", userID);
-                    
-                    string newpass =  CreateMD5("1");
+
+                    string newpass = CreateMD5("1");
                     string sqlQuery = @" UPDATE [acc].[User] SET IsFirstChangePassword = 0, Password = '" + newpass + "' WHERE UserID = @UserID";
 
                     conn.Query(sqlQuery, param);
                     return true;
                 }
-               
+
             }
             catch (Exception ex)
             {
@@ -316,7 +384,7 @@ namespace SimERP.Business
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 this.AddMessage("USE-004", "Đổi mật khẩu không thành công: " + ex.Message);
                 Logger.Error(GetType(), ex);

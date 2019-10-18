@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SimERP.Business.Models.MasterData.ListDTO;
 using SimERP.Business.Models.System;
 using SimERP.Data;
 using SimERP.Data.DBEntities;
@@ -20,5 +21,6 @@ namespace SimERP.Business
         bool ResetPassUser(int userID);
         bool ChangePassword(int userId, string currentPassword, string newPassword);
         bool ResetPassword(int userId, string newPassword);
+        List<PermissionUser> GetListPermission(int userId);
     }
 }

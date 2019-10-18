@@ -64,6 +64,7 @@ namespace SimERP.Controllers
                 {
                     if (dataResult.UserId > 0)
                     {
+                        var ListPermissionUser = userBO.GetListPermission(dataResult.UserId);
                         // Prepare info for create Access Token
                         var tokeOptions = this.GenerateTokenOption(dataResult);
 
@@ -85,7 +86,7 @@ namespace SimERP.Controllers
                         HttpContext.Session.SetString(Utils.Constant.REFRESHTOKEN, tokenRefresh.Refreshtoken);
 
                         // Return a brief user info for client
-                        responeResult.RepData = dataResult;
+                        responeResult.RepData = new object[] { dataResult, ListPermissionUser };
                         this.tokenRefreshBO.Save(tokenRefresh, isNewRefreshToken);
                     }
                     else

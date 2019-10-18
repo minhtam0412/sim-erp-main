@@ -13,7 +13,6 @@ export class CheckpermissionDirective {
 
 
   constructor(private el: ElementRef, private router: Router, private  authenService: AuthenService, private renderer2: Renderer2) {
-    el.nativeElement.style.color = 'Green';
   }
 
   // Get current path of component. Ex: /customertype

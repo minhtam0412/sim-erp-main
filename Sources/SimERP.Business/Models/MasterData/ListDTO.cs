@@ -121,4 +121,18 @@ namespace SimERP.Business.Models.MasterData.ListDTO
         public bool IsChange { get; set; } = true;//default has change
         public bool IsNew { get; set; }
     }
+
+    public class PermissionUser
+    {
+        public string UserName { get; set; }
+        public int UserId { get; set; }
+        public int RoleId { get; set; }
+        public string RoleName { get; set; }
+        public int PermissionId { get; set; }
+        public int PageId { get; set; }
+        public string PageName { get; set; }
+        public string FunctionId { get; set; }
+        public string ControllerName { get; set; }
+        public int IsFromRole { get; set; }
+    }
 }

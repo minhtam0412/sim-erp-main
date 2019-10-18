@@ -3,6 +3,7 @@ import {AuthenService} from '../systems/authen.service';
 import {User} from '../systems/user';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ChangepasswordComponent} from '../systems/changepassword/changepassword.component';
+import {Permissionuser} from '../systems/permissionuser';
 
 @Component({
   selector: 'app-header',
@@ -11,14 +12,20 @@ import {ChangepasswordComponent} from '../systems/changepassword/changepassword.
 })
 export class HeaderComponent implements OnInit {
   sessionUser: User;
+  lstPermission: Permissionuser[] = [];
 
   constructor(private authenService: AuthenService, private ngbModal: NgbModal) {
     this.authenService.currentUser.subscribe(x => {
       this.sessionUser = x;
     });
+    this.authenService.lstPermission.subscribe(res => {
+      this.lstPermission = res;
+      console.log(this.lstPermission);
+    });
   }
 
   ngOnInit() {
+
   }
 
   logout() {

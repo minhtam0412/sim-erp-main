@@ -25,6 +25,8 @@ export class AuthGuard implements CanActivate {
           return true;
         }
       }
+    } else {
+      localStorage.clear();
     }
 
     // không thoả các case trên => thực hiện điều hướng tới trang đăng nhập

@@ -6,11 +6,12 @@ import {Router} from '@angular/router';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {User} from './user';
 import {Observable} from 'rxjs/internal/Observable';
-import {Key_UserInfo} from '../common/config/globalconfig';
+import {Key_Permission, Key_UserInfo} from '../common/config/globalconfig';
 import {map, tap} from 'rxjs/operators';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {CookieService} from 'ngx-cookie-service';
 import sampleData from '../../data.json';
+import {Permissionuser} from './permissionuser';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,9 @@ import sampleData from '../../data.json';
 export class AuthenService {
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
+
+  private lstPermissionSubject: BehaviorSubject<Permissionuser[]>;
+  public lstPermission: Observable<Permissionuser[]>;
 
   constructor(private httpClient: HttpClient, @Inject('BASE_URL') private readonly baseURL: string, private router: Router,
               private jwtHelperService: JwtHelperService, private  cookieService: CookieService) {
@@ -51,6 +55,11 @@ export class AuthenService {
       const jsonStringUserInfo = this.cookieService.get(Key_UserInfo);
       if (jsonStringUserInfo) {
         rsl = JSON.parse(jsonStringUserInfo);
+        if (rsl) {
+          const permis = this.extractPermission();
+          this.lstPermissionSubject = new BehaviorSubject<Permissionuser[]>(permis);
+          this.lstPermission = this.lstPermissionSubject.asObservable();
+        }
       } else {
         rsl = null;
       }
@@ -64,6 +73,12 @@ export class AuthenService {
   extractAccessTokenData(): User {
     let rsl: User;
     rsl = this.getUserInfoFromCookie();
+    return rsl;
+  }
+
+  extractPermission(): Permissionuser[] {
+    let rsl: Permissionuser[];
+    rsl = JSON.parse(localStorage.getItem(Key_Permission));
     return rsl;
   }
 
@@ -85,7 +100,9 @@ export class AuthenService {
           return res;
         }
         const responeResult = res as ResponeResult;
-        this.cookieService.set(Key_UserInfo, JSON.stringify(responeResult.RepData), null);
+        console.log(responeResult);
+        this.cookieService.set(Key_UserInfo, JSON.stringify(responeResult.RepData[0] as User), null);
+        localStorage.setItem(Key_Permission, JSON.stringify(responeResult.RepData[1] as Permissionuser[]));
         const userFromToken = this.extractAccessTokenData();
         this.currentUserValue = userFromToken;
         return res;
@@ -110,8 +127,10 @@ export class AuthenService {
         if (res && res.IsOk) {
           this.currentUserSubject.next(null);
           this.router.navigate(['/login']).then(r => {
-            this.cookieService.deleteAll();
+
           });
+          this.cookieService.deleteAll();
+          localStorage.clear();
           return true;
         }
       });

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SimERP.Business.Models.MasterData.ListDTO;
 
 namespace SimERP.Business.Models.System
 {
