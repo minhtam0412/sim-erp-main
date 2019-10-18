@@ -133,6 +133,7 @@
         <None Remove="ClientApp\src\app\lists\pagelist\model\pagelist.ts" />
         <None Remove="ClientApp\src\app\lists\productcategory\model\ProductCategory - Copy.ts" />
         <None Remove="ClientApp\src\app\lists\productcategory\model\ProductCategory.ts" />
+        <None Remove="ClientApp\src\app\lists\rolelist\model\rolelist.ts" />
         <None Remove="ClientApp\tslint.json" />
     </ItemGroup>
 
@@ -175,6 +176,7 @@
         </TypeScriptCompile>
         <TypeScriptCompile Include="ClientApp\src\app\lists\pagelist\model\Pagelist.ts" />
         <TypeScriptCompile Include="ClientApp\src\app\lists\productcategory\model\ProductCategory.ts" />
+        <TypeScriptCompile Include="ClientApp\src\app\lists\rolelist\model\rolelist.ts" />
     </ItemGroup>
 
     <ItemGroup>

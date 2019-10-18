@@ -42,6 +42,7 @@ import { CheckpermissionDirective } from './common/checkpermission/checkpermissi
 import { PagelistComponent } from './lists/pagelist/pagelist/pagelist.component';
 import { ProductCategoryComponent } from './lists/productcategory/product-category/product-category.component';
 import { CustomerComponent } from './lists/customer/customer/customer.component';
+import { RolelistComponent } from './lists/rolelist/rolelist/rolelist.component';
 import { ProductlistComponent } from './lists/product/productlist/productlist.component';
 import { ProductdetailComponent } from './lists/product/productdetail/productdetail.component';
 import {NgSelectModule} from '@ng-select/ng-select';
@@ -83,7 +84,8 @@ export function tokenGetter() {
     ProductlistComponent,
     ProductdetailComponent,
     ProductCategoryComponent,
-    CustomerComponent
+    CustomerComponent,
+    RolelistComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),

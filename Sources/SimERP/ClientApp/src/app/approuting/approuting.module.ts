@@ -1,25 +1,25 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
-import { HomeLayoutComponent } from '../systems/layouts/home-layout.component';
-import { AuthGuard } from '../systems/authguard';
-import { TaxComponent } from '../lists/taxcomponent/tax/tax.component';
-import { LoginLayoutComponent } from '../systems/layouts/login-layout.component';
-import { LoginComponent } from '../systems/login/login.component';
-import { UnitComponent } from '../lists/unitcomponent/unit/unit.component';
-import { PurchasemanagementComponent } from '../vouchers/purchase/purchasemanagement/purchasemanagement.component';
-import { PurchasedetailinfoComponent } from '../vouchers/purchase/purchasedetailinfo/purchasedetailinfo.component';
-import { CustomertypelistComponent } from '../lists/customertypecomponent/customertypelist/customertypelist.component';
-import { VendortypeComponent } from '../lists/vendortype/vendortype/vendortype.component';
-import { PagenotfoundComponent } from '../common/pagenotfound/pagenotfound.component';
-import { UserComponent } from '../systems/user/user.component';
-import { LogoutComponent } from '../systems/logout/logout.component';
-import { FirstchangepasswordComponent } from '../systems/firstchangepassword/firstchangepassword.component';
-import { PagelistComponent } from '../lists/pagelist/pagelist/pagelist.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {RouterModule, Routes} from '@angular/router';
+import {HomeLayoutComponent} from '../systems/layouts/home-layout.component';
+import {AuthGuard} from '../systems/authguard';
+import {TaxComponent} from '../lists/taxcomponent/tax/tax.component';
+import {LoginLayoutComponent} from '../systems/layouts/login-layout.component';
+import {LoginComponent} from '../systems/login/login.component';
+import {UnitComponent} from '../lists/unitcomponent/unit/unit.component';
+import {PurchasemanagementComponent} from '../vouchers/purchase/purchasemanagement/purchasemanagement.component';
+import {PurchasedetailinfoComponent} from '../vouchers/purchase/purchasedetailinfo/purchasedetailinfo.component';
+import {CustomertypelistComponent} from '../lists/customertypecomponent/customertypelist/customertypelist.component';
+import {VendortypeComponent} from '../lists/vendortype/vendortype/vendortype.component';
+import {PagenotfoundComponent} from '../common/pagenotfound/pagenotfound.component';
+import {UserComponent} from '../systems/user/user.component';
+import {LogoutComponent} from '../systems/logout/logout.component';
+import {FirstchangepasswordComponent} from '../systems/firstchangepassword/firstchangepassword.component';
+import {PagelistComponent} from '../lists/pagelist/pagelist/pagelist.component';
 import {ProductlistComponent} from '../lists/product/productlist/productlist.component';
-import { ProductCategoryComponent } from '../lists/productcategory/product-category/product-category.component';
-import { CustomerComponent } from '../lists/customer/customer/customer.component';
-import {NgSelectModule} from '@ng-select/ng-select';
+import {ProductCategoryComponent} from '../lists/productcategory/product-category/product-category.component';
+import {CustomerComponent} from '../lists/customer/customer/customer.component';
+import {RolelistComponent} from '../lists/rolelist/rolelist/rolelist.component';
 
 const routes: Routes = [
   {
@@ -36,6 +36,7 @@ const routes: Routes = [
       { path: 'product', component: ProductlistComponent },
       { path: 'productcategory', component: ProductCategoryComponent },
       { path: 'customer', component: CustomerComponent },
+      { path: 'rolelist', component: RolelistComponent },
     ]
   },
   {

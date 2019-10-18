@@ -146,6 +146,7 @@
     <Compile Include="Businesses\List\CountryBO.cs" />
     <Compile Include="Businesses\List\CustomerTypeBO.cs" />
     <Compile Include="Businesses\List\CustomerBO.cs" />
+    <Compile Include="Businesses\List\RoleListBO.cs" />
     <Compile Include="Businesses\List\TaxBO.cs" />
     <Compile Include="Businesses\List\FiscalBO.cs" />
     <Compile Include="Businesses\List\ProductCategory.cs" />
@@ -162,7 +163,8 @@
     <Compile Include="Interfaces\List\ICustomerType.cs" />
     <Compile Include="Interfaces\List\IFiscal.cs" />
     <Compile Include="Interfaces\List\ICustomer.cs" />
-    <Compile Include="Interfaces\List\IPageList.cs" />
+	<Compile Include="Interfaces\List\IPageList.cs" />
+	<Compile Include="Interfaces\List\IRoleList.cs" />
     <Compile Include="Interfaces\List\IProductCategory.cs" />
     <Compile Include="Interfaces\List\IVendor.cs" />
     <Compile Include="Interfaces\List\IVendorType.cs" />

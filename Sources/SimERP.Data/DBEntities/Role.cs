@@ -17,5 +17,6 @@ namespace SimERP.Data.DBEntities
         public string Notes { get; set; }
         public string SearchString { get; set; }
         public bool IsActive { get; set; }
+        public int? SortOrder { get; set; }
     }
 }

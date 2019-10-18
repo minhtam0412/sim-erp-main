@@ -63,7 +63,7 @@
           <div class="row">
             <div class="col-sm-12">
               <div class="input-group mb-3 ">
-                <ng-select [(ngModel)]="isActive" name="isActive" class="select-custom select-full-border" autofocus
+                <ng-select [(ngModel)]="isActive" name="isActive" class="select-custom select-full-border"
                            (clear)="clearIsActive()">
                   <ng-option *ngFor="let status of lstStatus"
                              [value]="status.StatusId">{{status.StatusName}}</ng-option>

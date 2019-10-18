@@ -6,4 +6,6 @@ export class Function {
   IsActive: boolean;
   IsSpecial: boolean;
   IsCheck: boolean = false;
+  PermissionID: number;
+  IsRole: boolean = true;
 }

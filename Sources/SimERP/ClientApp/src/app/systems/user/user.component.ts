@@ -174,7 +174,6 @@ export class UserComponent implements OnInit {
     this.isNewModel = true;
     this.IsSecondPassword = false;
     this.dtcreate = this.calendar.getToday();
-    this.objModel.CreatedBy = 1;
     this.objModel.CreatedBy = this.userAuthenInfo.UserId;
     this.objModel.Gender = parseInt(this.temGender);
     this.temCreateBy = this.userAuthenInfo.UserName;

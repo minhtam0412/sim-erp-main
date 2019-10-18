@@ -26,6 +26,6 @@ export class NotificationService {
   }
 
   showErrorBackend() {
-    this.toastrService.error('Đã xảy ra lỗi. Vui lòng liên hệ quản trị viên hệ thống!', 'Lỗi hệ thống');
+    this.toastrService.error('Đã xảy ra lỗi. Vui lòng liên hệ quản trị hệ thống!', 'Lỗi hệ thống');
   }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SimERP.Business;
+using SimERP.Business.Models.MasterData.ListDTO;
 using SimERP.Business.Utils;
 using System;
 using System.Diagnostics;
@@ -20,7 +21,6 @@ using System.Linq;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.Internal;
 using SimERP.Business.Businesses.List;
-using SimERP.Business.Models.MasterData.ListDTO;
 using AttachFile = SimERP.Business.Models.MasterData.ListDTO.AttachFile;
 using Function = SimERP.Business.Models.MasterData.ListDTO.Function;
 using Product = SimERP.Business.Models.MasterData.ListDTO.Product;
@@ -43,7 +43,8 @@ namespace SimERP.Controllers
         private IProductCategory productcategoryBO;
         private IAttachFile attachFileBO;
         private ICustomer customerBO;
-        private IVendor vendorBO;
+		private IVendor vendorBO;
+		private IRoleList roleListBO;
 
 
         #endregion Variables
@@ -64,7 +65,9 @@ namespace SimERP.Controllers
             this.productcategoryBO = this.productcategoryBO ?? new ProductCategoryBO();
             this.attachFileBO = this.attachFileBO ?? new AttachFileBO();
             this.customerBO = this.customerBO ?? new CustomerBO();
-            this.vendorBO = this.vendorBO ?? new VendorBO();
+			this.vendorBO = this.vendorBO ?? new VendorBO();
+			this.roleListBO = this.roleListBO ?? new RoleListBO();
+
         }
         #endregion Contructor
 
@@ -1487,6 +1490,193 @@ namespace SimERP.Controllers
                 else
                     this.AddResponeError(ref repData, customerBO.getMsgCode(),
                         customerBO.GetMessage(this.customerBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+
+        #endregion
+
+        #region RoleList
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/rolelist")]
+        public ResponeResult GetRoleListData([FromBody] ReqListSearch reqData)
+        {
+            ReqListSearch reqSerach = new ReqListSearch();
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckSign(reqData, reqData.AuthenParams.ClientUserName,
+                    reqData.AuthenParams.ClientPassword, reqData.AuthenParams.Sign);
+                if (repData == null || !repData.IsOk)
+                    return repData;
+                var dataResult = roleListBO.GetData(ReplaceUnicode(reqData.SearchString), reqData.IsActive, reqData.StartRow, reqData.MaxRow);
+                if (dataResult != null)
+                {
+                    repData.RepData = dataResult;
+                    repData.TotalRow = this.roleListBO.TotalRows;
+                }
+                else
+                    this.AddResponeError(ref repData, roleListBO.getMsgCode(),
+                        roleListBO.GetMessage(this.roleListBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/loadpagelistrole")]
+        public ResponeResult LoadPageListRole([FromBody] JObject reqData)
+        {
+            ReqListSearch reqSerach = new ReqListSearch();
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckSign(reqData, reqSerach.AuthenParams.ClientUserName, reqSerach.AuthenParams.ClientPassword, "");
+                if (repData == null || !repData.IsOk)
+                    return repData;
+                var dataResult = roleListBO.LoadPageListRole(reqData["moduleID"].ToString() == "" ? (int?)null : Convert.ToInt32(reqData["moduleID"].ToString()));
+                if (dataResult != null)
+                {
+                    repData.RepData = dataResult;
+                    repData.TotalRow = this.roleListBO.TotalRows;
+                }
+                else
+                    this.AddResponeError(ref repData, roleListBO.getMsgCode(),
+                        roleListBO.GetMessage(this.roleListBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/saverolelist")]
+        public ActionResult<ResponeResult> SaveRoleList([FromBody] ReqListAdd reqData)
+        {
+            try
+            {
+                int roleId = -1;
+                //Check security & data request
+                var repData = this.CheckSign(reqData.AuthenParams, reqData.AuthenParams.ClientUserName,
+                    reqData.AuthenParams.ClientPassword, reqData.AuthenParams.Sign);
+                if (repData == null || !repData.IsOk)
+                    return repData;
+
+                if (reqData.IsNew)
+                    reqData.RowData.CreatedDate = DateTimeOffset.Now;
+                else
+                    reqData.RowData.ModifyDate = DateTimeOffset.Now;
+
+                var dataResult = roleListBO.Save(JsonConvert.DeserializeObject<Data.DBEntities.Role>(reqData.RowData.ToString()), reqData.IsNew, ref roleId);
+
+                //---save list role permission
+                if (roleId != -1)
+                {
+                    if (!reqData.IsNew)
+                    {
+                        roleListBO.DeleteListRolePermission(roleId);
+                    }
+
+                    Business.Models.MasterData.ListDTO.Role roleList = JsonConvert.DeserializeObject<Business.Models.MasterData.ListDTO.Role>(reqData.RowData.ToString());
+                    string[] lstPermission = roleList.LstPermission.Split(';');
+                    foreach (string item in lstPermission)
+                    {
+                        dataResult = roleListBO.SaveListRoleFunction(roleId, Convert.ToInt32(item));
+                    }
+                }
+
+                if (dataResult)
+                    repData.RepData = dataResult;
+                else
+                    this.AddResponeError(ref repData, roleListBO.getMsgCode(),
+                        roleListBO.GetMessage(this.roleListBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/deleterolelist")]
+        public ActionResult<ResponeResult> DeleteRoleList([FromBody] ReqListDelete reqData)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckSign(reqData.AuthenParams, reqData.AuthenParams.ClientUserName,
+                    reqData.AuthenParams.ClientPassword, reqData.AuthenParams.Sign);
+                if (repData == null || !repData.IsOk)
+                    return repData;
+
+                var dataResult = pageListBO.DeletePageList(Convert.ToInt32(reqData.ID));
+                if (dataResult)
+                    repData.RepData = dataResult;
+                else
+                    this.AddResponeError(ref repData, pageListBO.getMsgCode(),
+                        pageListBO.GetMessage(this.pageListBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/updateSortOrderRoleList")]
+        public ActionResult<ResponeResult> UpdateSortOrderRoleList([FromBody] ReqListUpdateSortOrder reqData)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckSign(reqData.AuthenParams, reqData.AuthenParams.ClientUserName,
+                    reqData.AuthenParams.ClientPassword, reqData.AuthenParams.Sign);
+                if (repData == null || !repData.IsOk)
+                    return repData;
+
+                var dataResult =
+                    pageListBO.UpdateSortOrder(Convert.ToInt32(reqData.UpID), Convert.ToInt32(reqData.DownID));
+                if (dataResult)
+                    repData.RepData = dataResult;
+                else
+                    this.AddResponeError(ref repData, pageListBO.getMsgCode(),
+                        pageListBO.GetMessage(this.pageListBO.getMsgCode(), this.LangID));
 
                 return repData;
             }

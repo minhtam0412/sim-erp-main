@@ -13,7 +13,8 @@ namespace ToolGen
 {
     public partial class Form1 : Form
     {
-        public static string ConnectionString = "Data Source=192.168.1.8;Initial Catalog=SimERP;Persist Security Info=True;User ID=admin;Password=admin";
+        //public static string ConnectionString = "Data Source=192.168.1.8;Initial Catalog=SimERP;Persist Security Info=True;User ID=admin;Password=admin";
+        public static string ConnectionString = "Data Source=45.119.84.185;Initial Catalog=ADS;Persist Security Info=True;User ID=sa;Password=123456aqZ;MultipleActiveResultSets=true;Max Pool Size=300;Min Pool Size=5;connect timeout=0;";
         private SqlConnection connection;
 
         public enum DataType

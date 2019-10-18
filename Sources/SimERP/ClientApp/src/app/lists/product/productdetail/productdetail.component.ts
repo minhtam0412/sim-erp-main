@@ -1,4 +1,4 @@
-import {AfterContentChecked, AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterContentChecked, AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {NgbActiveModal, NgbTabset} from '@ng-bootstrap/ng-bootstrap';
 import {NotificationService} from '../../../common/notifyservice/notification.service';
 import {Product} from '../model/product';
@@ -26,7 +26,8 @@ declare var $: any;
   templateUrl: './productdetail.component.html',
   styleUrls: ['./productdetail.component.css']
 })
-export class ProductdetailComponent implements OnInit, AfterViewInit, AfterContentChecked {
+export class ProductdetailComponent implements OnInit, AfterViewInit, AfterContentChecked, AfterViewChecked {
+
 
   constructor(private activeModal: NgbActiveModal, private notificationService: NotificationService, private service: ProductService,
               private uploadfileService: UploadfileService, private loaderService: LoaderService, private cdr: ChangeDetectorRef) {
@@ -49,7 +50,10 @@ export class ProductdetailComponent implements OnInit, AfterViewInit, AfterConte
 
   lstDataDropDown: ProductCategory[] = []; // List For Tree ProductCategoty
   @ViewChild('form', {static: false}) MyForm: NgForm;
-  @ViewChild('ngbTabset', {static: true}) public tabs: NgbTabset;
+  tabsInitialized = false;
+  dataDropDown: any;
+
+  @ViewChild('tabset', {static: false}) public tabs: NgbTabset;
 
   static checkIsImageFile(file: File) {
     const mimeType = file.type;
@@ -122,19 +126,19 @@ export class ProductdetailComponent implements OnInit, AfterViewInit, AfterConte
   }
 
   InitDropdown() {
-    const dataDropDown = this.getListDropDownTree();
+    const data = this.dataDropDown;
     $(document).ready(function () {
       $('#dropdowntreemodal').kendoDropDownTree({
         placeholder: 'Tất cả',
         height: 'auto',
-        dataSource: dataDropDown,
+        dataSource: data,
       });
     });
-
   }
 
   loadDataDropDown() {
     this.lstDataDropDown = this.lstProductCategory;
+    this.dataDropDown = this.getListDropDownTree();
     this.InitDropdown();
   }
 
@@ -176,6 +180,7 @@ export class ProductdetailComponent implements OnInit, AfterViewInit, AfterConte
         }
       });
     }
+    this.tabsInitialized = true;
     this.cdr.markForCheck();
   }
 
@@ -398,7 +403,18 @@ export class ProductdetailComponent implements OnInit, AfterViewInit, AfterConte
     if (this.model.SupplierProductCode === undefined || this.model.SupplierProductCode == null
       || this.model.SupplierProductCode.length < 1) {
       this.notificationService.showInfo('Vui lòng kiểm tra các trường dữ liệu bắt buộc nhập!');
-      // this.tabs.select('tab-Supllier');
+      if (this.tabsInitialized) {
+        this.tabs.select('tab-Supllier');
+      }
+      return false;
+    }
+
+    if (this.model.SupplierProductName === undefined || this.model.SupplierProductName == null
+      || this.model.SupplierProductName.length < 1) {
+      this.notificationService.showInfo('Vui lòng kiểm tra các trường dữ liệu bắt buộc nhập!');
+      if (this.tabsInitialized) {
+        this.tabs.select('tab-Supllier');
+      }
       return false;
     }
 
@@ -415,8 +431,9 @@ export class ProductdetailComponent implements OnInit, AfterViewInit, AfterConte
     }
   }
 
-  changeTab() {
-    console.log('change');
-    this.loadDataDropDown();
+  ngAfterViewChecked(): void {
+    if (this.tabsInitialized) {
+      this.InitDropdown();
+    }
   }
 }

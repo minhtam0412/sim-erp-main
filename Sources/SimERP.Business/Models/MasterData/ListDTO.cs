@@ -64,6 +64,8 @@ namespace SimERP.Business.Models.MasterData.ListDTO
     public class Function : Data.DBEntities.Function
     {
         public bool IsCheck { get; set; }
+        public int PermissionID { get; set; }
+        public bool IsRole { get; set; }
     }
 
     public class ProductCategory : Data.DBEntities.ProductCategory
@@ -74,6 +76,12 @@ namespace SimERP.Business.Models.MasterData.ListDTO
     public class Customer : Data.DBEntities.Customer
     {
         public string CreateName { get; set; }
+    }
+
+    public class Role : Data.DBEntities.Role
+    {
+        public string CreatedName { get; set; }
+        public string LstPermission { get; set; }
     }
 
     public class TaxSearchParams

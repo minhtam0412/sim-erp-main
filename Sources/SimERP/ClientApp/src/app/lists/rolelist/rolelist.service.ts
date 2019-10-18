@@ -7,13 +7,12 @@ import { ReqListUpdateSortOrder } from '../../common/commomodel/ReqListUpdateSor
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { ResponeResult } from '../../common/commomodel/ResponeResult';
 import { ROOT_URL } from '../../common/config/APIURLconfig';
-import { Customer } from './model/customer';
-
+import { RoleList } from './model/rolelist';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CustomerService {
+export class RolelistService {
 
   AuthenParams = new AuthenParams();
   SearchParams = new ReqListSearch();
@@ -23,15 +22,13 @@ export class CustomerService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getData(searchString?: string, customertype?: number, isActive?: number, startRow?: number, maxRow?: number) {
+  getData(searchString?: string, isActive?: number, startRow?: number, maxRow?: number) {
 
     var par_Isative = null;
     if (isActive == 1)
       par_Isative = true;
     if (isActive == 0)
       par_Isative = false;
-
-    var par_moduleID = customertype == -1 ? null : customertype;
 
     this.AuthenParams.Sign = 'tai.ngo';
     this.SearchParams.AuthenParams = this.AuthenParams;
@@ -40,14 +37,15 @@ export class CustomerService {
     this.SearchParams.SearchString = searchString;
     this.SearchParams.IsActive = par_Isative;
 
-    var param = { "dataserach": this.SearchParams, "customertypeID": par_moduleID };
-    const jsonString = JSON.stringify(param);
-
+    const jsonString = JSON.stringify(this.SearchParams);
     const headers = new HttpHeaders().set('content-type', 'application/json');
-    return this.httpClient.post<ResponeResult>(ROOT_URL + 'api/list/customer', jsonString, { headers });
+    return this.httpClient.post<ResponeResult>(ROOT_URL + 'api/list/rolelist', jsonString, { headers });
+
   }
 
-  Insert(obj: Customer, isNew: boolean) {
+  Insert(obj: RoleList, isNew: boolean) {
+    if(obj.ModuleId == -1)
+      obj.ModuleId = null;
 
     this.AuthenParams.Sign = 'tai.ngo';
     const headers = new HttpHeaders().set('content-type', 'application/json');
@@ -56,7 +54,7 @@ export class CustomerService {
     this.InsertParams.IsNew = isNew;
 
     const jsonString = JSON.stringify(this.InsertParams);
-    return this.httpClient.post<ResponeResult>(ROOT_URL + 'api/list/savecustomer', jsonString, { headers });
+    return this.httpClient.post<ResponeResult>(ROOT_URL + 'api/list/saverolelist', jsonString, { headers });
   }
 
   Delete(Id: any) {
@@ -67,7 +65,7 @@ export class CustomerService {
     const jsonString = JSON.stringify(this.DelParams);
 
     const headers = new HttpHeaders().set('content-type', 'application/json');
-    return this.httpClient.post<ResponeResult>(ROOT_URL + 'api/list/deletecustomer', jsonString, { headers });
+    return this.httpClient.post<ResponeResult>(ROOT_URL + 'api/list/deleterolelist', jsonString, { headers });
   }
 
   Sort(UpID: number, DowID: number) {
@@ -79,7 +77,7 @@ export class CustomerService {
     this.ReqListUpdateSortOrder.DownID = DowID;
 
     const jsonString = JSON.stringify(this.ReqListUpdateSortOrder);
-    return this.httpClient.post<ResponeResult>(ROOT_URL + 'api/list/updateSortOrderCustomer', jsonString, { headers });
+    return this.httpClient.post<ResponeResult>(ROOT_URL + 'api/list/updateSortOrderRoleList', jsonString, { headers });
   }
 
   GetListModule() {
@@ -93,12 +91,26 @@ export class CustomerService {
   }
 
   GetListFunction() {
-    
+
     this.AuthenParams.Sign = 'tai.ngo';
     this.SearchParams.AuthenParams = this.AuthenParams;
 
     const jsonString = JSON.stringify(this.SearchParams);
     const headers = new HttpHeaders().set('content-type', 'application/json');
     return this.httpClient.post<ResponeResult>(ROOT_URL + 'api/list/getlistfunction', jsonString, { headers });
+  }
+
+  LoadPageListRole( moduleID?: number) {
+
+    var par_moduleID = moduleID == -1 ? null : moduleID;
+
+    this.AuthenParams.Sign = 'tai.ngo';
+    this.SearchParams.AuthenParams = this.AuthenParams;
+   
+    var param = { "dataserach": this.SearchParams, "moduleID": par_moduleID };
+    const jsonString = JSON.stringify(param);
+
+    const headers = new HttpHeaders().set('content-type', 'application/json');
+    return this.httpClient.post<ResponeResult>(ROOT_URL + 'api/list/loadpagelistrole', jsonString, { headers });
   }
 }

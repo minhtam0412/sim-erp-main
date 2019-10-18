@@ -62,7 +62,7 @@ namespace SimERP.Business
                         dataResult = multiResult.Read<Models.MasterData.ListDTO.PageList>().ToList();
                     }
 
-                    foreach(Models.MasterData.ListDTO.PageList item in dataResult)
+                    foreach (Models.MasterData.ListDTO.PageList item in dataResult)
                     {
                         sqlQuery = @"SELECT t.* FROM [sec].[Function] t with(nolock) ORDER BY t.SortOrder";
                         var lsttem_fun = conn.QueryMultiple(sqlQuery);
@@ -73,7 +73,7 @@ namespace SimERP.Business
 
                         List<Permission> lstPermission = lsttem_per.Read<Permission>().ToList();
 
-                        foreach(Models.MasterData.ListDTO.Function node in lstFunction)
+                        foreach (Models.MasterData.ListDTO.Function node in lstFunction)
                         {
                             if (CheckIssue(node.FunctionId, lstPermission))
                                 node.IsCheck = true;
@@ -109,7 +109,7 @@ namespace SimERP.Business
                         }
 
                         rowData.SortOrder = db.Page.Max(u => u.SortOrder) + 1;
-                            
+
 
                         db.Page.Add(rowData);
                     }
@@ -185,17 +185,27 @@ namespace SimERP.Business
         {
             try
             {
-                if (this.DeleteListPagePermission(id))
+                using (var db = new DBEntities())
                 {
-                    using (var db = new DBEntities())
+                    using (var transaction = db.Database.BeginTransaction())
                     {
-                        //TODO LIST: Kiểm tra sử dụng trước khi xóa
-                        db.Page.Remove(db.Page.Find(id));
-                        db.SaveChanges();
-                        return true;
+                        try
+                        {
+                            //TODO LIST: Kiểm tra sử dụng trước khi xóa
+                            if (this.DeleteListPagePermission(id))
+                            {
+                                db.Page.Remove(db.Page.Find(id));
+                                db.SaveChanges();
+                                transaction.Commit();
+                                return true;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            transaction.Rollback();
+                        }
                     }
                 }
-                else return false;
             }
             catch (Exception ex)
             {
@@ -203,6 +213,7 @@ namespace SimERP.Business
                 Logger.Error(GetType(), ex);
                 return false;
             }
+            return false;
         }
 
         public List<Module> GetListModule()
@@ -299,10 +310,10 @@ namespace SimERP.Business
                 return true;
             }
         }
-        
+
         private bool CheckIssue(string functionID, List<Permission> lst)
         {
-            foreach(Permission item in lst)
+            foreach (Permission item in lst)
             {
                 if (item.FunctionId == functionID)
                     return true;
