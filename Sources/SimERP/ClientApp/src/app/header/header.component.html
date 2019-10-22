@@ -61,8 +61,10 @@
             <a href="#" class="dropdown-item"><i class="fas fa-cog"></i> Cấu hình</a>
             <a href="javascript:void(0)" [routerLink]='["/user"]' class="dropdown-item"><i
               class="fas fa-user"></i> Người dùng</a>
-            <a href="#" class="dropdown-item"><i class="fas fa-users"></i> Nhóm quyền</a>
-            <a href="#" class="dropdown-item"><i class="fas fa-key"></i> Phân quyền người dùng</a>
+            <a href="javascript:void(0)" class="dropdown-item" [routerLink]='["/rolelist"]'><i class="fas fa-users"></i>
+              Nhóm quyền</a>
+            <a href="javascript:void(0)" [routerLink]='["/userpermission"]' class="dropdown-item"><i
+              class="fas fa-key"></i> Phân quyền người dùng</a>
             <a href="#" class="dropdown-item"><i class="fas fa-key"></i> Phân quyền sửa chứng từ</a>
             <a href="javascript:void(0)" [routerLink]='["/pagelist"]' class="dropdown-item"><i
               class="fas fa-file-alt"></i> Danh sách page</a>
@@ -204,25 +206,32 @@
         <li>
           <a>Danh mục chung</a>
           <ul>
-            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'
+                *appCheckmenupermission="'tax'; Fn 'VIEW'">
               <a [routerLink]='["/tax"]' [routerLinkActive]='["tax"]'>Thuế VAT</a>
             </li>
-            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'
+                *appCheckmenupermission="'unit'; Fn 'VIEW'">
               <a [routerLink]='["/unit"]' [routerLinkActive]='["unit"]'>Đơn vị tính</a>
             </li>
-            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'
+                *appCheckmenupermission="'customertype'; Fn 'VIEW'">
               <a [routerLink]='["/customertype"]' [routerLinkActive]='["customertype"]'>Loại khách hàng</a>
             </li>
-            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'
+                *appCheckmenupermission="'vendortype'; Fn 'VIEW'">
               <a [routerLink]='["/vendortype"]' [routerLinkActive]='["vendortype"]'>Loại nhà cung cấp</a>
             </li>
-            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'
+                *appCheckmenupermission="'productcategory'">
               <a [routerLink]='["/productcategory"]' [routerLinkActive]='["productcategory"]'>Quản lý ngành hàng</a>
             </li>
-            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'
+                *appCheckmenupermission="'product'; Fn 'VIEW'">
               <a [routerLink]='["/product"]'>Hàng hoá</a>
             </li>
-            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
+            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'
+                *appCheckmenupermission="'customer'; Fn 'VIEW'">
               <a [routerLink]='["/customer"]' [routerLinkActive]='["customer"]'>Quản lý khách hàng</a>
             </li>
           </ul>

@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
+import {ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {AuthenService} from './authen.service';
+import {Observable} from 'rxjs/internal/Observable';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthGuard implements CanActivate, CanActivateChild {
 
   constructor(private router: Router, private jwtHelperService: JwtHelperService, private authenService: AuthenService) {
   }
@@ -33,5 +34,17 @@ export class AuthGuard implements CanActivate {
     this.router.navigate(['/login'], {queryParams: {returnUrl: state.url}}).then(r => {
     });
     return false;
+  }
+
+  canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean
+    | UrlTree> | boolean | UrlTree {
+    const currentURL = state.url.replace('/', '');
+    const index = this.authenService.checkRouterPermision(currentURL);
+    const rsl = index > -1;
+    if (!rsl) {
+      this.router.navigate(['/']).then(r => {
+      });
+    }
+    return rsl;
   }
 }

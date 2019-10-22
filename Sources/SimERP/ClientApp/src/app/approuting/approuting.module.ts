@@ -20,34 +20,37 @@ import {ProductlistComponent} from '../lists/product/productlist/productlist.com
 import {ProductCategoryComponent} from '../lists/productcategory/product-category/product-category.component';
 import {CustomerComponent} from '../lists/customer/customer/customer.component';
 import {RolelistComponent} from '../lists/rolelist/rolelist/rolelist.component';
+import {UserpermissionComponent} from '../systems/userpermission/userpermission/userpermission.component';
+
 
 const routes: Routes = [
   {
-    path: '', component: HomeLayoutComponent, canActivate: [AuthGuard], children: [
-      { path: 'tax', component: TaxComponent },
-      { path: 'unit', component: UnitComponent },
-      { path: 'purchase', component: PurchasemanagementComponent },
-      { path: 'purchaseinvoice', component: PurchasedetailinfoComponent },
-      { path: 'purchaseinvoice/:id', component: PurchasedetailinfoComponent },
-      { path: 'customertype', component: CustomertypelistComponent },
-      { path: 'vendortype', component: VendortypeComponent },
-      { path: 'user', component: UserComponent },
-      { path: 'pagelist', component: PagelistComponent },
-      { path: 'product', component: ProductlistComponent },
-      { path: 'productcategory', component: ProductCategoryComponent },
-      { path: 'customer', component: CustomerComponent },
-      { path: 'rolelist', component: RolelistComponent },
+    path: '', component: HomeLayoutComponent, canActivate: [AuthGuard], canActivateChild: [AuthGuard], children: [
+      {path: 'tax', component: TaxComponent},
+      {path: 'unit', component: UnitComponent},
+      {path: 'purchase', component: PurchasemanagementComponent},
+      {path: 'purchaseinvoice', component: PurchasedetailinfoComponent},
+      {path: 'purchaseinvoice/:id', component: PurchasedetailinfoComponent},
+      {path: 'customertype', component: CustomertypelistComponent},
+      {path: 'vendortype', component: VendortypeComponent},
+      {path: 'user', component: UserComponent},
+      {path: 'pagelist', component: PagelistComponent},
+      {path: 'product', component: ProductlistComponent},
+      {path: 'productcategory', component: ProductCategoryComponent},
+      {path: 'customer', component: CustomerComponent},
+      {path: 'rolelist', component: RolelistComponent},
+      {path: 'userpermission', component: UserpermissionComponent},
     ]
   },
   {
     path: '', component: LoginLayoutComponent,
     children: [
-      { path: 'login', component: LoginComponent },
-      { path: 'quit', component: LogoutComponent },
-      { path: 'firstchangepassword', component: FirstchangepasswordComponent }
+      {path: 'login', component: LoginComponent},
+      {path: 'quit', component: LogoutComponent},
+      {path: 'firstchangepassword', component: FirstchangepasswordComponent}
     ]
   },
-  { path: '**', component: PagenotfoundComponent },
+  {path: '**', component: PagenotfoundComponent},
 
 ];
 

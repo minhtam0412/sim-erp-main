@@ -5,16 +5,17 @@
         <div class="col-md-12">
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item"><a href="#">Library</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Data</li>
+              <li class="breadcrumb-item"><a href="#">Danh mục</a></li>
+              <li class="breadcrumb-item active" aria-current="page"><a href="#" [routerLink]="'/tax'">Thuế VAT</a></li>
             </ol>
           </nav>
         </div>
       </div>
       <div class="row">
         <div class="col-sm-4 text-left">
-          <p class="text-uppercase" style="font-size:18px;color: #587792; font-weight:bold; font-family: 'Lato', sans-serif;"><span>THUẾ VAT</span></p>
+          <p class="text-uppercase"
+             style="font-size:18px;color: #587792; font-weight:bold; font-family: 'Lato', sans-serif;">
+            <span>THUẾ VAT</span></p>
         </div>
         <div class="col-sm-8 text-right">
           <div class="form-group">
@@ -35,8 +36,13 @@
           <div class="row">
             <div class="col-md-12">
               <div class="input-group mb-3 input-group-sm">
-                <input type="text" class="form-control" formControlName='SearchString' (keydown)="onKeydown($event)" select-value-of="TaxCode" ngui-auto-complete style="width: 500px;;height: 25px; font-size: 12px;" [source]="this.lstDataResult" [accept-user-input]="true" [list-formatter]="renderDataRowAutoComplete"
-                       placeholder="Mã/tên thuế" display-property-name="TaxName" (valueChanged)="autocompleteCallback($event)" [header-item-template]="autocompleteHeaderTemplate" no-match-found-text='Không có dữ liệu' value-property-name="TaxCode"
+                <input type="text" class="form-control" formControlName='SearchString' (keydown)="onKeydown($event)"
+                       select-value-of="TaxCode" ngui-auto-complete style="width: 500px;;height: 25px; font-size: 12px;"
+                       [source]="this.lstDataResult" [accept-user-input]="true"
+                       [list-formatter]="renderDataRowAutoComplete"
+                       placeholder="Mã/tên thuế" display-property-name="TaxName"
+                       (valueChanged)="autocompleteCallback($event)" [header-item-template]="autocompleteHeaderTemplate"
+                       no-match-found-text='Không có dữ liệu' value-property-name="TaxCode"
                        max-num-list='5' tab-to-select='true'>
               </div>
             </div>
@@ -51,47 +57,52 @@
     <div class="table-responsive">
       <table class="table table-bordered table-striped table-hover">
         <thead>
-          <tr>
-            <th>#</th>
-            <th>MÃ THUẾ</th>
-            <th>TÊN THUẾ</th>
-            <th>%VAT</th>
-            <th>GHI CHÚ</th>
-            <th class="col-active">SỬ DỤNG</th>
-            <th class="col-sortorder">SORT ORDER</th>
-            <th class="col-action"></th>
-          </tr>
+        <tr>
+          <th>#</th>
+          <th>Mã thuế</th>
+          <th>Tên thuế</th>
+          <th>%VAT</th>
+          <th>Ghi chú</th>
+          <th class="col-active">Sử dụng</th>
+          <th class="col-sortorder">Sort Order</th>
+          <th class="col-action"></th>
+        </tr>
         </thead>
         <tbody>
-          <tr *ngIf="!isDataAvailable">
-            <td colspan='7' class="datarow-null">Không có dữ liệu</td>
-          </tr>
-          <tr mdbTableCol *ngFor="let row of lstDataResult; let i = index;">
-            <td class="order-number">{{i+1}}</td>
-            <td class="col-code"><a style="text-decoration: none;color: #337ab7" (click)="openDialog(row)"> {{row.TaxCode}}</a></td>
-            <td class="col-name">{{row.TaxName}}</td>
-            <td>{{row.TaxPercent}}%</td>
-            <td class="col-note">{{row.Notes}}</td>
-            <td>
-              <i [ngClass]="{'fas fa-check-square':row.IsActive, 'far fa-square': !row.IsActive}" [ngStyle]="{'color': '#337ab7'}"></i>
-            </td>
-            <td>
-              <a (click)="i == 0 ? 'javascript:void(0)' : moveUp(i)"><i class="fas fa-arrow-alt-circle-up" style="color:forestgreen; cursor:pointer; font-size:14px"></i></a>&nbsp;&nbsp;&nbsp;
-              <a (click)="i == pagingComponent.getLimit() - 1 ? 'javascript:void(0)' : moveDown(i)"><i class="fas fa-arrow-alt-circle-down" style="color:forestgreen; cursor:pointer; font-size:14px"></i></a>
-            </td>
-            <td>
-              <a style="text-decoration: none" (click)="openDialog(row)">
-                <i class="fas fa-edit" style='color:#337ab7'></i>&nbsp;&nbsp;&nbsp;
-              </a>
-              <a (click)="showConfirmDeleteDialog(row)">
-                <i class="far fa-trash-alt " style='color:#337ab7'></i>
-              </a>
-            </td>
-          </tr>
+        <tr *ngIf="!isDataAvailable">
+          <td colspan='7' class="datarow-null">Dữ liệu không tồn tại</td>
+        </tr>
+        <tr mdbTableCol *ngFor="let row of lstDataResult; let i = index;">
+          <td class="order-number">{{i + 1}}</td>
+          <td class="col-code"><a style="text-decoration: none;color: #337ab7"
+                                  (click)="openDialog(row)"> {{row.TaxCode}}</a></td>
+          <td class="col-name">{{row.TaxName}}</td>
+          <td>{{row.TaxPercent}}%</td>
+          <td class="col-note">{{row.Notes}}</td>
+          <td>
+            <i [ngClass]="{'fas fa-check-square':row.IsActive, 'far fa-square': !row.IsActive}"
+               [ngStyle]="{'color': '#337ab7'}"></i>
+          </td>
+          <td>
+            <a (click)="i == 0 ? 'javascript:void(0)' : moveUp(i)"><i class="fas fa-arrow-alt-circle-up"
+                                                                      style="color:forestgreen; cursor:pointer; font-size:14px"></i></a>&nbsp;&nbsp;&nbsp;
+            <a (click)="i == pagingComponent.getLimit() - 1 ? 'javascript:void(0)' : moveDown(i)"><i
+              class="fas fa-arrow-alt-circle-down" style="color:forestgreen; cursor:pointer; font-size:14px"></i></a>
+          </td>
+          <td>
+            <a style="text-decoration: none" (click)="openDialog(row)">
+              <i class="fas fa-edit" style='color:#337ab7'></i>&nbsp;&nbsp;&nbsp;
+            </a>
+            <a (click)="showConfirmDeleteDialog(row)">
+              <i class="far fa-trash-alt " style='color:#337ab7'></i>
+            </a>
+          </td>
+        </tr>
         </tbody>
       </table>
     </div>
-    <app-pagination (goPage)="goToPage($event)" (changeLimit)="changeLimit()" (goNext)="onNext() " (goPrev)="onPrev() " [pagesToShow]="5 " [page]="page " [perPage]="limit " [count]="total "></app-pagination>
+    <app-pagination (goPage)="goToPage($event)" (changeLimit)="changeLimit()" (goNext)="onNext() " (goPrev)="onPrev() "
+                    [pagesToShow]="5 " [page]="page " [perPage]="limit " [count]="total "></app-pagination>
     <!--    <ng4-loading-spinner> </ng4-loading-spinner>-->
   </section>
 </div>

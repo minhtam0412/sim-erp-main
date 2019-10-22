@@ -44,7 +44,7 @@ namespace SimERP.Business
                     }
 
                     string sqlQuery = @" SELECT Count(1) FROM  [sec].[Role] t with(nolock) " + sqlWhere +
-                                      @";SELECT t.*, u.FullName as CreatedName FROM [sec].[Role] t with(nolock) LEFT JOIN acc.[User] u with(nolock) on u.UserID = t.CreatedBy
+                                      @";SELECT t.*, u.FullName as CreatedName, dbo.fn_GetListPermissionId(t.RoleId) as LstPermission FROM [sec].[Role] t with(nolock) LEFT JOIN acc.[User] u with(nolock) on u.UserID = t.CreatedBy
                                           " + sqlWhere + " ORDER BY t.SortOrder OFFSET " + startRow +
                                       " ROWS FETCH NEXT " + maxRows + " ROWS ONLY";
 
@@ -114,8 +114,8 @@ namespace SimERP.Business
                     param.Add("DownID", downID);
 
                     string sqlQuery =
-                        @" UPDATE [sec].[Page] SET SortOrder = SortOrder - 1 WHERE PageID = @UpID;
-                                         UPDATE [sec].[Page] SET SortOrder = SortOrder + 1 WHERE PageID = @DownID;";
+                        @" UPDATE [sec].[Role] SET SortOrder = SortOrder - 1 WHERE RoleId = @UpID;
+                                         UPDATE [sec].[Role] SET SortOrder = SortOrder + 1 WHERE RoleId = @DownID;";
 
                     conn.Query(sqlQuery, param);
                     return true;
@@ -133,16 +133,27 @@ namespace SimERP.Business
         {
             try
             {
-
-
                 using (var db = new DBEntities())
                 {
-                    //TODO LIST: Kiểm tra sử dụng trước khi xóa
-                    db.Page.Remove(db.Page.Find(id));
-                    db.SaveChanges();
-                    return true;
+                    using (var transaction = db.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            //TODO LIST: Kiểm tra sử dụng trước khi xóa
+                            if (this.DeleteListRolePermission(id))
+                            {
+                                db.Role.Remove(db.Role.Find(id));
+                                db.SaveChanges();
+                                transaction.Commit();
+                                return true;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            transaction.Rollback();
+                        }
+                    }
                 }
-
             }
             catch (Exception ex)
             {
@@ -150,6 +161,7 @@ namespace SimERP.Business
                 Logger.Error(GetType(), ex);
                 return false;
             }
+            return false;
         }
         public List<Models.MasterData.ListDTO.PageList> LoadPageListRole(int? moduleID)
         {
@@ -263,6 +275,7 @@ namespace SimERP.Business
                 return false;
             }
         }
+
 
         #region Private methods
 

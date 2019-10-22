@@ -155,6 +155,7 @@
     <Compile Include="Businesses\List\VendorBO.cs" />
     <Compile Include="Businesses\List\VendorTypeBO.cs" />
     <Compile Include="Businesses\User\TokenRefreshBO.cs" />
+    <Compile Include="Businesses\User\UserPermissionBO.cs" />
     <Compile Include="Businesses\User\UserBO.cs" />
     <Compile Include="Interfaces\List\IAttachFile.cs" />
     <Compile Include="Interfaces\List\IProduct.cs" />
@@ -163,12 +164,13 @@
     <Compile Include="Interfaces\List\ICustomerType.cs" />
     <Compile Include="Interfaces\List\IFiscal.cs" />
     <Compile Include="Interfaces\List\ICustomer.cs" />
-	<Compile Include="Interfaces\List\IPageList.cs" />
-	<Compile Include="Interfaces\List\IRoleList.cs" />
+    <Compile Include="Interfaces\List\IPageList.cs" />
+    <Compile Include="Interfaces\List\IRoleList.cs" />
     <Compile Include="Interfaces\List\IProductCategory.cs" />
     <Compile Include="Interfaces\List\IVendor.cs" />
     <Compile Include="Interfaces\List\IVendorType.cs" />
     <Compile Include="Interfaces\User\ITokenRefresh.cs" />
+    <Compile Include="Interfaces\User\IUserPermission.cs" />
     <Compile Include="Interfaces\User\IUser.cs" />
     <Compile Include="Models\MappingProfile.cs" />
     <Compile Include="Models\RequestData\AuthenParams.cs" />

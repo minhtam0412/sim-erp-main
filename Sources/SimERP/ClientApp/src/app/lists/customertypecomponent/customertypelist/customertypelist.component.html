@@ -5,9 +5,8 @@
         <div class="col-md-12">
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item"><a href="#">Library</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Data</li>
+              <li class="breadcrumb-item"><a href="#">Danh mục</a></li>
+              <li class="breadcrumb-item active" aria-current="page"><a href="#" [routerLink]="'/customertype'">Loại khách hàng</a></li>
             </ol>
           </nav>
         </div>
@@ -67,17 +66,17 @@
         <thead>
           <tr>
             <th>#</th>
-            <th>MÃ LOẠI KHÁCH HÀNG</th>
-            <th>TÊN LOẠI KHÁCH HÀNG</th>
-            <th>GHI CHÚ</th>
-            <th class="col-active">SỬ DỤNG</th>
-            <th class="col-sortorder">SORT ORDER</th>
+            <th>Mã loại khách hàng</th>
+            <th>Tên loại khách hàng</th>
+            <th>Ghi chú</th>
+            <th class="col-active">Sử dụng</th>
+            <th class="col-sortorder">Sort Order</th>
             <th class="col-action"></th>
           </tr>
         </thead>
         <tbody>
           <tr *ngIf="!dataIsAvailable">
-            <td colspan="8" class="datarow-null">Không có dữ liệu</td>
+            <td colspan="8" class="datarow-null">Dữ liệu không tồn lại</td>
           </tr>
           <tr *ngFor="let row of lstDataResult; let index = index">
             <td class="order-number">{{index + 1}}</td>

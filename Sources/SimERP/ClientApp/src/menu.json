@@ -1,0 +1,15 @@
+[
+  {
+    "ControllerName": "product",
+    "FunctionId": "VIEW"
+  },
+  {
+    "ControllerName": "pagelist",
+    "FunctionId": "VIEW"
+  },
+  {
+    "ControllerName": "customertype",
+    "FunctionId": "VIEW"
+  }
+
+]

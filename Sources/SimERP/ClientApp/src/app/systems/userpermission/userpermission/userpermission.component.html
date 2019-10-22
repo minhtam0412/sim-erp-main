@@ -1,0 +1,182 @@
+<div class="header_content">
+    <section class="form_content">
+        <form>
+            <div class="row">
+                <div class="col-md-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Bảo mật </a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Phân quyền người dùng</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4 text-left">
+                    <p class="text-uppercase" style="font-size:18px;color: #587792; font-weight:bold; font-family: 'Lato', sans-serif;"><span>Phần quyền người dùng</span></p>
+                </div>
+                <div class="col-sm-8 text-right">
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary btn-sm" (click)="saveRoleUser()">
+                                <i class="far fa-save"></i> Lưu & Đóng
+                        </button>&nbsp;
+                        <button type="button" class="btn btn-outline-secondary btn-sm"><i class="fas fa-times"></i> Đóng</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="row">
+                        <label class="col-sm-12 control-label">Chọn người dùng</label>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="input-group mb-3 ">
+                                <select [(ngModel)]="cboUserID" (change)="ChangeCboUser()" name="cboUserID" class="browser-default form-control">
+                                    <option *ngFor="let item of lstCboUser" value="{{item.UserId}}">
+                                        {{item.FullName}}
+                                      </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </section>
+</div>
+<div class="main_content">
+    <section class="form_content">
+        <ngb-tabset #tabset="ngbTabset">
+            <ngb-tab id="tab-RoleGroup">
+                <ng-template ngbTabTitle>Nhóm quyền</ng-template>
+                <ng-template ngbTabContent>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <!-- Table  -->
+                            <table class="table">
+                                <!-- Table head -->
+                                <thead>
+                                    <tr>
+                                        <th style="border-bottom: none; border-top: none; font-size: 14px; padding-bottom: 15px;">Danh sách nhóm quyền</th>
+                                        <th style="border-bottom: none; border-top: none; padding-bottom: 15px;"></th>
+                                        <th style="border-bottom: none; border-top: none; font-size: 14px; padding-bottom: 15px;">Nhóm quyền được áp dụng</th>
+                                    </tr>
+                                </thead>
+                                <!-- Table head -->
+                                <!-- Table body -->
+                                <tbody>
+                                    <tr>
+                                        <td style="border-bottom: none; border-top: none; vertical-align: top !important;">
+                                            <div class="list-group ">
+                                                <a *ngFor="let item of lstRoleList; let i = index" class="list-group-item list-group-item-action" aria-controls="messages" (click)="rowClick(lstRoleList, i)">
+                                                    <div class="custom-control custom-checkbox mb-3">
+                                                        <input type="checkbox" [(ngModel)]="item.isCheck" class="custom-control-input" id="item.RoleId" name="item.RoleId">
+                                                        <label class="custom-control-label" for="{{item.RoleId}}">{{item.RoleName}}</label>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td style="border-bottom: none; border-top: none; width: 60px;">
+                                            <div>
+                                                <button type="button" class="btn btn-info btn-sm" style="font-size: 14px; width: 50px;" (click)="addRole()">
+                                                        <i class="fas fa-angle-double-right" style="vertical-align: middle;"></i>
+                                                </button>
+                                                <br>
+                                                <br>
+                                                <button type="button" class="btn btn-info btn-sm" style="font-size: 14px; width: 50px;" (click)="removeRole()">
+                                                        <i class="fas fa-angle-double-left" style="vertical-align: middle;"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td style="border-bottom: none; border-top: none; vertical-align: top !important;">
+                                            <div class="list-group">
+                                                <a *ngFor="let item of lstRoleUser; let i = index" class="list-group-item list-group-item-action" aria-controls="messages" (click)="rowClick(lstRoleUser, i)">
+                                                    <div class="custom-control custom-checkbox mb-3">
+                                                        <input type="checkbox" [(ngModel)]="item.isCheck" class="custom-control-input" id="item.RoleId" name="item.RoleId">
+                                                        <label class="custom-control-label" for="{{item.RoleId}}">{{item.RoleName}}</label>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </ng-template>
+            </ngb-tab>
+
+            <ngb-tab id="tab-RoleUser">
+                <ng-template ngbTabTitle>Quyền</ng-template>
+                <ng-template ngbTabContent>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-7">
+                                        <div class="row">
+                                            <div class="col-sm-4 text-right"><label control-label>Tên Module</label></div>
+                                            <div class="col-sm-8">
+                                                <select [(ngModel)]="cboModuleId" name="cboModuleId" (change)="ChangeCboModule()" class="browser-default form-control">
+                                                          <option value=-1>--Tất cả--</option>
+                                                          <option *ngFor="let item of lstCboModule" value="{{item.ModuleId}}">
+                                                            {{item.ModuleName}}
+                                                          </option>
+                                                        </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="custom-control custom-checkbox mb-3">
+                                                    <input type="checkbox" class="custom-control-input" [(ngModel)]="isCheckAll" id="isCheckAll" name="isCheckAll" (change)="CheckAllPermission()">
+                                                    <label class="custom-control-label" for="isCheckAll">Chọn/Bỏ chọn</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="table-responsive" style="overflow-y: auto; max-height: 350px;">
+                                <!-- Table  -->
+                                <table class="table table-bordered table-striped table-hover table-fixed">
+                                    <!-- Table head -->
+                                    <thead>
+                                        <tr style="height: 40px; line-height: 15px;">
+                                            <th style="vertical-align: middle;">#</th>
+                                            <th style="width: 150px; vertical-align: middle;">Màn hình/Tính năng</th>
+                                            <th *ngFor="let item of lstFunction" style="vertical-align: middle;">
+                                                {{item.FunctionName}}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <!-- Table head -->
+                                    <!-- Table body -->
+                                    <tbody>
+                                        <tr *ngIf="lstPageList.length <= 0">
+                                            <td colspan="lstFunction.length + 2" class="datarow-null">Dữ liệu không tồn tại</td>
+                                        </tr>
+                                        <tr *ngFor="let row of lstPageList; let i = index">
+                                            <td class="order-number">{{i + 1}}</td>
+                                            <td class="col-name"><a>{{row.PageName}}</a></td>
+                                            <td *ngFor="let item of lstFunction; let j = index" style="width: 70px;">
+                                                <div *ngIf="checkIssueFunctionID(row.lstFunction, item.FunctionId)" class="custom-control custom-checkbox mb-3">
+                                                    <input type="checkbox" class="custom-control-input" [(ngModel)]="row.lstFunction[j].IsRole" id="row{{i}}.lstFunction[{{j}}].IsRole" name="row{{i}}.lstFunction[{{j}}].IsRole">
+                                                    <label class="custom-control-label" for="row{{i}}.lstFunction[{{j}}].IsRole"></label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </ngb-tab>
+        </ngb-tabset>
+    </section>
+</div>

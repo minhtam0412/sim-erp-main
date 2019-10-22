@@ -28,6 +28,7 @@ namespace SimERP.Controllers
         private IUser userBO;
         private IFiscal fiscalBO;
         private ITokenRefresh tokenRefreshBO;
+        private IUserPermission userpermissionBO;
 
         #endregion Variables
 
@@ -39,6 +40,7 @@ namespace SimERP.Controllers
             this.userBO = this.userBO ?? new UserBO();
             this.fiscalBO = this.fiscalBO ?? new FiscalBO();
             this.tokenRefreshBO = this.tokenRefreshBO ?? new TokenRefreshBO();
+            this.userpermissionBO = this.userpermissionBO ?? new UserPermissionBO();
         }
 
         #endregion Contructor
@@ -341,6 +343,160 @@ namespace SimERP.Controllers
             }
         }
 
+        [HttpPost]
+        [Authorize]
+        [Route("api/user/getlistuser")]
+        public ResponeResult getListUser([FromBody] ReqListSearch reqData)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckSign(reqData, reqData.AuthenParams.ClientUserName,
+                    reqData.AuthenParams.ClientPassword, reqData.AuthenParams.Sign);
+                if (repData == null || !repData.IsOk)
+                    return repData;
+                var dataResult = userpermissionBO.getListUser();
+                if (dataResult != null)
+                {
+                    repData.RepData = dataResult;
+                }
+                else
+                    this.AddResponeError(ref repData, userpermissionBO.getMsgCode(), userpermissionBO.GetMessage(this.userpermissionBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid, MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("api/user/getroleuser")]
+        public ResponeResult getRoleUser([FromBody] ReqListSearch reqData)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckSign(reqData, reqData.AuthenParams.ClientUserName,
+                    reqData.AuthenParams.ClientPassword, reqData.AuthenParams.Sign);
+                if (repData == null || !repData.IsOk)
+                    return repData;
+                var dataResult = userpermissionBO.getRoleUser(reqData.SearchString == null ? (int?)null : Convert.ToInt32(reqData.SearchString));
+                if (dataResult != null)
+                {
+                    repData.RepData = dataResult;
+                }
+                else
+                    this.AddResponeError(ref repData, userpermissionBO.getMsgCode(), userpermissionBO.GetMessage(this.userpermissionBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid, MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("api/user/getrolelist")]
+        public ResponeResult getRoleList([FromBody] ReqListSearch reqData)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckSign(reqData, reqData.AuthenParams.ClientUserName,
+                    reqData.AuthenParams.ClientPassword, reqData.AuthenParams.Sign);
+                if (repData == null || !repData.IsOk)
+                    return repData;
+                var dataResult = userpermissionBO.getRoleList(reqData.SearchString == null ? (int?)null : Convert.ToInt32(reqData.SearchString));
+                if (dataResult != null)
+                {
+                    repData.RepData = dataResult;
+                }
+                else
+                    this.AddResponeError(ref repData, userpermissionBO.getMsgCode(), userpermissionBO.GetMessage(this.userpermissionBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid, MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("api/user/saveuserrole")]
+        public ActionResult<ResponeResult> SaveUserRole([FromBody] JObject reqData)
+        {
+            ReqListSearch reqSerach = new ReqListSearch();
+            try
+            {
+                var repData = this.CheckSign(reqData, reqSerach.AuthenParams.ClientUserName, reqSerach.AuthenParams.ClientPassword, "");
+                if (repData == null || !repData.IsOk || reqData["userid"] == null)
+                    return repData;
+
+                var dataResult = userpermissionBO.Save(JsonConvert.DeserializeObject<List<RoleList>>(reqData["datasave"]["RowData"].ToString()), Convert.ToInt32(reqData["userid"].ToString()));
+                if (dataResult)
+                    dataResult = userpermissionBO.SaveListUserPermission(reqData["lstpermission"].ToString(), Convert.ToInt32(reqData["userid"].ToString()));
+                if (dataResult)
+                    repData.RepData = dataResult;
+                else
+                    this.AddResponeError(ref repData, userpermissionBO.getMsgCode(),
+                        userpermissionBO.GetMessage(this.userpermissionBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("api/user/loadpagelistrole")]
+        public ResponeResult LoadPageListRole([FromBody] JObject reqData)
+        {
+            ReqListSearch reqSerach = new ReqListSearch();
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckSign(reqData, reqSerach.AuthenParams.ClientUserName, reqSerach.AuthenParams.ClientPassword, "");
+                if (repData == null || !repData.IsOk)
+                    return repData;
+                var dataResult = userpermissionBO.LoadPageListRole(reqData["moduleID"].ToString() == "" ? (int?)null : Convert.ToInt32(reqData["moduleID"].ToString()),
+                    reqData["userID"].ToString() == "" ? (int?)null : Convert.ToInt32(reqData["userID"].ToString()));
+                if (dataResult != null)
+                {
+                    repData.RepData = dataResult;
+                }
+                else
+                    this.AddResponeError(ref repData, userpermissionBO.getMsgCode(),
+                        userpermissionBO.GetMessage(this.userpermissionBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
         #endregion API Methods
 
         #region Private Methods

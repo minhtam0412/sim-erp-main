@@ -1,12 +1,12 @@
 import {Inject, Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ResponeResult} from '../common/commomodel/ResponeResult';
-import {IsCheckLogin, ROOT_URL} from '../common/config/APIURLconfig';
+import {IsCheckLogin, IsCheckRouterPermission, ROOT_URL} from '../common/config/APIURLconfig';
 import {Router} from '@angular/router';
 import {BehaviorSubject} from 'rxjs/internal/BehaviorSubject';
 import {User} from './user';
 import {Observable} from 'rxjs/internal/Observable';
-import {Key_Permission, Key_UserInfo} from '../common/config/globalconfig';
+import {Key_FunctionId_View, Key_Permission, Key_UserInfo, Key_WhiteListURL} from '../common/config/globalconfig';
 import {map, tap} from 'rxjs/operators';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {CookieService} from 'ngx-cookie-service';
@@ -17,11 +17,6 @@ import {Permissionuser} from './permissionuser';
   providedIn: 'root'
 })
 export class AuthenService {
-  private currentUserSubject: BehaviorSubject<User>;
-  public currentUser: Observable<User>;
-
-  private lstPermissionSubject: BehaviorSubject<Permissionuser[]>;
-  public lstPermission: Observable<Permissionuser[]>;
 
   constructor(private httpClient: HttpClient, @Inject('BASE_URL') private readonly baseURL: string, private router: Router,
               private jwtHelperService: JwtHelperService, private  cookieService: CookieService) {
@@ -39,12 +34,51 @@ export class AuthenService {
     this.currentUserSubject.next(userInfo);
   }
 
+  public get listPermissionValue(): Permissionuser[] {
+    return this.lstPermissionSubject.value;
+  }
+
+  public set listPermissionValue(value) {
+    this.lstPermissionSubject.next(value);
+  }
+
+  private currentUserSubject: BehaviorSubject<User>;
+  public currentUser: Observable<User>;
+
+  private lstPermissionSubject: BehaviorSubject<Permissionuser[]>;
+  public lstPermission: Observable<Permissionuser[]>;
+
+  static extractPermission(): Permissionuser[] {
+    let rsl: Permissionuser[];
+    rsl = JSON.parse(localStorage.getItem(Key_Permission));
+    return rsl;
+  }
+
   // kiểm tra Cookie đã có thông tin đăng nhập hay chưa
   checkLogin(): Boolean {
     if (IsCheckLogin) {
       return this.cookieService.check(Key_UserInfo);
     } else {
       return true;
+    }
+  }
+
+  checkRouterPermision(controllerName: string) {
+    if (!IsCheckRouterPermission) {
+      return 0;
+    }
+
+    if (Key_WhiteListURL.includes(controllerName)) {
+      return 0;
+    }
+
+    const FunctionId = Key_FunctionId_View;
+    if (this.listPermissionValue.length > 0) {
+      return this.listPermissionValue.findIndex(value => {
+        return value.FunctionId.trim() === FunctionId.trim() && value.ControllerName.trim() === controllerName.trim();
+      });
+    } else {
+      return -1;
     }
   }
 
@@ -56,9 +90,10 @@ export class AuthenService {
       if (jsonStringUserInfo) {
         rsl = JSON.parse(jsonStringUserInfo);
         if (rsl) {
-          const permis = this.extractPermission();
+          const permis = AuthenService.extractPermission();
           this.lstPermissionSubject = new BehaviorSubject<Permissionuser[]>(permis);
           this.lstPermission = this.lstPermissionSubject.asObservable();
+          this.listPermissionValue = permis;
         }
       } else {
         rsl = null;
@@ -73,12 +108,6 @@ export class AuthenService {
   extractAccessTokenData(): User {
     let rsl: User;
     rsl = this.getUserInfoFromCookie();
-    return rsl;
-  }
-
-  extractPermission(): Permissionuser[] {
-    let rsl: Permissionuser[];
-    rsl = JSON.parse(localStorage.getItem(Key_Permission));
     return rsl;
   }
 
@@ -100,11 +129,9 @@ export class AuthenService {
           return res;
         }
         const responeResult = res as ResponeResult;
-        console.log(responeResult);
         this.cookieService.set(Key_UserInfo, JSON.stringify(responeResult.RepData[0] as User), null);
         localStorage.setItem(Key_Permission, JSON.stringify(responeResult.RepData[1] as Permissionuser[]));
-        const userFromToken = this.extractAccessTokenData();
-        this.currentUserValue = userFromToken;
+        this.currentUserValue = this.extractAccessTokenData();
         return res;
       })
     );

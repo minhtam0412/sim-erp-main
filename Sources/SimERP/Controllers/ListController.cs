@@ -1639,12 +1639,12 @@ namespace SimERP.Controllers
                 if (repData == null || !repData.IsOk)
                     return repData;
 
-                var dataResult = pageListBO.DeletePageList(Convert.ToInt32(reqData.ID));
+                var dataResult = roleListBO.Delete(Convert.ToInt32(reqData.ID));
                 if (dataResult)
                     repData.RepData = dataResult;
                 else
-                    this.AddResponeError(ref repData, pageListBO.getMsgCode(),
-                        pageListBO.GetMessage(this.pageListBO.getMsgCode(), this.LangID));
+                    this.AddResponeError(ref repData, roleListBO.getMsgCode(),
+                        roleListBO.GetMessage(this.roleListBO.getMsgCode(), this.LangID));
 
                 return repData;
             }
@@ -1671,12 +1671,12 @@ namespace SimERP.Controllers
                     return repData;
 
                 var dataResult =
-                    pageListBO.UpdateSortOrder(Convert.ToInt32(reqData.UpID), Convert.ToInt32(reqData.DownID));
+                    roleListBO.UpdateSortOrder(Convert.ToInt32(reqData.UpID), Convert.ToInt32(reqData.DownID));
                 if (dataResult)
                     repData.RepData = dataResult;
                 else
-                    this.AddResponeError(ref repData, pageListBO.getMsgCode(),
-                        pageListBO.GetMessage(this.pageListBO.getMsgCode(), this.LangID));
+                    this.AddResponeError(ref repData, roleListBO.getMsgCode(),
+                        roleListBO.GetMessage(this.roleListBO.getMsgCode(), this.LangID));
 
                 return repData;
             }

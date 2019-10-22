@@ -84,6 +84,14 @@ namespace SimERP.Business.Models.MasterData.ListDTO
         public string LstPermission { get; set; }
     }
 
+    public class RoleList
+    {
+        public int RoleId { get; set; }
+        public string RoleName { get; set; }
+        public bool isCheck { get; set; }
+       
+    }
+
     public class TaxSearchParams
     {
         public AuthenParams authenParams { get; set; }

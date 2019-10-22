@@ -20,7 +20,6 @@ export class HeaderComponent implements OnInit {
     });
     this.authenService.lstPermission.subscribe(res => {
       this.lstPermission = res;
-      console.log(this.lstPermission);
     });
   }
 

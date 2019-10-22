@@ -30,7 +30,7 @@ export class ProductdetailComponent implements OnInit, AfterViewInit, AfterConte
 
 
   constructor(private activeModal: NgbActiveModal, private notificationService: NotificationService, private service: ProductService,
-              private uploadfileService: UploadfileService, private loaderService: LoaderService, private cdr: ChangeDetectorRef) {
+              private uploadfileService: UploadfileService, public loaderService: LoaderService, private cdr: ChangeDetectorRef) {
   }
 
   @Input() isAddState = true;
@@ -214,7 +214,7 @@ export class ProductdetailComponent implements OnInit, AfterViewInit, AfterConte
           this.closeModal();
         }
       } else {
-        this.notificationService.showError('Lỗi thực hiện cập nhật thông tin. Vui lòng liên hệ quản trị hệ thống!');
+        this.notificationService.showError(res.MessageText);
       }
     });
   }
@@ -226,6 +226,7 @@ export class ProductdetailComponent implements OnInit, AfterViewInit, AfterConte
   // handle on user click change AttachFile
   setCurrentAttachFileIndex(index: any) {
     this.currentIndexAttachFile = index;
+    return true;
   }
 
   // handle duplicate file name

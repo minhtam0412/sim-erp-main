@@ -1,0 +1,12 @@
+.table-responsive .list-group {
+    text-align: left;
+}
+
+.table-responsive .list-group a:hover {
+    background-color: lightblue;
+}
+
+.table-responsive .list-group .list-group-item {
+    height: 30px;
+    padding: .3rem 1.25rem;
+}

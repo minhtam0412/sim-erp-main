@@ -188,7 +188,7 @@ export class ProductlistComponent implements OnInit, AfterViewInit {
   // mở dialog insert/update
   showDialog(productId?: any) {
     const modalRef = this.modalService.open(ProductdetailComponent, {
-      backdrop: 'static', scrollable: true, centered: true, backdropClass: 'backdrop-modal', size: 'xl'
+      backdrop: 'static', scrollable: false, centered: true, backdropClass: 'backdrop-modal', size: 'xl'
     });
 
     modalRef.componentInstance.lstCountry = this.lstCountry;
@@ -254,7 +254,6 @@ export class ProductlistComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.loadDataDropDown();
     this.SearchAction();
-
   }
 
   goToPage(n: number): void {
