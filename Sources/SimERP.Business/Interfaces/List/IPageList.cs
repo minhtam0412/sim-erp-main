@@ -14,10 +14,11 @@ namespace SimERP.Business
             int maxRows);
         bool Save(Page rowData, bool isNew, ref int pageID);
         bool SaveListPageFunction(int pageID, string functionID);
-        bool DeletePageList(int id);
-        bool DeleteListPagePermission(int pageID);
+        bool DeletePageList(int id, ref string MessageText);
+        bool DeleteListPagePermission(int pageID, ref string MessageText);
         bool UpdateSortOrder(int upID, int downID);
         List<Module> GetListModule();
         List<Models.MasterData.ListDTO.Function> GetListFunction();
+        bool checkIssuePermission(int pageId, string functionID);
     }
 }

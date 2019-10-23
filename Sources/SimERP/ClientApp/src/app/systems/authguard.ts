@@ -3,6 +3,7 @@ import {ActivatedRouteSnapshot, CanActivate, CanActivateChild, Router, RouterSta
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {AuthenService} from './authen.service';
 import {Observable} from 'rxjs/internal/Observable';
+import {Key_FunctionId_Edit, Key_FunctionId_View} from '../common/config/globalconfig';
 
 @Injectable()
 export class AuthGuard implements CanActivate, CanActivateChild {
@@ -38,13 +39,36 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
   canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean
     | UrlTree> | boolean | UrlTree {
-    const currentURL = state.url.replace('/', '');
-    const index = this.authenService.checkRouterPermision(currentURL);
+
+    // xử lý tách URL dạng customertype/123456
+    const arrURL = state.url.split('/').filter(value => {
+      return value != null && value.length > 0;
+    });
+
+    let currentURL = ''; // URL của component
+    if (arrURL.length > 0) {
+      currentURL = arrURL[0];
+    }
+
+    // default functionId là VIEW
+    let functionId = Key_FunctionId_View;
+
+    // xử lý case chỉnh sửa bằng cách truy cập URL
+    if (arrURL.length === 2) {
+      const paramValue = arrURL[1];
+      // Nếu  param khác undefined và chuỗi rỗng => functionId là EDIT
+      if (String(paramValue) !== 'undefined' && String(paramValue).trim() !== '') {
+        functionId = Key_FunctionId_Edit;
+      }
+    }
+
+    const index = this.authenService.checkRouterPermision(currentURL, functionId);
     const rsl = index > -1;
     if (!rsl) {
       this.router.navigate(['/']).then(r => {
       });
     }
+    console.log('canActivateChild', rsl);
     return rsl;
   }
 }

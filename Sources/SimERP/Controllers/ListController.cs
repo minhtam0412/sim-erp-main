@@ -667,6 +667,7 @@ namespace SimERP.Controllers
             try
             {
                 int pageID = -1;
+                string message = "";
                 //Check security & data request
                 var repData = this.CheckSign(reqData.AuthenParams, reqData.AuthenParams.ClientUserName,
                     reqData.AuthenParams.ClientPassword, reqData.AuthenParams.Sign);
@@ -685,19 +686,26 @@ namespace SimERP.Controllers
                 {
                     if (!reqData.IsNew)
                     {
-                        pageListBO.DeleteListPagePermission(pageID);
+                        pageListBO.DeleteListPagePermission(pageID, ref message);
                     }
 
                     PageList pageList = JsonConvert.DeserializeObject<PageList>(reqData.RowData.ToString());
                     foreach (Function item in pageList.lstFunction)
                     {
                         if (item.IsCheck)
-                            dataResult = pageListBO.SaveListPageFunction(pageID, item.FunctionId);
+                        {
+                            if(!pageListBO.checkIssuePermission(pageID, item.FunctionId))
+                                dataResult = pageListBO.SaveListPageFunction(pageID, item.FunctionId);
+                        }
                     }
                 }
 
                 if (dataResult)
+                {
                     repData.RepData = dataResult;
+                    repData.MessageText = message;
+                }
+                    
                 else
                     this.AddResponeError(ref repData, pageListBO.getMsgCode(),
                         pageListBO.GetMessage(this.pageListBO.getMsgCode(), this.LangID));
@@ -720,15 +728,20 @@ namespace SimERP.Controllers
         {
             try
             {
+                string message = "";
                 //Check security & data request
                 var repData = this.CheckSign(reqData.AuthenParams, reqData.AuthenParams.ClientUserName,
                     reqData.AuthenParams.ClientPassword, reqData.AuthenParams.Sign);
                 if (repData == null || !repData.IsOk)
                     return repData;
 
-                var dataResult = pageListBO.DeletePageList(Convert.ToInt32(reqData.ID));
+                var dataResult = pageListBO.DeletePageList(Convert.ToInt32(reqData.ID), ref message);
+
                 if (dataResult)
+                {
                     repData.RepData = dataResult;
+                    repData.MessageText = message;
+                }
                 else
                     this.AddResponeError(ref repData, pageListBO.getMsgCode(),
                         pageListBO.GetMessage(this.pageListBO.getMsgCode(), this.LangID));

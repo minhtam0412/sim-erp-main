@@ -6,7 +6,8 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="#">Danh mục</a></li>
-              <li class="breadcrumb-item active" aria-current="page"><a href="#" [routerLink]="'/customertype'">Loại khách hàng</a></li>
+              <li class="breadcrumb-item active" aria-current="page"><a href="#" [routerLink]="'/customertype'">Loại
+                khách hàng</a></li>
             </ol>
           </nav>
         </div>
@@ -20,10 +21,11 @@
         </div>
         <div class="col-sm-8 text-right">
           <div class="form-group">
-            <button type="button" class="btn btn-success btn-sm" (click)="searchData()">
+            <button type="button" class="btn btn-success btn-sm" (click)="searchData()" *appCheckpermission="'VIEW'">
               <i class="fab fa-searchengin"></i> Tìm kiếm
             </button>&nbsp;
-            <button type="button" class="btn btn-primary btn-sm" appCheckpermission functionId="ADD" (click)="openDialog()">
+            <button type="button" class="btn btn-primary btn-sm" *appCheckpermission="'ADD'"
+                    (click)="openDialog()">
               <i class="fas fa-plus-circle"></i> Thêm mới
             </button>&nbsp;
           </div>
@@ -64,48 +66,48 @@
     <div class="table-responsive">
       <table class="table table-bordered table-hover table-striped">
         <thead>
-          <tr>
-            <th>#</th>
-            <th>Mã loại khách hàng</th>
-            <th>Tên loại khách hàng</th>
-            <th>Ghi chú</th>
-            <th class="col-active">Sử dụng</th>
-            <th class="col-sortorder">Sort Order</th>
-            <th class="col-action"></th>
-          </tr>
+        <tr>
+          <th>#</th>
+          <th>Mã loại khách hàng</th>
+          <th>Tên loại khách hàng</th>
+          <th>Ghi chú</th>
+          <th class="col-active">Sử dụng</th>
+          <th class="col-sortorder">Sort Order</th>
+          <th class="col-action"></th>
+        </tr>
         </thead>
         <tbody>
-          <tr *ngIf="!dataIsAvailable">
-            <td colspan="8" class="datarow-null">Dữ liệu không tồn lại</td>
-          </tr>
-          <tr *ngFor="let row of lstDataResult; let index = index">
-            <td class="order-number">{{index + 1}}</td>
-            <td class="col-code">
-              <a (click)="openDialog(row)"> {{row.CustomerTypeCode}}</a>
-            </td>
-            <td class="col-name">{{row.CustomerTypeName}}</td>
-            <td class="col-note">{{row.Notes}}</td>
-            <td>
-              <i [ngClass]="{'fas fa-check-square':row.IsActive, 'far fa-square': !row.IsActive}"
-                 [ngStyle]="{'color': '#337ab7'}"></i>
-            </td>
-            <td class="col-moveaction">
-              <a (click)="index == 0 ? 'javascript:void(0)' : moveUp(index)">
-                <i class="fas fa-arrow-alt-circle-up" style="color:forestgreen; font-size:14px;"></i>
-              </a>&nbsp;&nbsp;&nbsp;
-              <a (click)="index == pagingComponent.getLimit() - 1 ? 'javascript:void(0)' : moveDown(index)">
-                <i class="fas fa-arrow-alt-circle-down" style="color:forestgreen; font-size:14px;"></i>
-              </a>
-            </td>
-            <td class="col-action">
-              <a (click)="openDialog(row)">
-                <i class="fas fa-edit" style='color:#337ab7'></i>&nbsp;&nbsp;&nbsp;
-              </a>
-              <a (click)="showConfirmDeleteDialog(row)">
-                <i class="far fa-trash-alt " style='color:#337ab7'></i>
-              </a>
-            </td>
-          </tr>
+        <tr *ngIf="!dataIsAvailable">
+          <td colspan="8" class="datarow-null">Dữ liệu không tồn lại</td>
+        </tr>
+        <tr *ngFor="let row of lstDataResult; let index = index">
+          <td class="order-number">{{index + 1}}</td>
+          <td class="col-code">
+            <a (click)="openDialog(row)"> {{row.CustomerTypeCode}}</a>
+          </td>
+          <td class="col-name">{{row.CustomerTypeName}}</td>
+          <td class="col-note">{{row.Notes}}</td>
+          <td>
+            <i [ngClass]="{'fas fa-check-square':row.IsActive, 'far fa-square': !row.IsActive}"
+               [ngStyle]="{'color': '#337ab7'}"></i>
+          </td>
+          <td class="col-moveaction">
+            <a (click)="index == 0 ? 'javascript:void(0)' : moveUp(index)">
+              <i class="fas fa-arrow-alt-circle-up" style="color:forestgreen; font-size:14px;"></i>
+            </a>&nbsp;&nbsp;&nbsp;
+            <a (click)="index == pagingComponent.getLimit() - 1 ? 'javascript:void(0)' : moveDown(index)">
+              <i class="fas fa-arrow-alt-circle-down" style="color:forestgreen; font-size:14px;"></i>
+            </a>
+          </td>
+          <td class="col-action">
+            <a (click)="openDialog(row)" *appCheckpermission="'EDIT'">
+              <i class="fas fa-edit" style='color:#337ab7'></i>&nbsp;&nbsp;&nbsp;
+            </a>
+            <a (click)="showConfirmDeleteDialog(row)" *appCheckpermission="'DEL'">
+              <i class="far fa-trash-alt " style='color:#337ab7'></i>
+            </a>
+          </td>
+        </tr>
         </tbody>
       </table>
     </div>

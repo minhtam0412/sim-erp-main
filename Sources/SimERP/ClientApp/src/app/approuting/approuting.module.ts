@@ -21,6 +21,9 @@ import {ProductCategoryComponent} from '../lists/productcategory/product-categor
 import {CustomerComponent} from '../lists/customer/customer/customer.component';
 import {RolelistComponent} from '../lists/rolelist/rolelist/rolelist.component';
 import {UserpermissionComponent} from '../systems/userpermission/userpermission/userpermission.component';
+import {SupplierlistComponent} from '../lists/supplier/supplierlist/supplierlist.component';
+import {SupplierdetailComponent} from '../lists/supplier/supplierdetail/supplierdetail.component';
+import { CustomerdetailComponent } from '../lists/customer/customerdetail/customerdetail.component';
 
 
 const routes: Routes = [
@@ -38,8 +41,11 @@ const routes: Routes = [
       {path: 'product', component: ProductlistComponent},
       {path: 'productcategory', component: ProductCategoryComponent},
       {path: 'customer', component: CustomerComponent},
+      {path: 'customer/:id', component: CustomerdetailComponent},
       {path: 'rolelist', component: RolelistComponent},
       {path: 'userpermission', component: UserpermissionComponent},
+      {path: 'supplier', component: SupplierlistComponent},
+      {path: 'supplier/:id', component: SupplierdetailComponent},
     ]
   },
   {

@@ -1,4 +1,4 @@
-import {Directive, ElementRef, Input, Renderer2} from '@angular/core';
+import {Directive, ElementRef, Input, Renderer2, TemplateRef, ViewContainerRef} from '@angular/core';
 import {Router} from '@angular/router';
 import {AuthenService} from '../../systems/authen.service';
 import {Permissionuser} from '../../systems/permissionuser';
@@ -9,23 +9,41 @@ import {Permissionuser} from '../../systems/permissionuser';
 })
 export class CheckpermissionDirective {
 
-  // FunctionId of current element
-  @Input() functionId: string;
+  @Input() set appCheckpermission(value) {
+    this.functionId = value;
+    this.updateView();
+  }
 
+  // FunctionId of current element
+  functionId = '';
+  controllerName = '';
+  private isHidden = true;
   lstPermission: Permissionuser[] = [];
 
-
-  constructor(private el: ElementRef, private router: Router, private  authenService: AuthenService, private renderer2: Renderer2) {
+  constructor(private templateRef: TemplateRef<any>, private viewContainer: ViewContainerRef, private el: ElementRef,
+              private router: Router, private  authenService: AuthenService, private renderer2: Renderer2) {
     this.authenService.lstPermission.subscribe(res => {
       this.lstPermission = res;
     });
-    console.log(this.getCurrentPath());
+    this.controllerName = this.getCurrentPath();
+  }
+
+  updateView() {
+    const index = this.checkPermission();
+    if (index > -1) {
+      if (this.isHidden) {
+        this.viewContainer.createEmbeddedView(this.templateRef);
+        this.isHidden = false;
+      }
+    } else {
+      this.isHidden = true;
+      this.viewContainer.clear();
+    }
   }
 
   // Get current path of component. Ex: /customertype
   getCurrentPath() {
     const arrURL = this.router.url.split('/');
-    console.log(arrURL);
     if (arrURL && arrURL.length > 0) {
       const filter = arrURL.filter((value) => {
         return value != null && value.length > 0;
@@ -35,6 +53,14 @@ export class CheckpermissionDirective {
       }
     }
     return null;
+  }
+
+  private checkPermission() {
+    let index: number;
+    index = this.lstPermission.findIndex(value => {
+      return value.ControllerName.trim() === this.controllerName && value.FunctionId.trim() === this.functionId.trim();
+    });
+    return index;
   }
 
 

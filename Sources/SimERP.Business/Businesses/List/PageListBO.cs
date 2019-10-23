@@ -181,7 +181,7 @@ namespace SimERP.Business
             }
         }
 
-        public bool DeletePageList(int id)
+        public bool DeletePageList(int id, ref string MessageText)
         {
             try
             {
@@ -192,7 +192,7 @@ namespace SimERP.Business
                         try
                         {
                             //TODO LIST: Kiểm tra sử dụng trước khi xóa
-                            if (this.DeleteListPagePermission(id))
+                            if (this.DeleteListPagePermission(id, ref MessageText))
                             {
                                 db.Page.Remove(db.Page.Find(id));
                                 db.SaveChanges();
@@ -264,7 +264,7 @@ namespace SimERP.Business
             }
         }
 
-        public bool DeleteListPagePermission(int pageID)
+        public bool DeleteListPagePermission(int pageID, ref string MessageText)
         {
             try
             {
@@ -272,8 +272,25 @@ namespace SimERP.Business
                 {
                     DynamicParameters param = new DynamicParameters();
                     param.Add("PageID", pageID);
+                    // check PermissionID used: yes -> notify "PermissionID used", no -> delete
+                    string sqlQuery = @"SELECT p1.PageName + ' ' + p.FunctionId FROM sec.Permission p JOIN sec.Page p1 ON p1.PageId = p.PageId WHERE p.PageId = @PageID 
+                                        AND (p.PermissionId IN (SELECT DISTINCT rp.PermissionId FROM sec.RolePermission rp)
+                                        OR p.PermissionId IN (SELECT DISTINCT up.PermissionId FROM sec.UserPermission up));";
 
-                    string sqlQuery = @" DELETE [sec].[Permission] WHERE PageID = @PageID";
+                    var tem_Mess = conn.QueryMultiple(sqlQuery, param);
+                    List<string> str_array = tem_Mess.Read<string>().ToList();
+                    if (str_array.Count > 0 && str_array[0] != null)
+                    {
+                        for (int i = 0; i < str_array.Count; ++i)
+                        {
+                            MessageText += (i == 0 ? "" : ";") + str_array[i];
+                        }
+                    }
+
+                    //-----------------------
+                    sqlQuery = @" DELETE [sec].[Permission] WHERE PageID = @PageID " +
+                        " AND PermissionId  NOT IN (SELECT DISTINCT rp.PermissionId FROM sec.RolePermission rp) " +
+                        " AND PermissionId NOT IN (SELECT DISTINCT up.PermissionId FROM sec.UserPermission up) ";
 
                     conn.Query(sqlQuery, param);
                     return true;
@@ -287,6 +304,32 @@ namespace SimERP.Business
             }
         }
 
+        public bool checkIssuePermission(int pageId, string functionID)
+        {
+
+            try
+            {
+                using (var db = new DBEntities())
+                {
+                    try
+                    {
+                        if (db.Permission.Where(x => x.PageId == pageId && x.FunctionId == functionID).ToList().Count > 0)
+                            return true;
+                    }
+                    catch (Exception e)
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                this.AddMessage(MessageCode.MSGCODE_003, "Find Id unsucessfull");
+                Logger.Error(GetType(), ex);
+                return false;
+            }
+            return false;
+        }
         #region Private methods
 
         private bool CheckExistCode(string pagename)

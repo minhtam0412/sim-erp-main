@@ -7,6 +7,8 @@ import {CustomertypeService} from '../customertype.service';
 import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
 import {ToastrService} from 'ngx-toastr';
 import {ComfirmDialogComponent} from '../../../common/comfirm-dialog/comfirm-dialog.component';
+import {AuthenService} from '../../../systems/authen.service';
+import {NotificationService} from '../../../common/notifyservice/notification.service';
 
 @Component({
   selector: 'app-customertypelist',
@@ -25,7 +27,7 @@ export class CustomertypelistComponent implements OnInit, AfterViewInit {
   @ViewChild(PaginationComponent, {static: false}) pagingComponent: PaginationComponent;
 
   constructor(private modalService: NgbModal, private cusTypeService: CustomertypeService, private spinnerService: Ng4LoadingSpinnerService,
-              private toastr: ToastrService) {
+              private toastr: ToastrService, private authenService: AuthenService, private notificationService: NotificationService) {
   }
 
   ngOnInit() {
@@ -69,17 +71,25 @@ export class CustomertypelistComponent implements OnInit, AfterViewInit {
 
 
   // mở các dialog
-    openDialog(cusType?: any) {
-      const modalRef = this.modalService.open(CustomertypedetailComponent, {
-        backdrop: 'static', scrollable: true, centered: true, backdropClass: 'backdrop-modal'
-      });
-
-      if (cusType === undefined) {
-        modalRef.componentInstance.isAddState = true;
-      } else {
-        modalRef.componentInstance.isAddState = false;
-        modalRef.componentInstance.rowSelected = cusType;
+  openDialog(cusType?: any) {
+    if (cusType !== undefined) {
+      if (!this.authenService.isHasPermission('customertype', 'EDIT')) {
+        this.notificationService.showRestrictPermission();
+        return;
       }
+    }
+
+    const modalRef = this.modalService.open(CustomertypedetailComponent, {
+      backdrop: 'static', scrollable: true, centered: true, backdropClass: 'backdrop-modal'
+    });
+
+    if (cusType === undefined) {
+      modalRef.componentInstance.isAddState = true;
+    } else {
+
+      modalRef.componentInstance.isAddState = false;
+      modalRef.componentInstance.rowSelected = cusType;
+    }
 
     // xử lý sau khi đóng dialog, thực hiện load lại dữ liệu nếu muốn
     modalRef.result.then((result) => {

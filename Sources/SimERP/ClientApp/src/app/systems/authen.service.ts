@@ -12,6 +12,7 @@ import {JwtHelperService} from '@auth0/angular-jwt';
 import {CookieService} from 'ngx-cookie-service';
 import sampleData from '../../data.json';
 import {Permissionuser} from './permissionuser';
+import {EncrDecrService} from '../common/security/encr-decr.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,8 @@ import {Permissionuser} from './permissionuser';
 export class AuthenService {
 
   constructor(private httpClient: HttpClient, @Inject('BASE_URL') private readonly baseURL: string, private router: Router,
-              private jwtHelperService: JwtHelperService, private  cookieService: CookieService) {
+              private jwtHelperService: JwtHelperService, private  cookieService: CookieService,
+              private encrDecrService: EncrDecrService) {
     this.baseURL = ROOT_URL;
     const userFromToken = this.extractAccessTokenData();
     this.currentUserSubject = new BehaviorSubject<User>(userFromToken);
@@ -63,16 +65,22 @@ export class AuthenService {
     }
   }
 
-  checkRouterPermision(controllerName: string) {
+  // kiểm tra quyền khi truy cập URL
+  // return > -1: có quyền; ngược lại: không có quyền truy cập URL
+  checkRouterPermision(controllerName: string, functionId?: string) {
+    // config check quyền URL
     if (!IsCheckRouterPermission) {
       return 0;
     }
 
+    // bỏ qua các URL nằm trong danh sách White List
     if (Key_WhiteListURL.includes(controllerName)) {
       return 0;
     }
 
-    const FunctionId = Key_FunctionId_View;
+    // nếu functionId = undefined thì default là function VIEW
+    const FunctionId = functionId || Key_FunctionId_View;
+    console.log('checkRouterPermision', 'FunctionId: ' + FunctionId + '| controllerName: ' + controllerName);
     if (this.listPermissionValue.length > 0) {
       return this.listPermissionValue.findIndex(value => {
         return value.FunctionId.trim() === FunctionId.trim() && value.ControllerName.trim() === controllerName.trim();
@@ -171,5 +179,15 @@ export class AuthenService {
     const headers = new HttpHeaders().set('content-type', 'application/json');
     const body = {'userId': model.userId, 'currentPassword': model.currentPassword, 'newPassword': model.newPassword};
     return this.httpClient.post<ResponeResult>(this.baseURL + 'api/changepassword', body, {headers});
+  }
+
+  // kiểm tra user hiện tại có quyền trên controller & functionId
+  isHasPermission(controllerName: string, functionId: string): boolean {
+    let rsl: boolean;
+    const index = this.listPermissionValue.findIndex(value => {
+      return value.FunctionId.trim() === functionId.trim() && value.ControllerName.trim() === controllerName.trim();
+    });
+    rsl = index > -1;
+    return rsl;
   }
 }

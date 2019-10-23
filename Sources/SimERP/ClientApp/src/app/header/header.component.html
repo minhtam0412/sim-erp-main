@@ -200,7 +200,9 @@
       </ul>
     </li>
 
-    <li>
+    <li
+      *appCheckmenupermission="''; Fn '', Op ['tax','unit','customertype','vendortype','productcategory'
+      ,'product','customer','supplier']">
       <a style="color: white;"><i class="far fa-list-alt"></i> Danh mục</a>
       <ul>
         <li>
@@ -223,7 +225,7 @@
               <a [routerLink]='["/vendortype"]' [routerLinkActive]='["vendortype"]'>Loại nhà cung cấp</a>
             </li>
             <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'
-                *appCheckmenupermission="'productcategory'">
+                *appCheckmenupermission="'productcategory'; Fn 'VIEW'">
               <a [routerLink]='["/productcategory"]' [routerLinkActive]='["productcategory"]'>Quản lý ngành hàng</a>
             </li>
             <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'
@@ -233,6 +235,10 @@
             <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'
                 *appCheckmenupermission="'customer'; Fn 'VIEW'">
               <a [routerLink]='["/customer"]' [routerLinkActive]='["customer"]'>Quản lý khách hàng</a>
+            </li>
+            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'
+                *appCheckmenupermission="'supplier'; Fn 'VIEW'">
+              <a [routerLink]='["/supplier"]' [routerLinkActive]='["supplier"]'>Quản lý nhà cung cấp</a>
             </li>
           </ul>
         </li>

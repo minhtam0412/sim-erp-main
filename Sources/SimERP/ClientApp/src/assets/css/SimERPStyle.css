@@ -377,7 +377,7 @@
   min-height: 25px;
   width: 100%;
   border: none;
-  border-bottom: 1px solid #9e9e9e;
+  border-bottom: 1px solid #ced4da !important;
   box-shadow: none;
 }
 

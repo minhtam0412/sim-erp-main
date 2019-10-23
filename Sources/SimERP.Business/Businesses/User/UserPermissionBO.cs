@@ -87,11 +87,12 @@ namespace SimERP.Business
         {
             try
             {
-                if (list.Count <= 0)
-                    return true;
+                
 
                 if (DeleteUserRole(userId))
                 {
+                    if (list.Count <= 0)
+                        return true;
                     foreach (RoleList item in list)
                     {
                         SaveUserRole(userId, item.RoleId);
@@ -142,7 +143,8 @@ namespace SimERP.Business
                     {
                         foreach (string permis in lstPermission)
                         {
-                            SaveUserPermission(userId, Convert.ToInt32(permis));
+                            if(permis != "" && permis != null)
+                                SaveUserPermission(userId, Convert.ToInt32(permis));
                         }
                         return true;
                     }

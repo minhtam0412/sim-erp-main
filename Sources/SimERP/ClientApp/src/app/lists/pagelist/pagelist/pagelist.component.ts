@@ -102,7 +102,7 @@ export class PagelistComponent implements OnInit {
   LoadData(startRow: number) {
     const limit = this.pagingComponent.getLimit();
     this.spinnerService.show();
-    this.pageListService.getData(this.dataSerach, this.cboIsActive, this.cboModule,  startRow, limit).subscribe(
+    this.pageListService.getData(this.dataSerach, this.cboIsActive, this.cboModule, startRow, limit).subscribe(
       {
         next: (res) => {
           if (!res.IsOk) {
@@ -124,23 +124,34 @@ export class PagelistComponent implements OnInit {
 
   saveDataModel(isclose: boolean) {
     this.pageListService.InsertPageList(this.objModel, this.isNewModel).subscribe(res => {
-       if (res !== undefined) {
-         if (!res.IsOk) {
-           this.toastr.error(res.MessageText, 'Thông báo!');
-         } else {
-           this.SearchData();
-           this.clearModel();
-           this.toastr.success(this.isNewModel ? 'Thêm dữ liệu thành công' : 'Dữ liệu đã được chỉnh sửa', 'Thông báo!');
-           if (isclose) {
-             this.closeAddExpenseModal.nativeElement.click();
-           }
-         }
-       } else {
-         this.toastr.error("Lỗi xử lý hệ thống", 'Thông báo!');
-       }
-     }, err => {
-       console.log(err);
-     });
+      if (res !== undefined) {
+        if (!res.IsOk) {
+          this.toastr.error(res.MessageText, 'Thông báo!');
+        } else {
+          this.SearchData();
+          this.clearModel();
+          this.toastr.success(this.isNewModel ? 'Thêm dữ liệu thành công' : 'Dữ liệu đã được chỉnh sửa', 'Thông báo!');
+          this.showNotifyEditErro(res.MessageText);
+          if (isclose) {
+            this.closeAddExpenseModal.nativeElement.click();
+          }
+        }
+      } else {
+        this.toastr.error("Lỗi xử lý hệ thống", 'Thông báo!');
+      }
+    }, err => {
+      console.log(err);
+    });
+  }
+
+  showNotifyEditErro(message: string) {
+    if (message == null || message == "")
+      return;
+    var arr_message: string[] = [];
+    arr_message = message.split(';');
+    arr_message.forEach(element => {
+      this.toastr.warning(element + " đã được sử dụng", 'Thông báo!');
+    });
   }
 
   clearModel() {
@@ -153,33 +164,33 @@ export class PagelistComponent implements OnInit {
   }
 
   openDialog(PageID: number) {
-     const modalRef = this.modalService.open(ComfirmDialogComponent, {
-       backdrop: false, scrollable: true, centered: true
-     });
-     // xử lý sau khi đóng dialog, thực hiện load lại dữ liệu nếu muốn
-     modalRef.result.then((result) => {
-       if (result != undefined && result == true) {
-         this.deleteRowGird_PageList(PageID);
-       }
-     });
+    const modalRef = this.modalService.open(ComfirmDialogComponent, {
+      backdrop: false, scrollable: true, centered: true
+    });
+    // xử lý sau khi đóng dialog, thực hiện load lại dữ liệu nếu muốn
+    modalRef.result.then((result) => {
+      if (result != undefined && result == true) {
+        this.deleteRowGird_PageList(PageID);
+      }
+    });
   }
 
   deleteRowGird_PageList(PageID: number) {
 
     this.pageListService.DeletePageList(PageID).subscribe(res => {
-       if (res !== undefined) {
-         if (!res.IsOk) {
-           this.toastr.error(res.MessageText, 'Thông báo!');
-         } else {
-           this.toastr.warning('Dữ liệu đã được xóa', 'Thông báo!');
-           this.SearchData();
-         }
-       } else {
-         this.toastr.error("Lỗi xử lý hệ thống", 'Thông báo!');
-       }
-     }, err => {
-       console.log(err);
-     });
+      if (res !== undefined) {
+        if (!res.IsOk) {
+          this.toastr.error(res.MessageText, 'Thông báo!');
+        } else {
+          this.toastr.warning('Dữ liệu đã được xóa', 'Thông báo!');
+          this.SearchData();
+        }
+      } else {
+        this.toastr.error("Lỗi xử lý hệ thống", 'Thông báo!');
+      }
+    }, err => {
+      console.log(err);
+    });
   }
 
   checkValidateModel() {
@@ -194,44 +205,44 @@ export class PagelistComponent implements OnInit {
     var objUp: number = this.lstDataResult[index - 1].PageId;
 
     this.pageListService.SortPageList(objcusr, objUp).subscribe(res => {
-       if (res !== undefined) {
-         if (!res.IsOk) {
-           this.toastr.error(res.MessageText, 'Thông báo!');
-         } else {
-           this.SearchData();
-         }
-       } else {
-         this.toastr.error("Lỗi xử lý hệ thống", 'Thông báo!');
-       }
-     }, err => {
-       console.log(err);
-     });
+      if (res !== undefined) {
+        if (!res.IsOk) {
+          this.toastr.error(res.MessageText, 'Thông báo!');
+        } else {
+          this.SearchData();
+        }
+      } else {
+        this.toastr.error("Lỗi xử lý hệ thống", 'Thông báo!');
+      }
+    }, err => {
+      console.log(err);
+    });
   }
 
   actionDow(index: number) {
-     if (index == this.lstDataResult.length - 1) return;
+    if (index == this.lstDataResult.length - 1) return;
 
     var objcusr: number = this.lstDataResult[index].PageId;
     var objDow: number = this.lstDataResult[index + 1].PageId;
 
     this.pageListService.SortPageList(objDow, objcusr).subscribe(res => {
-        if (res !== undefined) {
-          if (!res.IsOk) {
-            this.toastr.error(res.MessageText, 'Thông báo!');
-          } else {
-            this.SearchData();
-          }
+      if (res !== undefined) {
+        if (!res.IsOk) {
+          this.toastr.error(res.MessageText, 'Thông báo!');
         } else {
-          this.toastr.error("Lỗi xử lý hệ thống", 'Thông báo!');
+          this.SearchData();
         }
-      }, err => {
-        console.log(err);
-      });
+      } else {
+        this.toastr.error("Lỗi xử lý hệ thống", 'Thông báo!');
+      }
+    }, err => {
+      console.log(err);
+    });
   }
 
   EditModel(index: number) {
-     this.isNewModel = false;
-     this.objModel = this.lstDataResult[index];
+    this.isNewModel = false;
+    this.objModel = this.lstDataResult[index];
   }
 
   SearchData() {

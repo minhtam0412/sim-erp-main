@@ -25,6 +25,10 @@ export class NotificationService {
     this.toastrService.error(content, NotificationService.getTitleContent(title));
   }
 
+  showRestrictPermission(content?: string) {
+    this.toastrService.info(content || 'Người dùng không có quyền thao tác!', 'Thông báo');
+  }
+
   showErrorBackend() {
     this.toastrService.error('Đã xảy ra lỗi. Vui lòng liên hệ quản trị hệ thống!', 'Lỗi hệ thống');
   }

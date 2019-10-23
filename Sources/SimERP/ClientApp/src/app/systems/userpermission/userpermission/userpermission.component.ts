@@ -9,9 +9,7 @@ import { UserRoleList } from '../model/userpermission';
 import { Function } from 'src/app/lists/pagelist/model/Function';
 import { Module } from 'src/app/lists/pagelist/model/Module';
 import { PageList } from 'src/app/lists/pagelist/model/pagelist';
-import { RolelistService } from 'src/app/lists/rolelist/rolelist.service';
 import { PagelistService } from 'src/app/lists/pagelist/pagelist.service';
-import { RoleList } from 'src/app/lists/rolelist/model/rolelist';
 
 @Component({
   selector: 'app-userpermission',
