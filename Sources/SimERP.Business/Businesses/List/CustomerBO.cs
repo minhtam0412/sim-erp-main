@@ -155,6 +155,29 @@ namespace SimERP.Business
                 return false;
             }
         }
+        public List<GroupCompany> GetListGroupCompany()
+        {
+            try
+            {
+                using (IDbConnection conn = IConnect.GetOpenConnection())
+                {
+                    string sqlWhere = string.Empty;
+                    DynamicParameters param = new DynamicParameters();
+
+                    string sqlQuery = @"SELECT t.* FROM [list].[GroupCompany] t with(nolock) WHERE t.IsActive = 1 ORDER BY t.CreatedDate ";
+
+                    var listResult = conn.QueryMultiple(sqlQuery, param);
+
+                    return listResult.Read<GroupCompany>().ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                this.AddMessage(MessageCode.MSGCODE_001, ex.Message);
+                Logger.Error(GetType(), ex);
+                return null;
+            }
+        }
 
         #region Private methods
 
@@ -189,6 +212,7 @@ namespace SimERP.Business
             }
             return false;
         }
+
         #endregion
     }
 }

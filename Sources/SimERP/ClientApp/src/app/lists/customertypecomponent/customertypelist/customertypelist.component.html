@@ -21,10 +21,10 @@
         </div>
         <div class="col-sm-8 text-right">
           <div class="form-group">
-            <button type="button" class="btn btn-success btn-sm" (click)="searchData()" *appCheckpermission="'VIEW'">
+            <button type="button" class="btn btn-success btn-sm" (click)="searchData()" *appCheckpermission="['VIEW']">
               <i class="fab fa-searchengin"></i> Tìm kiếm
             </button>&nbsp;
-            <button type="button" class="btn btn-primary btn-sm" *appCheckpermission="'ADD'"
+            <button type="button" class="btn btn-primary btn-sm" *appCheckpermission="['ADD']"
                     (click)="openDialog()">
               <i class="fas fa-plus-circle"></i> Thêm mới
             </button>&nbsp;
@@ -100,10 +100,10 @@
             </a>
           </td>
           <td class="col-action">
-            <a (click)="openDialog(row)" *appCheckpermission="'EDIT'">
+            <a (click)="openDialog(row)" *appCheckpermission="['EDIT']">
               <i class="fas fa-edit" style='color:#337ab7'></i>&nbsp;&nbsp;&nbsp;
             </a>
-            <a (click)="showConfirmDeleteDialog(row)" *appCheckpermission="'DEL'">
+            <a *appCheckpermission="['DEL']" (click)="showConfirmDeleteDialog(row)">
               <i class="far fa-trash-alt " style='color:#337ab7'></i>
             </a>
           </td>

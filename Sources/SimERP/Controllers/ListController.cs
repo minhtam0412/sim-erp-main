@@ -1515,6 +1515,37 @@ namespace SimERP.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("api/list/getlistgroupcompany")]
+        public ResponeResult GetListGroupCompany([FromBody] ReqListSearch objReqListSearch)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckSign(objReqListSearch.AuthenParams,
+                    objReqListSearch.AuthenParams.ClientUserName, objReqListSearch.AuthenParams.ClientPassword,
+                    objReqListSearch.AuthenParams.Sign);
+                if (repData == null || !repData.IsOk)
+                    return repData;
+                var dataResult = customerBO.GetListGroupCompany();
+                if (dataResult != null)
+                {
+                    repData.RepData = dataResult;
+                }
+                else
+                    this.AddResponeError(ref repData, customerBO.getMsgCode(),
+                        customerBO.GetMessage(this.customerBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
         #endregion
 
         #region RoleList

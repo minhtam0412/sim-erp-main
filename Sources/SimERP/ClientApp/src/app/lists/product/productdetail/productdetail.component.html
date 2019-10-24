@@ -338,7 +338,7 @@
                     </td>
                     <td class="col-code">{{row["CreatedDate"] | date : "dd/MM/yyyy"}}</td>
                     <td class="col-action">
-                      <a (click)="setCurrentAttachFileIndex(i) || file.click()"><i class="fas fa-edit"
+                      <a (click)="setCurrentAttachFileIndex(i) && file.click()"><i class="fas fa-edit"
                                                                                    style='color:#337ab7;'></i></a>&nbsp;&nbsp;&nbsp;
                       <a (click)="deleteAttachFile(i)"><i class="far fa-trash-alt" style='color:#337ab7;'></i></a>
                     </td>

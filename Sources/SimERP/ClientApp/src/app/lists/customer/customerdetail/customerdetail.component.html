@@ -2,21 +2,18 @@
     <form>
         <div class="row">
             <div class="col-sm-4 text-left">
-                <p class="text-uppercase" style="font-size:18px;color: #587792; font-weight:bold; font-family: 'Lato', sans-serif;"><span>HÓA ĐƠN MUA HÀNG</span></p>
+                <p class="text-uppercase" style="font-size:18px;color: #587792; font-weight:bold; font-family: 'Lato', sans-serif;"><span>Thêm mới/Edit khách hàng</span></p>
             </div>
             <div class="col-sm-8 text-right">
                 <div class="form-group">
                     <button type="submit" class="btn btn-success btn-sm" style="background-color: #5cb85c; border-color: #4cae4c">
-                        <i class="far fa-save"></i> Lưu (F3)
+                        <i class="far fa-save"></i> Lưu & Đóng
                     </button>&nbsp;
                     <button type="button" class="btn btn-success btn-sm" style="background-color: #5cb85c; border-color: #4cae4c">
-                        <i class="far fa-check-square"></i> Lưu & Ghi sổ (F4)
-                    </button>&nbsp;
-                    <button type="button" class="btn btn-success btn-sm" style="background-color: #5bc0de; border-color: #46b8da;">
-                        <i class="fas fa-check"></i> Kiểm tra HSD
+                        <i class="far fa-check-square"></i> Lưu & Thêm mới
                     </button>&nbsp;
                     <button type="button" class="btn btn-success btn-sm" style="background-color: #337ab7; border-color: #2e6da4;" [routerLink]="['/purchase']" routerLinkActive="router-link-active">
-                        <i class="fas fa-long-arrow-alt-left"></i> Trở về (F10)
+                        <i class="fas fa-long-arrow-alt-left"></i> Trở về
                     </button>&nbsp;
                 </div>
             </div>
@@ -30,33 +27,48 @@
             <div class="col-sm-6">
                 <div class="form-horizontal">
                     <div class="row">
-                        <label class="col-sm-5 control-label text-right control-label-require">Nhà cung cấp<span class="control-label-require">*</span></label>
+                        <label class="col-sm-3 control-label text-right">Tên khách hàng<span class="control-label-require">*</span></label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                            <input type="text" [(ngModel)]="objData.CustomerName" name="CustomerName" class="form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
                         </div>
                     </div>
                     <div class="row">
-                        <label class="col-sm-5 control-label text-right">Địa chỉ<span class="control-label-require"></span></label>
+                        <label class="col-sm-3 control-label text-right">Địa chỉ<span class="control-label-require"></span></label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                            <textarea type="text" [(ngModel)]="objData.Address" name="Address" class="form-control " rows="5" style="box-shadow: none; border-top: none; border-left: none; border-right: none"></textarea>
                         </div>
                     </div>
                     <div class="row">
-                        <label class="col-sm-5 control-label text-right">Điện thoại<span class="control-label-require"></span></label>
+                        <label class="col-sm-3 control-label text-right">Nhóm khách hàng<span class="control-label-require"></span></label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                            <select [(ngModel)]="objData.CustomerTypeId" name="CustomerTypeId" class="browser-default form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">                                  
+                                    <option *ngFor="let item of cboCustomerType" value="{{item.CustomerTypeId}}">
+                                            {{item.CustomerTypeName}}
+                                    </option>
+                            </select>
                         </div>
                     </div>
                     <div class="row">
-                        <label class="col-sm-5 control-label text-right">Số CT tham chiếu<span class="control-label-require"></span></label>
+                        <div class="col-sm-3 text-right"><label></label></div>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="custom-control custom-checkbox mb-3" style="padding-top: 8px;">
+                                        <input type="checkbox" [(ngModel)]="objData.IsGroupCompany" name="IsGroupCompany" id="IsGroupCompany" class="custom-control-input">
+                                        <label class="custom-control-label" for="IsGroupCompany">Tổng công ty</label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <label class="col-sm-5 control-label text-right" style="margin-top: inherit;">Ghi chú<span class="control-label-require"></span></label>
+                    <div *ngIf="objData.IsGroupCompany" class="row">
+                        <label class="col-sm-3 control-label text-right">Tên tổng công ty<span class="control-label-require"></span></label>
                         <div class="col-sm-7">
-                            <textarea type="text" class="form-control form-control-sm" rows="5" style="box-shadow: none; border-top: none; border-left: none; border-right: none"></textarea>
+                            <select [(ngModel)]="objData.GroupCompanyId" name="GroupCompanyId" class="browser-default form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                    <option *ngFor="let item of cboGroupCompany" value="{{item.GroupCompanyId}}">
+                                            {{item.GroupCompanyName}}
+                                    </option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -64,80 +76,40 @@
             <div class="col-sm-6">
                 <div class="form-horizontal">
                     <div class="row">
-                        <label class="col-sm-5 control-label text-right">Số chứng từ<span class="control-label-require">*</span></label>
+                        <label class="col-sm-3 control-label text-right">Mã khách hàng<span class="control-label-require">*</span></label>
                         <div class="col-sm-7">
-                            <input type="text" class="form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                            <input type="text" [(ngModel)]="objData.CustomerCode" name="CustomerCode" class="form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
                         </div>
                     </div>
                     <div class="row">
-                        <label class="col-sm-5 control-label text-right">Ngày chứng từ<span class="control-label-require">*</span></label>
+                        <label class="col-sm-3 control-label text-right">Điện thoại<span class="control-label-require">*</span></label>
                         <div class="col-sm-7">
-                            <div class="input-group input-group-sm">
-                                <input class="form-control form-control-sm" placeholder="" name="NgayChungTu" ngbDatepicker #dNgayChungTu="ngbDatepicker" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
-                                <div class="input-group-append">
-                                    <button class="btn btn-sm btn-outline-secondary calendar" (click)="dNgayChungTu.toggle()" type="button">
-                                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                                    </button>
+                            <input type="text" [(ngModel)]="objData.PhoneNumber" name="PhoneNumber" class="form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-3 control-label text-right">Fax<span class="control-label-require"></span></label>
+                        <div class="col-sm-7">
+                            <input type="text" [(ngModel)]="objData.FaxNumber" name="FaxNumber" class="form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-sm-3 control-label text-right">Email<span class="control-label-require"></span></label>
+                        <div class="col-sm-7">
+                            <input type="text" [(ngModel)]="objData.Email" name="Email" class="form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3 text-right"><label></label></div>
+                        <div class="col-sm-7">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="custom-control custom-checkbox mb-3" style="padding-top: 8px;">
+                                        <input type="checkbox" [(ngModel)]="objData.IsActive" name="IsActive" id="IsActive" class="custom-control-input">
+                                        <label class="custom-control-label" for="IsActive">Sử dụng</label>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label class="col-sm-5 control-label text-right">Ngày hạch toán<span class="control-label-require">*</span></label>
-                        <div class="col-sm-7">
-                            <div class="input-group input-group-sm">
-                                <input class="form-control form-control-sm" placeholder="" name="NgayHoachToan" ngbDatepicker #dNgayHoachToan="ngbDatepicker" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
-                                <div class="input-group-append">
-                                    <button class="btn btn-sm btn-outline-secondary calendar" (click)="dNgayHoachToan.toggle()" type="button">
-                                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label class="col-sm-5 control-label text-right">Ngày tạo<span class="control-label-require"></span></label>
-                        <div class="col-sm-7">
-                            <div class="input-group input-group-sm">
-                                <input class="form-control form-control-sm" placeholder="" name="NgayTao" ngbDatepicker #dNgayTao="ngbDatepicker" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
-                                <div class="input-group-append">
-                                    <button class="btn btn-sm btn-outline-secondary calendar" (click)="dNgayTao.toggle()" type="button">
-                                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label class="col-sm-5 control-label text-right">Hình thức TT<span class="control-label-require"></span></label>
-                        <div class="col-sm-7">
-                            <select class="browser-default form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
-                                <option value="1" selected>Tiền mặt</option>
-                                <option value="2">Ngân hàng</option>
-                                <option value="2">Thu khám đoàn</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label class="col-sm-5 control-label text-right">Hạn thanh toán<span class="control-label-require"></span></label>
-                        <div class="col-sm-7">
-                            <select class="browser-default form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
-                                    <option value="1" selected>Thanh toán liền</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label class="col-sm-5 control-label text-right">Kho nhập<span class="control-label-require"></span></label>
-                        <div class="col-sm-7">
-                            <select class="browser-default form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
-                                <option value="1" selected>[Tân Phú] Kho dược</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label class="col-sm-5 control-label text-right">Công nợ<span class="control-label-require"></span></label>
-                        <div class="col-sm-7">
-                            <input type="text" class="form-control form-control-sm text-right" style="box-shadow: none; border-top: none; border-left: none; border-right: none" value="0">
                         </div>
                     </div>
                 </div>
@@ -150,107 +122,367 @@
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs">
                         <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#home">Hàng hóa(s)</a>
+                            <a class="nav-link active" data-toggle="tab" href="#info">THÔNG TIN KHÁCH HÀNG</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#menu1">Quy đổi</a>
+                            <a class="nav-link" data-toggle="tab" href="#items">HÀNG HÓA(s)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#saler">SALER(s)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#poundage">HOA HỒNG(s)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#ship">GIAO HÀNG(s)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#document">TÀI LIỆU(s)</a>
                         </li>
                     </ul>
 
                     <!-- Tab panes -->
                     <div class="tab-content">
-                        <div id="home" class="tab-pane active"><br>
-                            <div class="col-md-12">
-                                <div class="row table-responsive">
+                        <div id="info" class="tab-pane active"><br>
+                            <div class="row" style="padding-bottom: 10px;">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <label class="col-sm-3 control-label text-right">Mã số thuế<span class="control-label-require"></span></label>
+                                        <div class="col-sm-7">
+                                            <input type="text" [(ngModel)]="objData.TaxNumber" name="TaxNumber" class="form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-sm-3 control-label text-right">Tên công ty xuất hóa đơn<span class="control-label-require"></span></label>
+                                        <div class="col-sm-7">
+                                            <input type="text" [(ngModel)]="objData.CompanyName" name="CompanyName" class="form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-sm-3 control-label text-right">Địa chỉ xuất hóa đơn<span class="control-label-require"></span></label>
+                                        <div class="col-sm-7">
+                                            <input type="text" [(ngModel)]="objData.CompanyAddress" name="CompanyAddress" class="form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-sm-3 control-label text-right">TK ngân hàng<span class="control-label-require"></span></label>
+                                        <div class="col-sm-7">
+                                            <input type="text" [(ngModel)]="objData.BankingNumber" name="BankingNumber" class="form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-sm-3 control-label text-right">Ngân hàng<span class="control-label-require"></span></label>
+                                        <div class="col-sm-7">
+                                            <input type="text" [(ngModel)]="objData.BankingName" name="BankingName" class="form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-sm-3 control-label text-right">Ghi chú<span class="control-label-require"></span></label>
+                                        <div class="col-sm-7">
+                                            <textarea type="text" [(ngModel)]="objData.Notes" name="Notes" class="form-control " rows="5" style="box-shadow: none; border-top: none; border-left: none; border-right: none"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <label class="col-sm-3 control-label text-right">Hạn thanh toán<span class="control-label-require"></span></label>
+                                        <div class="col-sm-7">
+                                            <select [(ngModel)]="objData.PaymentTermId" name="PaymentTermId" class="browser-default form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                                    <option value="10">10 Ngày</option>
+                                                    <option value="15">15 Ngày</option>
+                                                    <option value="20">20 Ngày</option>
+                                                    <option value="50">50 Ngày</option>
+                                                    <option value="100">100 Ngày</option>
+                                                    <option value="200">200 Ngày</option>
+                                                    <option value="300">300 Ngày</option>
+                                                    <option value="500">500 Ngày</option>
+                                                </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-sm-3 control-label text-right">Hạn mức nợ<span class="control-label-require"></span></label>
+                                        <div class="col-sm-7">
+                                            <input type="text" [(ngModel)]="objData.DebtCeiling" name="DebtCeiling" class="form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-sm-3 control-label text-right">Người đại diện<span class="control-label-require"></span></label>
+                                        <div class="col-sm-7">
+                                            <input type="text" [(ngModel)]="objData.RepresentativeName" name="RepresentativeName" class="form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-sm-3 control-label text-right">ĐT người ĐD<span class="control-label-require"></span></label>
+                                        <div class="col-sm-7">
+                                            <input type="text" [(ngModel)]="objData.RepresentativePhone" name="RepresentativePhone" class="form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-sm-3 control-label text-right">Email người ĐD<span class="control-label-require"></span></label>
+                                        <div class="col-sm-7">
+                                            <input type="text" [(ngModel)]="objData.RepresentativeEmail" name="RepresentativeEmail" class="form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <label class="col-sm-3 control-label text-right">Địa chỉ người ĐD<span class="control-label-require"></span></label>
+                                        <div class="col-sm-7">
+                                            <textarea type="text" [(ngModel)]="objData.RepresentativeAddress" name="RepresentativeAddress" class="form-control " rows="5" style="box-shadow: none; border-top: none; border-left: none; border-right: none"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="items" class="tab-pane"><br>
+                            <div class="row" style="margin-right: 0px; margin-left: 0px;">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <label class="col-sm-4 control-label text-right">Ngành hàng<span class="control-label-require"></span></label>
+                                                <div class="col-sm-8">
+                                                    <select class="browser-default form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                                            <option *ngFor="let item of cboProductCategory" value="{{item.ProductCategoryId}}">
+                                                                    {{item.ProductCategoryName}}
+                                                            </option>
+                                                                </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <label class="col-sm-4 control-label text-right">Trạng thái<span class="control-label-require"></span></label>
+                                                <div class="col-sm-8">
+                                                    <select class="browser-default form-control" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                                                        <option value="-1">Tất cả</option>
+                                                                        <option value="1">Đang cung cấp</option>
+                                                                        <option value="0">Ngừng cung cấp</option>
+                                                                      </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-right: 0px; margin-left: 0px; padding-top: 8px;">
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <!-- Table  -->
+                                        <table class="table table-bordered table-striped table-hover">
+                                            <!-- Table head -->
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Mã HH</th>
+                                                    <th>Tên Hàng Hóa</th>
+                                                    <th>ĐVT</th>
+                                                    <th>Ngành Hàng</th>
+                                                    <th>Nhân Viên Sale</th>
+                                                    <th>Giá TK</th>
+                                                    <th>Trạng Thái</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <!-- Table head -->
+                                            <!-- Table body -->
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="10" class="datarow-null" style="text-align: left !important;">Dữ liệu không tồn tại</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="14" class="text-left lbadd"><a data-toggle="modal" data-target="#myModal"><i class="fas fa-plus-circle"></i>Thêm hàng hóa</a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="saler" class="tab-pane fade"><br>
+                            <div class="row" style="margin-right: 0px; margin-left: 0px;">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <label class="col-sm-4 control-label text-right">Trạng thái<span class="control-label-require"></span></label>
+                                                <div class="col-sm-8">
+                                                    <select class="browser-default form-control" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                                                            <option value="-1">Tất cả</option>
+                                                                            <option value="1">Đang quản lý</option>
+                                                                            <option value="0">Ngưng quản lý</option>
+                                                                          </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-right: 0px; margin-left: 0px; padding-top: 8px;">
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <!-- Table  -->
+                                        <table class="table table-bordered table-striped table-hover">
+                                            <!-- Table head -->
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Mã NV</th>
+                                                    <th>Tên Nhân Viên Sale</th>
+                                                    <th>Ngày Tạo</th>
+                                                    <th>Từ Ngày</th>
+                                                    <th>Đến Ngày</th>
+                                                    <th>Trạng Thái</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <!-- Table head -->
+                                            <!-- Table body -->
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="10" class="datarow-null" style="text-align: left !important;">Dữ liệu không tồn tại</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="14" class="text-left lbadd"><a data-toggle="modal" data-target="#myModal"><i class="fas fa-plus-circle"></i>Thêm nhân viên sale</a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="poundage" class="tab-pane"><br>
+                            <div class="row" style="margin-right: 0px; margin-left: 0px;">
+                                <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <label class="col-sm-4 control-label text-right">Trạng thái<span class="control-label-require"></span></label>
+                                                <div class="col-sm-8">
+                                                    <select class="browser-default form-control" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                                                                <option value="-1">Tất cả</option>
+                                                                                <option value="1">Sử dụng</option>
+                                                                                <option value="0">Ngưng</option>
+                                                                              </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-right: 0px; margin-left: 0px; padding-top: 8px;">
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <!-- Table  -->
+                                        <table class="table table-bordered table-striped table-hover">
+                                            <!-- Table head -->
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Người Hưởng Hoa Hồng</th>
+                                                    <th>Ghi Chú</th>
+                                                    <th>Điện Thoại</th>
+                                                    <th>Tài Khoản</th>
+                                                    <th>Ngân Hàng</th>
+                                                    <th>Ngày Tạo</th>
+                                                    <th>Trạng Thái</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <!-- Table head -->
+                                            <!-- Table body -->
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="10" class="datarow-null" style="text-align: left !important;">Dữ liệu không tồn tại</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="14" class="text-left lbadd"><a data-toggle="modal" data-target="#myModal"><i class="fas fa-plus-circle"></i>Thêm hoa hồng</a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="ship" class="tab-pane"><br>
+                            <div class="row" style="margin-right: 0px; margin-left: 0px; padding-top: 8px;">
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <!-- Table  -->
+                                        <table class="table table-bordered table-striped table-hover">
+                                            <!-- Table head -->
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Nơi Giao Hàng</th>
+                                                    <th>Địa Chỉ</th>
+                                                    <th>Ngày Tạo</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <!-- Table head -->
+                                            <!-- Table body -->
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="10" class="datarow-null" style="text-align: left !important;">Dữ liệu không tồn tại</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="14" class="text-left lbadd"><a data-toggle="modal" data-target="#myModal"><i class="fas fa-plus-circle"></i>Thêm thông tin giao hàng</a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="document" class="tab-pane"><br>
+                            <div class="row" style="margin-right: 0px; margin-left: 0px; padding-top: 8px;">
+                                <div style="display: none">
+                                    <input type="file" #file placeholder="Choose file" (change)="changeFile(file.files)" multiple style="display:none;">
+                                </div>
+                                <div class="table-responsive">
+
                                     <!-- Table  -->
-                                    <table class="table table-bordered table-striped table-hover">
+                                    <table class="table table-bordered table-striped table-hover table-fixed">
+
                                         <!-- Table head -->
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Mã hàng</th>
-                                                <th style="width: 30%">Tên hàng</th>
-                                                <th>ĐVT</th>
-                                                <th>SL</th>
-                                                <th>Đơn giá</th>
-                                                <th>Thành tiền</th>
-                                                <th>Giảm giá</th>
-                                                <th>VAT(%)</th>
-                                                <th>Tổng tiền</th>
-                                                <th>QĐ/HSD</th>
-                                                <th>Hạn SD</th>
-                                                <th>Số lô</th>
+                                                <th>Image</th>
+                                                <th>Tên hình ảnh/Tài liệu</th>
+                                                <th>Ghi chú</th>
+                                                <th>File Name</th>
+                                                <th>Ngày update</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
                                         <!-- Table head -->
+
                                         <!-- Table body -->
                                         <tbody>
-                                            <!-- <tr *ngIf="lst_Merchandise.length <= 0">
-                                                <td colspan="14" class="text-center">Dữ liệu không tồn tại</td>
+                                            <tr *ngIf="objData.ListAttachFile.length < 1">
+                                                <td colspan="10" class="datarow-null">Dữ liệu không tồn tại</td>
                                             </tr>
-                                            <tr *ngFor="let row of lst_Merchandise; let i = index">
-                                                <th>{{i + 1}}</th>
-                                                <td><input type="text" [(ngModel)]="row.Name" name="Name{{i}}" class="form-control form-control-sm" value="{{row.Code}}"></td>
-                                                <td>{{row.Name}}</td>
-                                                <td>{{row.Unit}}</td>
-                                                <td>{{row.Amount}}</td>
-                                                <td>{{row.Price}}</td>
-                                                <td>{{row.Money}}</td>
-                                                <td>{{row.Promotion}}</td>
-                                                <td>{{row.VAT}}</td>
-                                                <td>{{row.TotalMoney}}</td>
-                                                <td>{{row.QD_HSD}}</td>
-                                                <td>{{row.ExpiryDate | date: 'dd/MM/yyyy HH:mm:ss'}}</td>
-                                                <td>{{row.TotalMoney}}</td>
-                                                <td>
-                                                    <a id="edit_exp"><i class="fas fa-edit" style='color:#337ab7' data-toggle="modal" data-target="#exampleModalCenter"></i></a>&nbsp;&nbsp;&nbsp;
-                                                    <a><i class="far fa-trash-alt" style='color:#337ab7'></i></a>
+                                            <tr *ngFor="let row of objData.ListAttachFile; let i = index">
+                                                <td class="order-number">{{i + 1}}</td>
+                                                <td><img [src]="row.FilePathPreview" height="40px"></td>
+                                                <td class="col-name"><input type="text" [(ngModel)]="objData.ListAttachFile[i].FileTitle" name="FileTitle{{i}}" class="form-control " maxlength="250"></td>
+                                                <td class="col-name"><input type="text" [(ngModel)]="objData.ListAttachFile[i].Desctiption" name="Desctiption{{i}}" class="form-control " maxlength="500"></td>
+                                                <td style="text-align: left; text-overflow: ellipsis" class="col-name"><a href="javascript:void(0)" (click)="openAttachFile(row)">{{row.FileNameOriginal}}</a>
+                                                </td>
+                                                <td class="col-code">{{row["CreatedDate"] | date : "dd/MM/yyyy"}}</td>
+                                                <td class="col-action">
+                                                    <a (click)="setCurrentAttachFileIndex(i) && file.click()"><i class="fas fa-edit" style="color:#337ab7"></i></a>&nbsp;&nbsp;&nbsp;
+                                                    <a (click)="deleteAttachFile(i)"><i class="far fa-trash-alt" style="color:#337ab7"></i></a>
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="14" class="text-left lbadd"><a (click)="addRowGird_HangHoa()">Thêm (F12)</a> | <a data-toggle="modal" data-target="#myModal">Thêm nhiều</a></td>
-                                            </tr> -->
+                                                <td colspan="14" class="text-left lbadd"><a (click)="file.click()"><i class="fas fa-plus-circle"></i>Upload tài liệu/Hình ảnh</a></td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
-                        </div>
-                        <div id="menu1" class="tab-pane fade"><br>
-                            <div class="col-md-12">
-                                <div class="row table-responsive">
-                                    <!-- Table  -->
-                                    <table class="table table-bordered table-striped table-hover">
-                                        <!-- Table head -->
-                                        <thead>
-                                            <tr>
-                                                <th rowspan="2" style="vertical-align: middle;">#</th>
-                                                <th rowspan="2" style="vertical-align: middle;">MÃ HH</th>
-                                                <th rowspan="2" style="width: 30%; vertical-align: middle;">TÊN HH</th>
-                                                <th colspan="3">QUY ĐỔI</th>
-                                                <th colspan="2">SỐ LƯỢNG</th>
-                                                <th colspan="2">THÀNH TIỀN</th>
-                                            </tr>
-                                            <tr>
 
-                                                <th>ĐVT(mua)</th>
-                                                <th>ĐVT(quy đổi)</th>
-                                                <th>Quy đổi<br><br>(1)</th>
-                                                <th>SL(mua)<br><br>(2)</th>
-                                                <th>SL(quy đổi)<br><br>(3=1x2)</th>
-                                                <th>Giá vốn<br><br>(4)</th>
-                                                <th>Thành tiền<br><br>(5=3x4)</th>
-                                            </tr>
-                                        </thead>
-                                        <!-- Table head -->
-                                        <!-- Table body -->
-                                        <tbody>
-                                            <tr>
-                                                <td colspan="10" class="text-center">Dữ liệu không tồn tại</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -275,11 +507,11 @@
                         <div class="row">
                             <label class="col-sm-2 control-label text-right">Tìm kiếm</label>
                             <div class="col-sm-3">
-                                <input type="text" class="form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                <input type="text" class="form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
                             </div>
                             <label class="col-sm-2 control-label text-right">Nhóm hàng hóa</label>
                             <div class="col-sm-3">
-                                <select class="browser-default form-control form-control-sm" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                <select class="browser-default form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
                                     <option value="1" selected>--Tất cả--</option>
                                     <option value="2">Ngân hàng</option>
                                     <option value="2">Thu khám đoàn</option>

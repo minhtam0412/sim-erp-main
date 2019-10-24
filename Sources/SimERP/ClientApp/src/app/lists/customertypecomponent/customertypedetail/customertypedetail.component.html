@@ -48,14 +48,16 @@
     </div>
     <!-- Modal footer -->
     <div class="modal-footer">
-      <button type="button" name="btnSave"
+      <button type="button" name="btnSave" *appCheckpermission="['SAVE']"
               [disabled]="form.invalid || (model.Notes != undefined && model.Notes.length > 250)"
               class="btn btn-info btn-sm"
               (click)="saveData(false)">
         <i class="far fa-save"></i> Lưu
-      </button>&nbsp;
-      <button type="button" name="btnSaveContinue" [disabled]="form.invalid || (model.Notes != undefined && model.Notes.length > 250)" class="btn btn-info btn-sm"
-              (click)="saveData(true)">
+      </button>
+      <button type="button" name="btnSaveContinue"
+              [disabled]="form.invalid || (model.Notes != undefined && model.Notes.length > 250)"
+              class="btn btn-info btn-sm"
+              (click)="saveData(true)" *appCheckpermission="['SAVE','ADD']">
         <i class="far fa-save"></i> Lưu & Thêm mới
       </button>&nbsp;
       <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal" (click)="closeDialog()">Đóng

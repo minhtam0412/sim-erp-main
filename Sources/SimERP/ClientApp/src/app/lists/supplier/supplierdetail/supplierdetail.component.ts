@@ -3,6 +3,7 @@ import {NotificationService} from '../../../common/notifyservice/notification.se
 import {UploadfileService} from '../../../common/uploadfile/uploadfile.service';
 import {LoaderService} from '../../../common/loading/loader.service';
 import {SupplierService} from '../supplier.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-supplierdetail',
@@ -14,10 +15,11 @@ export class SupplierdetailComponent implements OnInit {
   model: {};
 
   constructor(private notificationService: NotificationService, private service: SupplierService,
-              private uploadfileService: UploadfileService, public loaderService: LoaderService) {
+              private uploadfileService: UploadfileService, public loaderService: LoaderService, private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit() {
+    console.log(this.activatedRoute.snapshot.params);
   }
 
   changeFile(files: FileList) {

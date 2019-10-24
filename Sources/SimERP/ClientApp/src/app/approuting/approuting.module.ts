@@ -23,7 +23,7 @@ import {RolelistComponent} from '../lists/rolelist/rolelist/rolelist.component';
 import {UserpermissionComponent} from '../systems/userpermission/userpermission/userpermission.component';
 import {SupplierlistComponent} from '../lists/supplier/supplierlist/supplierlist.component';
 import {SupplierdetailComponent} from '../lists/supplier/supplierdetail/supplierdetail.component';
-import { CustomerdetailComponent } from '../lists/customer/customerdetail/customerdetail.component';
+import {CustomerdetailComponent} from '../lists/customer/customerdetail/customerdetail.component';
 
 
 const routes: Routes = [
@@ -45,7 +45,8 @@ const routes: Routes = [
       {path: 'rolelist', component: RolelistComponent},
       {path: 'userpermission', component: UserpermissionComponent},
       {path: 'supplier', component: SupplierlistComponent},
-      {path: 'supplier/:id', component: SupplierdetailComponent},
+      {path: 'supplierdetail', component: SupplierdetailComponent},
+      {path: 'supplierdetail/:id', component: SupplierdetailComponent},
     ]
   },
   {

@@ -12,13 +12,17 @@ namespace SimERP.Data.DBEntities
         public string PhoneNumber { get; set; }
         public string FaxNumber { get; set; }
         public string Email { get; set; }
+        public int? GroupCompanyId { get; set; }
         public int? CustomerTypeId { get; set; }
         public string CustomerTypeList { get; set; }
-        public decimal DebtCeiling { get; set; }
         public int? PaymentTermId { get; set; }
+        public decimal DebtCeiling { get; set; }
+        public string TaxNumber { get; set; }
+        public string CompanyName { get; set; }
+        public string CompanyAddress { get; set; }
         public string BankingNumber { get; set; }
         public string BankingName { get; set; }
-        public string BankingNotes { get; set; }
+        public string Notes { get; set; }
         public string RepresentativeName { get; set; }
         public string RepresentativePhone { get; set; }
         public string RepresentativeAddress { get; set; }
@@ -33,9 +37,11 @@ namespace SimERP.Data.DBEntities
         public int? WardId { get; set; }
         public decimal? Latitude { get; set; }
         public decimal? Longitude { get; set; }
-        public int? SortOrder { get; set; }
         public string SearchString { get; set; }
+        public string TrackingNotes { get; set; }
+        public bool IsGroupCompany { get; set; }
         public bool IsCompany { get; set; }
         public bool IsActive { get; set; }
+        public int? SortOrder { get; set; }
     }
 }

@@ -9,10 +9,10 @@
       </div>
       <div class="col-sm-8 text-right">
         <div class="form-group">
-          <button type="submit" class="btn btn-success btn-sm">
+          <button type="submit" class="btn btn-success btn-sm" *appCheckpermission="['SAVE']">
             <i class="far fa-save"></i> Lưu (F3)
           </button>&nbsp;
-          <button type="button" class="btn btn-success btn-sm">
+          <button type="button" class="btn btn-success btn-sm" *appCheckpermission="['SAVE', 'ADD']">
             <i class="far fa-check-square"></i> Lưu & Thêm mới (F4)
           </button>&nbsp;
           <button type="button" class="btn btn-primary btn-sm"

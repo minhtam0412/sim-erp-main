@@ -18,9 +18,15 @@ namespace SimERP.Data.DBEntities
         public virtual DbSet<AttachFile> AttachFile { get; set; }
         public virtual DbSet<Country> Country { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
+        public virtual DbSet<CustomerCommission> CustomerCommission { get; set; }
+        public virtual DbSet<CustomerDelivery> CustomerDelivery { get; set; }
+        public virtual DbSet<CustomerProduct> CustomerProduct { get; set; }
+        public virtual DbSet<CustomerSale> CustomerSale { get; set; }
         public virtual DbSet<CustomerType> CustomerType { get; set; }
+        public virtual DbSet<District> District { get; set; }
         public virtual DbSet<Fiscal> Fiscal { get; set; }
         public virtual DbSet<Function> Function { get; set; }
+        public virtual DbSet<GroupCompany> GroupCompany { get; set; }
         public virtual DbSet<Message> Message { get; set; }
         public virtual DbSet<Module> Module { get; set; }
         public virtual DbSet<OptionSystem> OptionSystem { get; set; }
@@ -30,6 +36,7 @@ namespace SimERP.Data.DBEntities
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ProductCategory> ProductCategory { get; set; }
         public virtual DbSet<ProductVendor> ProductVendor { get; set; }
+        public virtual DbSet<Province> Province { get; set; }
         public virtual DbSet<RefNo> RefNo { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<RolePermission> RolePermission { get; set; }
@@ -42,6 +49,7 @@ namespace SimERP.Data.DBEntities
         public virtual DbSet<UserRole> UserRole { get; set; }
         public virtual DbSet<Vendor> Vendor { get; set; }
         public virtual DbSet<VendorType> VendorType { get; set; }
+        public virtual DbSet<Ward> Ward { get; set; }
 
         // Unable to generate entity type for table 'dbo.FiscalStatus'. Please see the warning messages.
 
@@ -113,11 +121,13 @@ namespace SimERP.Data.DBEntities
 
                 entity.Property(e => e.BankingName).HasMaxLength(250);
 
-                entity.Property(e => e.BankingNotes).HasMaxLength(250);
-
                 entity.Property(e => e.BankingNumber)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.CompanyAddress).HasMaxLength(250);
+
+                entity.Property(e => e.CompanyName).HasMaxLength(250);
 
                 entity.Property(e => e.CountryId)
                     .HasMaxLength(10)
@@ -150,6 +160,8 @@ namespace SimERP.Data.DBEntities
 
                 entity.Property(e => e.Longitude).HasColumnType("numeric(18, 2)");
 
+                entity.Property(e => e.Notes).HasMaxLength(250);
+
                 entity.Property(e => e.PhoneNumber)
                     .IsRequired()
                     .HasMaxLength(50)
@@ -170,6 +182,98 @@ namespace SimERP.Data.DBEntities
                 entity.Property(e => e.SearchString)
                     .HasMaxLength(4000)
                     .IsUnicode(false);
+
+                entity.Property(e => e.TaxNumber)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TrackingNotes).HasColumnType("ntext");
+            });
+
+            modelBuilder.Entity<CustomerCommission>(entity =>
+            {
+                entity.HasKey(e => e.RowId);
+
+                entity.ToTable("CustomerCommission", "list");
+
+                entity.Property(e => e.BankAccount)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.BankName).HasMaxLength(250);
+
+                entity.Property(e => e.BeneficiaryName)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Notes).HasMaxLength(500);
+
+                entity.Property(e => e.PhoneNumber)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<CustomerDelivery>(entity =>
+            {
+                entity.HasKey(e => e.RowId);
+
+                entity.ToTable("CustomerDelivery", "list");
+
+                entity.Property(e => e.CountryId)
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.DeliveryAddress)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.DeliveryPlace)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.IsActive)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Latitude).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.Longitude).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.Notes).HasMaxLength(250);
+            });
+
+            modelBuilder.Entity<CustomerProduct>(entity =>
+            {
+                entity.HasKey(e => e.RowId);
+
+                entity.ToTable("CustomerProduct", "list");
+
+                entity.Property(e => e.RowId).ValueGeneratedNever();
+
+                entity.Property(e => e.IsActive)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Notes).HasMaxLength(250);
+
+                entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
+            });
+
+            modelBuilder.Entity<CustomerSale>(entity =>
+            {
+                entity.HasKey(e => e.RowId);
+
+                entity.ToTable("CustomerSale", "list");
+
+                entity.Property(e => e.IsActive)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Notes).HasMaxLength(250);
             });
 
             modelBuilder.Entity<CustomerType>(entity =>
@@ -195,6 +299,19 @@ namespace SimERP.Data.DBEntities
                 entity.Property(e => e.SearchString)
                     .HasMaxLength(1000)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<District>(entity =>
+            {
+                entity.Property(e => e.DistrictId).ValueGeneratedNever();
+
+                entity.Property(e => e.DistrictCode)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.DistrictName)
+                    .IsRequired()
+                    .HasMaxLength(250);
             });
 
             modelBuilder.Entity<Fiscal>(entity =>
@@ -230,6 +347,30 @@ namespace SimERP.Data.DBEntities
                     .HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.Notes).HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<GroupCompany>(entity =>
+            {
+                entity.ToTable("GroupCompany", "list");
+
+                entity.Property(e => e.GroupCompanyCode)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.GroupCompanyName)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.IsActive)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Notes).HasMaxLength(250);
+
+                entity.Property(e => e.SearchString)
+                    .HasMaxLength(1000)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Message>(entity =>
@@ -476,6 +617,24 @@ namespace SimERP.Data.DBEntities
                 entity.Property(e => e.Notes).HasMaxLength(500);
 
                 entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
+            });
+
+            modelBuilder.Entity<Province>(entity =>
+            {
+                entity.Property(e => e.ProvinceId).ValueGeneratedNever();
+
+                entity.Property(e => e.CountryId)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ProvinceCode)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ProvinceName)
+                    .IsRequired()
+                    .HasMaxLength(250);
             });
 
             modelBuilder.Entity<RefNo>(entity =>
@@ -734,6 +893,19 @@ namespace SimERP.Data.DBEntities
                     .IsUnicode(false);
 
                 entity.Property(e => e.VendorTypeName)
+                    .IsRequired()
+                    .HasMaxLength(250);
+            });
+
+            modelBuilder.Entity<Ward>(entity =>
+            {
+                entity.Property(e => e.WardId).ValueGeneratedNever();
+
+                entity.Property(e => e.WardCode)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.WardName)
                     .IsRequired()
                     .HasMaxLength(250);
             });

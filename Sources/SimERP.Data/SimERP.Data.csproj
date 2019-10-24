@@ -137,10 +137,16 @@
     <Compile Include="DBEntities\AttachFile.cs" />
     <Compile Include="DBEntities\Country.cs" />
     <Compile Include="DBEntities\Customer.cs" />
+    <Compile Include="DBEntities\CustomerCommission.cs" />
+    <Compile Include="DBEntities\CustomerDelivery.cs" />
+    <Compile Include="DBEntities\CustomerProduct.cs" />
+    <Compile Include="DBEntities\CustomerSale.cs" />
     <Compile Include="DBEntities\CustomerType.cs" />
     <Compile Include="DBEntities\DBEntities.cs" />
+    <Compile Include="DBEntities\District.cs" />
     <Compile Include="DBEntities\Fiscal.cs" />
     <Compile Include="DBEntities\Function.cs" />
+    <Compile Include="DBEntities\GroupCompany.cs" />
     <Compile Include="DBEntities\Message.cs" />
     <Compile Include="DBEntities\Module.cs" />
     <Compile Include="DBEntities\OptionSystem.cs" />
@@ -151,6 +157,7 @@
     <Compile Include="DBEntities\ProductCategory.cs" />
     <Compile Include="DBEntities\ProductSupplier.cs" />
     <Compile Include="DBEntities\ProductVendor.cs" />
+    <Compile Include="DBEntities\Province.cs" />
     <Compile Include="DBEntities\RefNo.cs" />
     <Compile Include="DBEntities\Role.cs" />
     <Compile Include="DBEntities\RolePermission.cs" />
@@ -163,6 +170,7 @@
     <Compile Include="DBEntities\UserRole.cs" />
     <Compile Include="DBEntities\Vendor.cs" />
     <Compile Include="DBEntities\VendorType.cs" />
+    <Compile Include="DBEntities\Ward.cs" />
     <Compile Include="FiscalStatu.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

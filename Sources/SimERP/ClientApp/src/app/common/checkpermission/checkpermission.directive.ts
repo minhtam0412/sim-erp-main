@@ -8,29 +8,28 @@ import {Permissionuser} from '../../systems/permissionuser';
   selector: '[appCheckpermission]'
 })
 export class CheckpermissionDirective {
+  lstFunctionId: string[] = []; // danh sách các function cần xét của control
+  controllerName = ''; // url đang xét
+  private isHidden = true;
+  lstPermissionUser: Permissionuser[] = []; // danh sách các permission của user hiện tại
 
+  // đầu vào là array các functionId
   @Input() set appCheckpermission(value) {
-    this.functionId = value;
+    this.lstFunctionId = value;
     this.updateView();
   }
-
-  // FunctionId of current element
-  functionId = '';
-  controllerName = '';
-  private isHidden = true;
-  lstPermission: Permissionuser[] = [];
 
   constructor(private templateRef: TemplateRef<any>, private viewContainer: ViewContainerRef, private el: ElementRef,
               private router: Router, private  authenService: AuthenService, private renderer2: Renderer2) {
     this.authenService.lstPermission.subscribe(res => {
-      this.lstPermission = res;
+      this.lstPermissionUser = res;
     });
     this.controllerName = this.getCurrentPath();
   }
 
   updateView() {
-    const index = this.checkPermission();
-    if (index > -1) {
+    const isHasPermission = this.checkPermission();
+    if (isHasPermission) {
       if (this.isHidden) {
         this.viewContainer.createEmbeddedView(this.templateRef);
         this.isHidden = false;
@@ -55,14 +54,26 @@ export class CheckpermissionDirective {
     return null;
   }
 
-  private checkPermission() {
-    let index: number;
-    index = this.lstPermission.findIndex(value => {
-      return value.ControllerName.trim() === this.controllerName && value.FunctionId.trim() === this.functionId.trim();
+  // function kiểm tra người dùng có quyền trên element
+  private checkPermission(): boolean {
+    let index = -1; // xác định có tìm thấy quyền của element trong danh sách quyền của người dùng
+    let isHasAllRight = false; // mặc định ban đầu không có quyền
+    // duyệt qua danh sách quyền của element
+    isHasAllRight = this.lstFunctionId.every(functionId => {
+      // lấy ra chỉ số quyền của element trong danh sách quyền của người dùng
+      index = this.lstPermissionUser.findIndex(permission => {
+        return functionId.trim() === permission.FunctionId.trim() && this.controllerName.trim() === permission.ControllerName.trim();
+      });
+      // nếu tồn tại 1 mã quyền không nằm trong danh sách người dùng
+      if (index < 0) {
+        // kết thúc quá trình kiểm tra => kết luận không có quyền trên element
+        return false;
+      }
+      // nếu đã duyệt qua tất cả các quyền trên element => kết luận có quyền
+      return true;
     });
-    return index;
+    return isHasAllRight;
   }
-
 
   // hide/show element
   setVisisble(hasPermission: Boolean) {

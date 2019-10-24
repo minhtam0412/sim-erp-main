@@ -82,14 +82,14 @@ export class CustomerService {
     return this.httpClient.post<ResponeResult>(ROOT_URL + 'api/list/updateSortOrderCustomer', jsonString, { headers });
   }
 
-  GetListModule() {
+  GetListGroupCompany() {
 
     this.AuthenParams.Sign = 'tai.ngo';
     this.SearchParams.AuthenParams = this.AuthenParams;
 
     const jsonString = JSON.stringify(this.SearchParams);
     const headers = new HttpHeaders().set('content-type', 'application/json');
-    return this.httpClient.post<ResponeResult>(ROOT_URL + 'api/list/getlistmodule', jsonString, { headers });
+    return this.httpClient.post<ResponeResult>(ROOT_URL + 'api/list/getlistgroupcompany', jsonString, { headers });
   }
 
   GetListFunction() {

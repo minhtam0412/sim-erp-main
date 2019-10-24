@@ -22,10 +22,14 @@
         <div class="col-sm-8 text-right">
           <div class="form-group">
             <button type="button" class="btn btn-success btn-sm" (click)="SearchAction()">
-              <i class="fab fa-searchengin"></i> Tìm kiếm
+              <i class="fab fa-searchengin" *appCheckpermission="['VIEW']"></i> Tìm kiếm
             </button>&nbsp;
-            <button type="button" class="btn btn-primary btn-sm" [routerLink]="['/supplier','undefined']">
+            <button type="button" class="btn btn-primary btn-sm" [routerLink]="['/supplierdetail']"
+                    *appCheckpermission="['ADD']">
               <i class="fas fa-plus-circle"></i> Thêm mới
+            </button>&nbsp;
+            <button type="button" class="btn btn-primary btn-sm" [routerLink]="['/supplierdetail', '123']"
+                    *appCheckpermission="['EDIT']">Chỉnh sửa
             </button>
           </div>
         </div>

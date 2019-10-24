@@ -15,6 +15,6 @@ namespace SimERP.Business
         bool Save(Customer rowData, bool isNew);
         bool Delete(long id);
         bool UpdateSortOrder(long upID, long downID);
-        
+        List<GroupCompany> GetListGroupCompany();
     }
 }
