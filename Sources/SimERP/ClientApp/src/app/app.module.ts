@@ -52,6 +52,12 @@ import {SupplierlistComponent} from './lists/supplier/supplierlist/supplierlist.
 import {SupplierdetailComponent} from './lists/supplier/supplierdetail/supplierdetail.component';
 import {CustomerdetailComponent} from './lists/customer/customerdetail/customerdetail.component';
 import {EncrDecrService} from './common/security/encr-decr.service';
+import {NgZorroAntdModule, NZ_I18N, NzIconModule, vi_VN} from 'ng-zorro-antd';
+import { registerLocaleData } from '@angular/common';
+import vi from '@angular/common/locales/vi';
+import {IconsProviderModule} from './icons-provider.module';
+
+registerLocaleData(vi);
 
 export function tokenGetter() {
   const objToken = JSON.parse(localStorage.getItem(Key_UserInfo));
@@ -121,12 +127,16 @@ export function tokenGetter() {
         blacklistedRoutes: ['']
       }
     }),
-    NgSelectModule
+    NgSelectModule,
+    NgZorroAntdModule,
+    IconsProviderModule,
+    NzIconModule
   ],
   providers: [AuthGuard,
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
     CookieService,
     EncrDecrService,
+    { provide: NZ_I18N, useValue: vi_VN },
   ],
   bootstrap: [AppComponent],
   entryComponents:

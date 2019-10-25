@@ -1,5 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@ng-select/ng-select/themes/default.theme.css";
+@import "~ng-zorro-antd/style/index.min.css";
+/* Import basic styles */
+@import "~ng-zorro-antd/button/style/index.min.css"; /* Import styles of the component */
 
 fieldset {
   display: inline-block;
@@ -50,4 +53,61 @@ fieldset {
 .backdrop-modal {
   background-color: #495057;
 }
+
+
+/*Custom Zorro Style*/
+svg {
+  overflow: hidden;
+  vertical-align: initial !important;
+}
+
+.ant-btn {
+  height: 28px;
+  font-size: 12px;
+}
+
+.ant-select {
+  font-size: 12px;
+}
+
+.ant-select-selection {
+  border-radius: 1;
+  height: 25px;
+  max-height: 25px;
+  min-height: 25px;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #ced4da !important;
+  box-shadow: none;
+}
+
+.ant-select-dropdown {
+  font-size: 12px;
+}
+
+.ant-select-open .ant-select-selection {
+  box-shadow: none;
+}
+
+.ant-calendar-picker {
+  width: 100%;
+}
+
+.ant-input {
+  font-size: 12px;
+}
+
+.ant-calendar {
+  font-size: 12px;
+}
+
+.ant-calendar-header a {
+  font-size: 12px;
+}
+
+.ant-calendar-footer a {
+  font-size: 12px;
+}
+
+/*End custom Zorro Style*/
 

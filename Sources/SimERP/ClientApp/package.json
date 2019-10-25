@@ -41,6 +41,7 @@
     "jquery": "^3.4.1",
     "moment": "^2.24.0",
     "ng-multiselect-dropdown": "^0.2.4",
+    "ng-zorro-antd": "^8.4.1",
     "ng4-loading-spinner": "^1.2.3",
     "ngx-cookie-service": "^2.2.0",
     "ngx-toastr": "^11.0.0",

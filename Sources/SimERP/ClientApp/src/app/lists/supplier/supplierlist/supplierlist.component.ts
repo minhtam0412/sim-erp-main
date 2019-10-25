@@ -14,6 +14,8 @@ import {Router} from '@angular/router';
   styleUrls: ['./supplierlist.component.css']
 })
 export class SupplierlistComponent implements OnInit {
+  date: Date;
+  checked = true;
 
   constructor(private service: SupplierService, private modalService: NgbModal, private toastr: ToastrService,
               private masterdataService: MasterdataService, private  productCategoryService: ProductCategoryService,
@@ -48,4 +50,7 @@ export class SupplierlistComponent implements OnInit {
     });
   }
 
+  onChangeDate(result: Date) {
+    console.log('onChangeDate: ', result);
+  }
 }

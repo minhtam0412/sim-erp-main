@@ -55,22 +55,12 @@ export class AuthGuard implements CanActivate, CanActivateChild {
     // default functionId là VIEW
     const functionId = Key_FunctionId_View;
 
-    // // xử lý case chỉnh sửa bằng cách truy cập URL
-    // if (arrURL.length === 2) {
-    //   const paramValue = arrURL[1];
-    //   // Nếu  param khác undefined và chuỗi rỗng => functionId là EDIT
-    //   if (String(paramValue) !== 'undefined' && String(paramValue).trim() !== '') {
-    //     functionId = Key_FunctionId_Edit;
-    //   }
-    // }
-
     const index = this.authenService.checkRouterPermision(currentURL, functionId);
     const rsl = index > -1;
-    // if (!rsl) {
-    //   this.router.navigate(['/']).then(r => {
-    //   });
-    // }
-    console.log('canActivateChild', rsl);
+    if (!rsl) {
+      this.router.navigate(['/']).then(r => {
+      });
+    }
     return rsl;
   }
 }
