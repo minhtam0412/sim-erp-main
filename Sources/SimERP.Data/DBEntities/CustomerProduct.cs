@@ -12,5 +12,6 @@ namespace SimERP.Data.DBEntities
         public decimal? Price { get; set; }
         public string Notes { get; set; }
         public bool? IsActive { get; set; }
+        public bool? IsSale { get; set; }
     }
 }

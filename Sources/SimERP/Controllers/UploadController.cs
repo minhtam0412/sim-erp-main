@@ -71,7 +71,7 @@ namespace SimERP.Controllers
         }
 
         [NonAction]
-        public async Task<ResponeResult> UploadFile(IFormFileCollection Files)
+        public async Task<ResponeResult> UploadFile(IFormFileCollection Files, string pathToUpload)
         {
             var repData = new ResponeResult();
             Dictionary<string, AttachFile> mapFile = new Dictionary<string, AttachFile>();
@@ -80,7 +80,7 @@ namespace SimERP.Controllers
                 if (Files != null && Files.Any())
                 {
                     var files = Files;
-                    var folderName = Path.Combine("Upload", "Product");
+                    var folderName = Path.Combine("Upload", pathToUpload);
                     var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
 
                     if (files.Any(f => f.Length == 0))

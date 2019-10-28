@@ -24,6 +24,7 @@ import {UserpermissionComponent} from '../systems/userpermission/userpermission/
 import {SupplierlistComponent} from '../lists/supplier/supplierlist/supplierlist.component';
 import {SupplierdetailComponent} from '../lists/supplier/supplierdetail/supplierdetail.component';
 import {CustomerdetailComponent} from '../lists/customer/customerdetail/customerdetail.component';
+import {ZorrocustomComponent} from '../lists/customcontrol/zorrocustom/zorrocustom.component';
 
 
 const routes: Routes = [
@@ -47,6 +48,7 @@ const routes: Routes = [
       {path: 'supplier', component: SupplierlistComponent},
       {path: 'supplierdetail', component: SupplierdetailComponent},
       {path: 'supplierdetail/:id', component: SupplierdetailComponent},
+      {path: 'zorrocustom', component: ZorrocustomComponent},
     ]
   },
   {

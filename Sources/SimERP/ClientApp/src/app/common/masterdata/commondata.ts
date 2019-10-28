@@ -3,3 +3,7 @@ export const ListStatus = [{'StatusId': -1, 'StatusName': 'Tất cả'}, {'Statu
   'StatusId': 0,
   'StatusName': 'Ngưng'
 }];
+export const ListCurrency = [{'CurrencyId': 'VND', 'CurrencyName': 'VND'}, {'CurrencyId': 'USD', 'CurrencyName': 'USD'}, {
+  'CurrencyId': 'EURO',
+  'CurrencyName': 'EURO'
+}];

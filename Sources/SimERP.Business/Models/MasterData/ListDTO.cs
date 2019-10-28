@@ -89,7 +89,7 @@ namespace SimERP.Business.Models.MasterData.ListDTO
         public int RoleId { get; set; }
         public string RoleName { get; set; }
         public bool isCheck { get; set; }
-       
+
     }
 
     public class TaxSearchParams
@@ -142,5 +142,22 @@ namespace SimERP.Business.Models.MasterData.ListDTO
         public string FunctionId { get; set; }
         public string ControllerName { get; set; }
         public int IsFromRole { get; set; }
+    }
+
+    public class Vendor : SimERP.Data.DBEntities.Vendor
+    {
+        public List<AttachFile> ListAttachFile { get; set; }
+        public List<AttachFile> ListAttachFileDelete { get; set; }
+        public List<VendorProduct> ListVendorProduct { get; set; }
+        public List<VendorProduct> ListVendorProductDelete { get; set; }
+    }
+
+    public class VendorProduct : SimERP.Data.DBEntities.VendorProduct
+    {
+        public string ProductCode { get; set; }
+        public string ProductName { get; set; }
+        public string UnitName { get; set; }
+        public string CountryName { get; set; }
+        public string ProductCategoryName { get; set; }
     }
 }

@@ -12,11 +12,11 @@ import {ListItemType} from '../../../common/masterdata/commondata';
 import {Attachfile} from '../model/attachfile';
 import {ProductCategory} from '../../productcategory/model/ProductCategory';
 import {ProductService} from '../product.service';
-import {Vendor} from '../../vendor/model/vendor';
 import {Key_DefaultAttachFile} from '../../../common/config/globalconfig';
 import {DropDowTree} from '../../productcategory/model/dropdowntree';
 import {Guid} from 'guid-typescript';
 import {NgForm} from '@angular/forms';
+import {Vendor} from '../../supplier/model/vendor';
 
 declare var jquery: any;
 declare var $: any;

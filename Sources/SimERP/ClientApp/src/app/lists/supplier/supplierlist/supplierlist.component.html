@@ -21,17 +21,13 @@
         </div>
         <div class="col-sm-8 text-right">
           <div class="form-group">
-            <button type="button" style="" class="btn btn-success btn-sm" (click)="SearchAction()">
+            <button type="button" style="" class="btn btn-success btn-sm" (click)="searchAction()">
               <i class="fab fa-searchengin" *appCheckpermission="['VIEW']"></i> Tìm kiếm
             </button>&nbsp;
             <button type="button" style="" class="btn btn-primary btn-sm" [routerLink]="['/supplierdetail']"
                     *appCheckpermission="['ADD']">
               <i class="fas fa-plus-circle"></i> Thêm mới
             </button>&nbsp;
-            <button type="button" style="" class="btn btn-primary btn-sm" [routerLink]="['/supplierdetail', '123']"
-                    *appCheckpermission="['EDIT']">Chỉnh sửa
-            </button>
-            <button nz-button nzType="primary"><i nz-icon nzType="search"></i>Search</button>
           </div>
         </div>
       </div>
@@ -45,7 +41,7 @@
             <div class="col-sm-12">
               <div class="input-group mb-3 ">
                 <input type="text" [(ngModel)]="searchString" name="searchString" class="form-control form-control-sm"
-                       placeholder="Mã, tên nhà cung cấp" (keydown.enter)="SearchAction()">
+                       placeholder="Mã, tên nhà cung cấp" (keydown.enter)="searchAction()">
               </div>
             </div>
           </div>
@@ -58,10 +54,11 @@
           <div class="row">
             <div class="col-sm-12">
               <div class="input-group mb-3 ">
-                <ng-select [(ngModel)]="isActive" name="isActive" class="select-custom select-full-border"
-                           (clear)="clearIsActive()">
-                  <ng-option *ngFor="let status of lstStatus"
-                             [value]="status.StatusId">{{status.StatusName}}</ng-option>
+                <ng-select [(ngModel)]="vendorTypeId" name="vendorTypeId" class="select-custom select-full-border"
+                           (clear)="clearIsActive()" (clear)="clearVendorType()">
+                  <ng-option [value]="-1">--Tất cả--</ng-option>
+                  <ng-option *ngFor="let status of lstVendorType"
+                             [value]="status.VendorTypeId">{{status.VendorTypeName}}</ng-option>
                 </ng-select>
               </div>
             </div>
@@ -83,40 +80,6 @@
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-3">
-          <div class="form-group">
-            <nz-select [(ngModel)]="selectedValue" nz [nzSuffixIcon]="suffixIcon" nzShowSearch
-                       [nzMenuItemSelectedIcon]="nzMenuItemSelectedIcon" [nzRemoveIcon]="nzMenuItemSelectedIcon" [nzClearIcon]="nzMenuItemSelectedIcon" name="selectedValue" nzAllowClear nzAutoFocus
-                       nzPlaceHolder="--Tất cả--">
-              <nz-option nzValue="jack" nzLabel="Jack"></nz-option>
-              <nz-option nzValue="lucy" nzLabel="Lucy"></nz-option>
-              <nz-option nzValue="disabled" nzLabel="Disabled" nzDisabled></nz-option>
-            </nz-select>
-            <ng-template #suffixIcon>
-              <!--              <i nz-icon type="search"></i>-->
-              <i nz-icon nzType="caret-down" nzTheme="fill"></i>
-            </ng-template>
-            <ng-template #nzMenuItemSelectedIcon>
-              <!--              <i nz-icon type="search"></i>-->
-              <i nz-icon nzType="caret-up" nzTheme="fill"></i>
-            </ng-template>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="form-group">
-            <nz-date-picker name="date"
-                            [(ngModel)]="date" nzFormat="dd/MM/yyyy"
-                            (ngModelChange)="onChangeDate($event)"
-                            nzPlaceHolder="--Chọn ngày tạo--"
-            ></nz-date-picker>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <label nz-checkbox [(ngModel)]="checked" name="checked">Checkbox</label>
         </div>
       </div>
     </form>
@@ -152,19 +115,20 @@
         </tr>
         <tr *ngFor="let row of lstDataResult; let i = index">
           <td class="order-number">{{i + 1}}</td>
-          <td class="col-code"><a (click)="showDialog(row.ProductId)"
-                                  style="cursor: pointer; color: #337ab7">{{row.ProductCode}}</a></td>
-          <td class="col-name">{{row.ProductName}}</td>
-          <td class="col-name" style="text-align: center">{{row.UnitName}}</td>
-          <td class="col-name" style="text-align: center">{{row.PackageUnitName}}</td>
-          <td class="col-name" style="text-align: center">{{row.ProductCategoryName}}</td>
-          <td class="col-name" style="text-align: center">{{row.CountryName}}</td>
+          <td class="col-code"><a href="javascript:void(0)" [routerLink]="['/supplierdetail', row.VendorId]"
+                                  style="cursor: pointer; color: #337ab7">{{row.VendorCode}}</a></td>
+          <td class="col-name">{{row.VendorName}}</td>
+          <td class="col-name">{{row.Address}}</td>
+          <td class="col-name" style="text-align: center">{{row.PhoneNumber}}</td>
+          <td class="col-name" style="text-align: center">{{row.Email}}</td>
+          <td class="col-name" style="text-align: center">{{row.RepresentativeName}}</td>
           <td class="col-active">
             <i [ngClass]="{'fas fa-check-square':row.IsActive, 'far fa-square': !row.IsActive}"
                [ngStyle]="{'color': '#337ab7'}"></i>
           </td>
           <td class="col-action">
-            <a (click)="showDialog(row.ProductId)"><i class="fas fa-edit" style='color:#337ab7;'></i></a>&nbsp;&nbsp;&nbsp;
+            <a href="javascript:void(0)" [routerLink]="['/supplierdetail', row.VendorId]"><i class="fas fa-edit"
+                                                                                             style='color:#337ab7;'></i></a>&nbsp;&nbsp;&nbsp;
             <a (click)="showConfirmDeleteDialog(row)"><i class="far fa-trash-alt" style='color:#337ab7;'></i></a>
           </td>
         </tr>

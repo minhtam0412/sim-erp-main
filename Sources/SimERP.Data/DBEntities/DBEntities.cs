@@ -32,10 +32,10 @@ namespace SimERP.Data.DBEntities
         public virtual DbSet<OptionSystem> OptionSystem { get; set; }
         public virtual DbSet<PackageUnit> PackageUnit { get; set; }
         public virtual DbSet<Page> Page { get; set; }
+        public virtual DbSet<PaymentTerm> PaymentTerm { get; set; }
         public virtual DbSet<Permission> Permission { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ProductCategory> ProductCategory { get; set; }
-        public virtual DbSet<ProductVendor> ProductVendor { get; set; }
         public virtual DbSet<Province> Province { get; set; }
         public virtual DbSet<RefNo> RefNo { get; set; }
         public virtual DbSet<Role> Role { get; set; }
@@ -48,6 +48,7 @@ namespace SimERP.Data.DBEntities
         public virtual DbSet<UserPermission> UserPermission { get; set; }
         public virtual DbSet<UserRole> UserRole { get; set; }
         public virtual DbSet<Vendor> Vendor { get; set; }
+        public virtual DbSet<VendorProduct> VendorProduct { get; set; }
         public virtual DbSet<VendorType> VendorType { get; set; }
         public virtual DbSet<Ward> Ward { get; set; }
 
@@ -487,6 +488,17 @@ namespace SimERP.Data.DBEntities
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<PaymentTerm>(entity =>
+            {
+                entity.ToTable("PaymentTerm", "pay");
+
+                entity.Property(e => e.PaymentTermId).ValueGeneratedNever();
+
+                entity.Property(e => e.PaymentTermName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            });
+
             modelBuilder.Entity<Permission>(entity =>
             {
                 entity.ToTable("Permission", "sec");
@@ -600,23 +612,6 @@ namespace SimERP.Data.DBEntities
                     .HasMaxLength(250);
 
                 entity.Property(e => e.SearchString).HasMaxLength(1000);
-            });
-
-            modelBuilder.Entity<ProductVendor>(entity =>
-            {
-                entity.HasKey(e => e.RowId);
-
-                entity.ToTable("ProductVendor", "item");
-
-                entity.Property(e => e.RowId).ValueGeneratedNever();
-
-                entity.Property(e => e.IsActive)
-                    .IsRequired()
-                    .HasDefaultValueSql("((1))");
-
-                entity.Property(e => e.Notes).HasMaxLength(500);
-
-                entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
             });
 
             modelBuilder.Entity<Province>(entity =>
@@ -852,6 +847,26 @@ namespace SimERP.Data.DBEntities
 
                 entity.Property(e => e.Address).HasMaxLength(250);
 
+                entity.Property(e => e.BankingName).HasMaxLength(250);
+
+                entity.Property(e => e.BankingNumber)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CompanyAddress).HasMaxLength(250);
+
+                entity.Property(e => e.CompanyName).HasMaxLength(250);
+
+                entity.Property(e => e.CurrencyId)
+                    .HasMaxLength(5)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.DebtCeiling).HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.FaxNumber)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -860,9 +875,27 @@ namespace SimERP.Data.DBEntities
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.RepresentativeAddress).HasMaxLength(250);
+
+                entity.Property(e => e.RepresentativeEmail)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.RepresentativeName).HasMaxLength(250);
+
+                entity.Property(e => e.RepresentativePhone)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.SearchString)
                     .HasMaxLength(1000)
                     .IsUnicode(false);
+
+                entity.Property(e => e.TaxNumber)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TrackingNote).HasColumnType("ntext");
 
                 entity.Property(e => e.VendorCode)
                     .IsRequired()
@@ -872,6 +905,25 @@ namespace SimERP.Data.DBEntities
                 entity.Property(e => e.VendorName)
                     .IsRequired()
                     .HasMaxLength(250);
+
+                entity.Property(e => e.Website)
+                    .HasMaxLength(250)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<VendorProduct>(entity =>
+            {
+                entity.HasKey(e => e.RowId);
+
+                entity.ToTable("VendorProduct", "list");
+
+                entity.Property(e => e.IsActive)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Notes).HasMaxLength(500);
+
+                entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
             });
 
             modelBuilder.Entity<VendorType>(entity =>

@@ -1,0 +1,41 @@
+<div class="header_content">
+  <section class="form_content">
+    <form>
+      <div class="row">
+        <div class="col-md-3">
+          <div class="form-group">
+            <nz-select [(ngModel)]="selectedValue" nz [nzSuffixIcon]="suffixIcon" nzShowSearch
+                       [nzMenuItemSelectedIcon]="nzMenuItemSelectedIcon" [nzRemoveIcon]="nzMenuItemSelectedIcon" [nzClearIcon]="nzMenuItemSelectedIcon" name="selectedValue" nzAllowClear nzAutoFocus
+                       nzPlaceHolder="--Tất cả--">
+              <nz-option nzValue="jack" nzLabel="Jack"></nz-option>
+              <nz-option nzValue="lucy" nzLabel="Lucy"></nz-option>
+              <nz-option nzValue="disabled" nzLabel="Disabled" nzDisabled></nz-option>
+            </nz-select>
+            <ng-template #suffixIcon>
+              <!--              <i nz-icon type="search"></i>-->
+              <i nz-icon nzType="caret-down" nzTheme="fill"></i>
+            </ng-template>
+            <ng-template #nzMenuItemSelectedIcon>
+              <!--              <i nz-icon type="search"></i>-->
+              <i nz-icon nzType="caret-up" nzTheme="fill"></i>
+            </ng-template>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <nz-date-picker name="date"
+                            [(ngModel)]="date" nzFormat="dd/MM/yyyy"
+                            (ngModelChange)="onChangeDate($event)"
+                            nzPlaceHolder="--Chọn ngày tạo--"
+            ></nz-date-picker>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <label nz-checkbox [(ngModel)]="checked" name="checked">Checkbox</label>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>
+<div class="main_content">
+</div>

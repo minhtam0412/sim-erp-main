@@ -141,6 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Businesses\List\AttachFileBO.cs" />
+    <Compile Include="Businesses\List\PaymentTermBO.cs" />
     <Compile Include="Businesses\List\ProductBO.cs" />
     <Compile Include="Businesses\List\PackageUnitBO.cs" />
     <Compile Include="Businesses\List\CountryBO.cs" />
@@ -152,12 +153,14 @@
     <Compile Include="Businesses\List\ProductCategory.cs" />
     <Compile Include="Businesses\List\UnitBO.cs" />
     <Compile Include="Businesses\List\PageListBO.cs" />
+    <Compile Include="Businesses\List\VendorProductBO.cs" />
     <Compile Include="Businesses\List\VendorBO.cs" />
     <Compile Include="Businesses\List\VendorTypeBO.cs" />
     <Compile Include="Businesses\User\TokenRefreshBO.cs" />
     <Compile Include="Businesses\User\UserPermissionBO.cs" />
     <Compile Include="Businesses\User\UserBO.cs" />
     <Compile Include="Interfaces\List\IAttachFile.cs" />
+    <Compile Include="Interfaces\List\IPaymentTerm.cs" />
     <Compile Include="Interfaces\List\IProduct.cs" />
     <Compile Include="Interfaces\List\IPackageUnit.cs" />
     <Compile Include="Interfaces\List\ICountry.cs" />
@@ -167,6 +170,7 @@
     <Compile Include="Interfaces\List\IPageList.cs" />
     <Compile Include="Interfaces\List\IRoleList.cs" />
     <Compile Include="Interfaces\List\IProductCategory.cs" />
+    <Compile Include="Interfaces\List\IVendorProduct.cs" />
     <Compile Include="Interfaces\List\IVendor.cs" />
     <Compile Include="Interfaces\List\IVendorType.cs" />
     <Compile Include="Interfaces\User\ITokenRefresh.cs" />

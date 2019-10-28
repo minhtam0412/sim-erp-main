@@ -14,7 +14,7 @@ namespace SimERP.Data.DBEntities
         public int? ModifyBy { get; set; }
         public DateTimeOffset? ModifyDate { get; set; }
         public string SearchString { get; set; }
-        public bool? IsActive { get; set; }
         public int? SortOrder { get; set; }
+        public bool? IsActive { get; set; }
     }
 }

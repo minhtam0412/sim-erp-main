@@ -289,7 +289,7 @@
                                                     <td colspan="10" class="datarow-null" style="text-align: left !important;">Dữ liệu không tồn tại</td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="14" class="text-left lbadd"><a data-toggle="modal" data-target="#myModal"><i class="fas fa-plus-circle"></i>Thêm hàng hóa</a></td>
+                                                    <td colspan="14" class="text-left lbadd"><a data-toggle="modal" data-target="#ProductModel" (click)="AddModelProduct()"><i class="fas fa-plus-circle"></i>Thêm hàng hóa</a></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -490,79 +490,91 @@
             </div>
         </div>
     </form>
-    <!-- The Modal -->
-    <div class="modal fade" id="myModal">
+    <!-- The Modal Hàng Hóa -->
+    <div class="modal fade" id="ProductModel" data-backdrop="static">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Tìm kiếm hàng hóa</h4>
+                    <h4 class="modal-title">Chọn Hàng Hóa</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
                 <!-- Modal body -->
                 <div class="modal-body">
-                    <form class="form-horizontal">
+                    <div class="form_content">
                         <div class="row">
-                            <label class="col-sm-2 control-label text-right">Tìm kiếm</label>
-                            <div class="col-sm-3">
-                                <input type="text" class="form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
-                            </div>
-                            <label class="col-sm-2 control-label text-right">Nhóm hàng hóa</label>
-                            <div class="col-sm-3">
-                                <select class="browser-default form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
-                                    <option value="1" selected>--Tất cả--</option>
-                                    <option value="2">Ngân hàng</option>
-                                    <option value="2">Thu khám đoàn</option>
-                                </select>
-                            </div>
-                            <div class="col-sm-2">
-                                <button type="button" class="btn btn-success btn-sm" style="background-color: #5bc0de; border-color: #46b8da;">
-                                    <i class="fas fa-search"></i> Tìm
-                                </button>
+                            <div class="col-sm-3 text-right"><label control-label>Mã hàng hóa</label> <label class="control-label-require"></label></div>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control form-control-sm" [(ngModel)]='dataSerachProduct' (keydown)="onKeydown($event)" select-value-of="ProductCode" ngui-auto-complete [source]="this.lstProduct" [accept-user-input]="true" [list-formatter]="renderDataRowAutoComplete"
+                                    placeholder="Mã/tên thuế" display-property-name="ProductName" (valueChanged)="autocompleteCallback($event)" [header-item-template]="autocompleteHeaderTemplate" no-match-found-text='Không có dữ liệu' value-property-name="ProductCode"
+                                    max-num-list='5' tab-to-select='true'>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <br>
-                            <div class="row table-responsive">
-                                <!-- Table  -->
-                                <table class="table table-bordered table-striped table-hover">
-                                    <!-- Table head -->
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Mã</th>
-                                            <th>Tên hàng</th>
-                                            <th>Đơn vị tính</th>
-                                        </tr>
-
-                                    </thead>
-                                    <!-- Table head -->
-                                    <!-- Table body -->
-                                    <tbody>
-                                        <tr>
-                                            <td></td>
-                                            <td>COS-0001</td>
-                                            <td>Bepanthen balm</td>
-                                            <td>Tuýp</td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td>COS-0001</td>
-                                            <td>Bepanthen balm</td>
-                                            <td>Tuýp</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        <div class="row">
+                            <div class="col-sm-3 text-right"><label control-label>Tên hàng hóa</label> <label class="control-label-require"></label></div>
+                            <div class="col-sm-9">
+                                <input type="text" [(ngModel)]="objData.objProduct.ProductName" disabled class="form-control form-control-sm">
                             </div>
                         </div>
-                    </form>
+                        <div class="row">
+                            <div class="col-sm-3 text-right"><label control-label>Đơn vị tính</label> <label class="control-label-require"></label></div>
+                            <div class="col-sm-9">
+                                <input type="text" [(ngModel)]="objData.objProduct.UnitName" disabled class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 text-right"><label control-label>Ngành hàng</label> <label class="control-label-require"></label></div>
+                            <div class="col-sm-9">
+                                <input type="text" [(ngModel)]="objData.objProduct.ProductCategoryName" disabled class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 text-right"><label control-label>Nhóm hàng</label> <label class="control-label-require"></label></div>
+                            <div class="col-sm-9">
+                                <!-- <input type="text" [(ngModel)]="objData.objProduct.ProductType" disabled class="form-control form-control-sm"> -->
+                                <select [(ngModel)]="objData.objProduct.ProductType" name="ItemType" disabled class="browser-default form-control">
+                                    <option value=-1>--Chọn loại hàng hoá--</option>
+                                    <option *ngFor="let item of lstItemType" value="{{item.ItemTypeId}}">
+                                      {{item.ItemTypeName}}
+                                    </option>
+                                  </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 text-right"><label control-label>Mã nhân viên sale</label> <label class="control-label-require"></label></div>
+                            <div class="col-sm-9">
+                                <input type="text" [ngClass]="{'textvalidate': objData.objProduct.SaleId != null}" [(ngModel)]="objData.objProduct.SaleId" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 text-right"><label control-label>Tên nhân viên sale</label> <label class="control-label-require"></label></div>
+                            <div class="col-sm-9">
+                                <input type="text" [(ngModel)]="objData.objProduct.SaleName" disabled class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 text-right"><label></label></div>
+                            <div class="col-sm-9">
+                                <div class="custom-control custom-checkbox mb-3">
+                                    <input type="checkbox" class="custom-control-input" [(ngModel)]="objData.objProduct.IsSale" id="IsSale" name="IsSale">
+                                    <label class="custom-control-label" for="IsSale">Đang sale mặt hàng này</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" [ngClass]="{'pointer-events-none': (objData.objProduct.ProductId != null || objData.objProduct.SaleId != null)}" class="btn btn-info btn-sm" (click)="saveDataModelProduct(true)">
+                                <i class="far fa-save"></i> Lưu(F3)
+                              </button>&nbsp;
+                    <button type="button" [ngClass]="{'pointer-events-none': (objData.objProduct.ProductId != null || objData.objProduct.SaleId != null)}" class="btn btn-info btn-sm" (click)="saveDataModelProduct(false)">
+                                <i class="far fa-save"></i> Lưu & Thêm mới
+                              </button>&nbsp;
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal" #closeAddExpenseModal (click)="CloseProductModel()">Đóng</button>
                 </div>
 
             </div>

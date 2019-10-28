@@ -368,6 +368,7 @@
   min-height: 25px;
   border-radius: 1;
   border-bottom: 1px solid #ced4da !important;
+  box-shadow: none;
 }
 
 .ng-select.select-bottom-border .ng-select-container {

@@ -12,6 +12,10 @@ import { ProductCategoryService } from '../../productcategory/product-category.s
 import { NotificationService } from 'src/app/common/notifyservice/notification.service';
 import { Attachfile } from '../../product/model/attachfile';
 import { Key_DefaultAttachFile } from 'src/app/common/config/globalconfig';
+import { Product } from '../../product/model/product';
+import { ProductService } from '../../product/product.service';
+import { CustomerProduct } from '../model/customerproduct';
+import { ListItemType } from 'src/app/common/masterdata/commondata';
 
 @Component({
   selector: 'app-customerdetail',
@@ -22,11 +26,15 @@ export class CustomerdetailComponent implements OnInit {
 
   objData: Customer;
   currentIndexAttachFile = -1;
-  lstFileToUpload: File[] = [];
+  isNewModel: boolean;
+  dataSerachProduct: string;
+  lstItemType = ListItemType;
   //---Combobox---
   cboCustomerType: CustomerType[] = [];
   cboGroupCompany: GroupCompany[] = [];
   cboProductCategory: ProductCategory[] = [];
+  lstFileToUpload: File[] = [];
+  lstProduct: Product[] = [];
 
   static checkIsImageFile(file: File) {
     const mimeType = file.type;
@@ -45,17 +53,29 @@ export class CustomerdetailComponent implements OnInit {
       'width:100%; height:100%;" allowfullscreen></iframe>');
   }
 
-  constructor(private customerService:CustomerService, private customertypeService:CustomertypeService, private productCategoryService: ProductCategoryService,
-     private spinnerService: Ng4LoadingSpinnerService, private modalService: NgbModal, private toastr: ToastrService, private notificationService: NotificationService) { 
+  public autocompleteHeaderTemplate = `
+  <div class="header-row">
+  <div class="col-2">Mã hàng</div>
+  <div class="col-3">Tên hàng</div>
+  <div class="col-1">ĐVT</div>
+  <div class="col-3">Ngành hàng</div>
+  </div>`;
 
-    this.objData = new Customer;
+  constructor(private customerService: CustomerService, private customertypeService: CustomertypeService, private productCategoryService: ProductCategoryService,
+    private spinnerService: Ng4LoadingSpinnerService, private modalService: NgbModal, private toastr: ToastrService, private notificationService: NotificationService,
+    private productService: ProductService) {
+
+    this.objData = new Customer();
+    this.objData.objProduct = new CustomerProduct();
     this.objData.PaymentTermId = 50;
+    this.dataSerachProduct = "";
   }
 
   ngOnInit() {
     this.loadCustomerType();
     this.loadGroupCompany();
     this.loadProductCategory();
+    this.SearchProduct();
   }
 
   //---Load data combobox---
@@ -113,12 +133,78 @@ export class CustomerdetailComponent implements OnInit {
           console.log(err);
         },
         complete: () => {
-          // this.objData = this.cboGroupCompany[0].GroupCompanyId;
+
         }
       }
     );
   }
+  //---------------------Tab Hàng hóa---------------------------
+  SearchProduct() {
+    this.productService.getData(this.dataSerachProduct, 1,
+      null, 0, 10).subscribe(
+        {
+          next: (res) => {
+            if (!res.IsOk) {
+              this.toastr.error(res.MessageText, 'Thông báo!');
+            } else {
+              this.lstProduct = res.RepData;
+              console.log(this.lstProduct);
+            }
+          },
+          error: (err) => {
+            console.log(err);
+          },
+          complete: () => {
+          }
+        }
+      );
+  }
 
+  saveDataModelProduct(isclose: boolean) {
+
+  }
+
+  AddModelProduct() {
+    this.isNewModel = true;
+  }
+
+  CloseProductModel() {
+    this.clearProductModel();
+  }
+
+  clearProductModel() {
+    this.objData = new Customer();
+    this.objData.objProduct = new CustomerProduct();
+  }
+
+  onKeydown(event) {
+    // if (event.key === 'Enter') {
+    //   console.log(event);
+    // }
+  }
+
+  renderDataRowAutoComplete(data: Product): string {
+    const html = `
+      <div class="data-row">
+        <div class="col-2">${data.ProductCode}</div>
+        <div class="col-3">${data.ProductName}</div>
+        <div class="col-1">${data.UnitName}</div>
+        <div class="col-3">${data.ProductCategoryName}</div>
+      </div>`;
+    return html;
+  }
+
+  autocompleteCallback(event) {
+    var item: Product = this.lstProduct.find(x => x.ProductCode == event);
+
+    this.objData.objProduct.ProductId = item.ProductId;
+    this.objData.objProduct.ProductName = item.ProductName;
+    this.objData.objProduct.UnitName = item.UnitName;
+    this.objData.objProduct.Price = item.Price;
+    this.objData.objProduct.IsActive = item.IsActive;
+    // this.objData.objProduct.ProductType = item.ProductType;
+  }
+  //---------------------Tab file---------------------------
   // handle on user click delete attach file
   deleteAttachFile(index: number) {
     // check valid index

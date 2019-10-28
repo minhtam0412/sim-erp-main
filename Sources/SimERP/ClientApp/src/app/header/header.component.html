@@ -240,6 +240,10 @@
                 *appCheckmenupermission="'supplier'; Fn 'VIEW'">
               <a [routerLink]='["/supplier"]' [routerLinkActive]='["supplier"]'>Quản lý nhà cung cấp</a>
             </li>
+            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'
+                *appCheckmenupermission="'zorrocustom'; Fn 'VIEW'">
+              <a [routerLink]='["/zorrocustom"]' [routerLinkActive]='["zorrocustom"]'>Custom Control Zorro</a>
+            </li>
           </ul>
         </li>
       </ul>

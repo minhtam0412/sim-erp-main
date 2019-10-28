@@ -152,6 +152,7 @@
     <Compile Include="DBEntities\OptionSystem.cs" />
     <Compile Include="DBEntities\PackageUnit.cs" />
     <Compile Include="DBEntities\Page.cs" />
+    <Compile Include="DBEntities\PaymentTerm.cs" />
     <Compile Include="DBEntities\Permission.cs" />
     <Compile Include="DBEntities\Product.cs" />
     <Compile Include="DBEntities\ProductCategory.cs" />
@@ -169,6 +170,7 @@
     <Compile Include="DBEntities\UserPermission.cs" />
     <Compile Include="DBEntities\UserRole.cs" />
     <Compile Include="DBEntities\Vendor.cs" />
+    <Compile Include="DBEntities\VendorProduct.cs" />
     <Compile Include="DBEntities\VendorType.cs" />
     <Compile Include="DBEntities\Ward.cs" />
     <Compile Include="FiscalStatu.cs" />

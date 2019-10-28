@@ -1,4 +1,5 @@
 ﻿import { Attachfile } from '../../product/model/attachfile';
+import { CustomerProduct } from './customerproduct';
 
 export class Customer {
     CustomerId: any;
@@ -39,8 +40,9 @@ export class Customer {
     IsCompany: boolean;
     IsActive: boolean = true;
     SortOrder: number;
-
     //tab file đính kèm
     ListAttachFile: Attachfile[] = [];
     ListAttachFileDelete: Attachfile[] = [];
+    //tab hàng hóa
+    objProduct: CustomerProduct;
 }

@@ -15,13 +15,13 @@ import {Tax} from '../../taxcomponent/models/Tax';
 import {ProductCategory} from '../../productcategory/model/ProductCategory';
 import {ProductService} from '../product.service';
 import {Product} from '../model/product';
-import {Vendor} from '../../vendor/model/vendor';
 import {Guid} from 'guid-typescript';
 import {ProductCategoryService} from '../../productcategory/product-category.service';
 import {DropDowTree} from '../../productcategory/model/dropdowntree';
 import {ComfirmDialogComponent} from '../../../common/comfirm-dialog/comfirm-dialog.component';
 import {NotificationService} from '../../../common/notifyservice/notification.service';
 import {ListStatus} from '../../../common/masterdata/commondata';
+import {Vendor} from '../../supplier/model/vendor';
 
 declare var jquery: any;
 declare var $: any;

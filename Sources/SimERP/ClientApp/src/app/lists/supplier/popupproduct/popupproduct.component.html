@@ -1,0 +1,78 @@
+<form #form="ngForm">
+  <div class="modal-content">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h4 class="modal-title">Chọn sản phẩm</h4>
+      <button type="button" class="close" data-dismiss="modal" (click)="closeDialog()">&times;</button>
+    </div>
+
+    <!-- Modal body -->
+    <div class="modal-body">
+      <div class="form_content">
+        <div class="row" style="margin-bottom: 5px;">
+          <div class="col-sm-3 text-right"><label control-label>Mã hàng hóa</label> <label
+            class="control-label-require"></label></div>
+          <div class="col-sm-9">
+            <input type="text" class="form-control form-control-sm" [(ngModel)]='productCode' name="ProductCode"
+                   select-value-of="ProductCode" ngui-auto-complete
+                   [source]="this.lstProduct" [accept-user-input]="true" [list-formatter]="renderDataRowAutoComplete"
+                   placeholder="Mã/tên hàng hoá" display-property-name="ProductName"
+                   (valueChanged)="autocompleteCallback($event)" [header-item-template]="autocompleteHeaderTemplate"
+                   no-match-found-text='Không có dữ liệu' value-property-name="ProductCode"
+                   max-num-list='10' tab-to-select='true'>
+          </div>
+        </div>
+        <div class="row" style="margin-bottom: 5px;">
+          <div class="col-sm-3 text-right"><label control-label>Tên hàng hóa</label> <label
+            class="control-label-require"></label></div>
+          <div class="col-sm-9">
+            <input type="text" [(ngModel)]="model.ProductName" disabled name="ProductName"
+                   class="form-control form-control-sm">
+          </div>
+        </div>
+        <div class="row" style="margin-bottom: 5px;">
+          <div class="col-sm-3 text-right"><label control-label>Đơn vị tính</label> <label
+            class="control-label-require"></label></div>
+          <div class="col-sm-9">
+            <input type="text" [(ngModel)]="model.UnitName" disabled class="form-control form-control-sm"
+                   name="UnitName">
+          </div>
+        </div>
+        <div class="row" style="margin-bottom: 5px;">
+          <div class="col-sm-3 text-right"><label control-label>Made in</label> <label
+            class="control-label-require"></label></div>
+          <div class="col-sm-9">
+            <input type="text" [(ngModel)]="model.CountryName" disabled class="form-control form-control-sm"
+                   name="CountryName">
+          </div>
+        </div>
+        <div class="row" style="margin-bottom: 5px;">
+          <div class="col-sm-3 text-right"><label control-label>Ngành hàng</label> <label
+            class="control-label-require"></label></div>
+          <div class="col-sm-9">
+            <input type="text" [(ngModel)]="model.ProductCategoryName" disabled name="ProductCategoryName"
+                   class="form-control form-control-sm">
+          </div>
+        </div>
+        <div class="row" style="margin-bottom: 5px;">
+          <div class="col-sm-3 text-right"><label control-label>Giá</label> <label
+            class="control-label-require"></label></div>
+          <div class="col-sm-9">
+            <input type="text" [(ngModel)]="model.Price" disabled name="Price"
+                   class="form-control form-control-sm">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal footer -->
+    <div class="modal-footer">
+      <button type="button" name="btnSave"
+              class="btn btn-info btn-sm" (click)="saveData()"><i class="far fa-save"></i> Chọn
+      </button>
+
+      <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal" (click)="closeDialog()">Huỷ
+      </button>
+    </div>
+  </div>
+</form>

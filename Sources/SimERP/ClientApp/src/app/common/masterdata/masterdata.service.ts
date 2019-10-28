@@ -20,6 +20,7 @@ export class MasterdataService {
 
   getData(apiURL: string) {
     this.reqListSearch.MaxRow = Key_MaxRow;
+    this.reqListSearch.AuthenParams = this.authenParams;
     const jsonString = JSON.stringify(this.reqListSearch);
     const headers = new HttpHeaders().set('content-type', 'application/json');
     return this.httpClient.post<ResponeResult>(this.baseUrl + apiURL, jsonString, {headers});
@@ -51,5 +52,13 @@ export class MasterdataService {
 
   getProductCategoryData() {
     return this.getData('api/list/getalltproductcategory');
+  }
+
+  getPaymentTermData() {
+    return this.getData('api/list/paymentterm');
+  }
+
+  getProductData() {
+    return this.getData('api/list/product');
   }
 }

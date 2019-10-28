@@ -53,9 +53,11 @@ import {SupplierdetailComponent} from './lists/supplier/supplierdetail/supplierd
 import {CustomerdetailComponent} from './lists/customer/customerdetail/customerdetail.component';
 import {EncrDecrService} from './common/security/encr-decr.service';
 import {NgZorroAntdModule, NZ_I18N, NzIconModule, vi_VN} from 'ng-zorro-antd';
-import { registerLocaleData } from '@angular/common';
+import {registerLocaleData} from '@angular/common';
 import vi from '@angular/common/locales/vi';
 import {IconsProviderModule} from './icons-provider.module';
+import {ZorrocustomComponent} from './lists/customcontrol/zorrocustom/zorrocustom.component';
+import {PopupproductComponent} from './lists/supplier/popupproduct/popupproduct.component';
 
 registerLocaleData(vi);
 
@@ -102,7 +104,9 @@ export function tokenGetter() {
     SupplierlistComponent,
     SupplierdetailComponent,
     UserpermissionComponent,
-    CustomerdetailComponent
+    CustomerdetailComponent,
+    ZorrocustomComponent,
+    PopupproductComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -136,7 +140,7 @@ export function tokenGetter() {
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
     CookieService,
     EncrDecrService,
-    { provide: NZ_I18N, useValue: vi_VN },
+    {provide: NZ_I18N, useValue: vi_VN},
   ],
   bootstrap: [AppComponent],
   entryComponents:
@@ -145,7 +149,8 @@ export function tokenGetter() {
       ComfirmDialogComponent,
       CustomertypedetailComponent,
       ChangepasswordComponent,
-      ProductdetailComponent
+      ProductdetailComponent,
+      PopupproductComponent
     ],
 
 })

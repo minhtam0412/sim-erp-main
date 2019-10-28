@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import {Component, Input, OnInit} from '@angular/core';
+import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-comfirm-dialog',
@@ -9,9 +9,10 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 export class ComfirmDialogComponent implements OnInit {
 
   @Input() contentMessage: string;
+
   constructor(public activeModal: NgbActiveModal) {
-    if (this.contentMessage == null || this.contentMessage == "" || this.contentMessage == undefined) {
-      this.contentMessage = "Bạn có muốn xóa dữ liệu không?";
+    if (this.contentMessage == null || this.contentMessage == '' || this.contentMessage == undefined) {
+      this.contentMessage = 'Bạn có muốn xóa dữ liệu không?';
     }
   }
 
@@ -20,6 +21,6 @@ export class ComfirmDialogComponent implements OnInit {
 
   saveData(flag: boolean) {
     this.activeModal.close(flag);
-    
+
   }
 }

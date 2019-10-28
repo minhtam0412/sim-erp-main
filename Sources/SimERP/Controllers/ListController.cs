@@ -25,6 +25,8 @@ using AttachFile = SimERP.Business.Models.MasterData.ListDTO.AttachFile;
 using Function = SimERP.Business.Models.MasterData.ListDTO.Function;
 using Product = SimERP.Business.Models.MasterData.ListDTO.Product;
 using ProductCategory = SimERP.Business.Models.MasterData.ListDTO.ProductCategory;
+using Vendor = SimERP.Business.Models.MasterData.ListDTO.Vendor;
+using VendorProduct = SimERP.Business.Models.MasterData.ListDTO.VendorProduct;
 
 namespace SimERP.Controllers
 {
@@ -43,8 +45,10 @@ namespace SimERP.Controllers
         private IProductCategory productcategoryBO;
         private IAttachFile attachFileBO;
         private ICustomer customerBO;
-		private IVendor vendorBO;
-		private IRoleList roleListBO;
+        private IVendor vendorBO;
+        private IRoleList roleListBO;
+        private IPaymentTerm paymentTermBO;
+        private IVendorProduct vendorProductBO;
 
 
         #endregion Variables
@@ -65,8 +69,10 @@ namespace SimERP.Controllers
             this.productcategoryBO = this.productcategoryBO ?? new ProductCategoryBO();
             this.attachFileBO = this.attachFileBO ?? new AttachFileBO();
             this.customerBO = this.customerBO ?? new CustomerBO();
-			this.vendorBO = this.vendorBO ?? new VendorBO();
-			this.roleListBO = this.roleListBO ?? new RoleListBO();
+            this.vendorBO = this.vendorBO ?? new VendorBO();
+            this.roleListBO = this.roleListBO ?? new RoleListBO();
+            this.paymentTermBO = this.paymentTermBO ?? new PaymentTermBO();
+            this.vendorProductBO = this.vendorProductBO ?? new VendorProductBO();
 
         }
         #endregion Contructor
@@ -694,7 +700,7 @@ namespace SimERP.Controllers
                     {
                         if (item.IsCheck)
                         {
-                            if(!pageListBO.checkIssuePermission(pageID, item.FunctionId))
+                            if (!pageListBO.checkIssuePermission(pageID, item.FunctionId))
                                 dataResult = pageListBO.SaveListPageFunction(pageID, item.FunctionId);
                         }
                     }
@@ -705,7 +711,7 @@ namespace SimERP.Controllers
                     repData.RepData = dataResult;
                     repData.MessageText = message;
                 }
-                    
+
                 else
                     this.AddResponeError(ref repData, pageListBO.getMsgCode(),
                         pageListBO.GetMessage(this.pageListBO.getMsgCode(), this.LangID));
@@ -926,7 +932,150 @@ namespace SimERP.Controllers
                 return responeResult;
             }
         }
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/savevendor")]
+        public async System.Threading.Tasks.Task<ActionResult<ResponeResult>> SaveVendorAsync()
+        {
+            ReqListAdd objReqListAdd = null;
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckAuthen();
+                if (repData == null || !repData.IsOk)
+                    return repData;
 
+                if (Request.HasFormContentType)
+                {
+                    if (Request.Form.ContainsKey("formData"))
+                    {
+                        var form = await Request.ReadFormAsync();
+                        string formData = form["formData"];
+                        objReqListAdd = JsonConvert.DeserializeObject<ReqListAdd>(formData);
+                    }
+                }
+
+                if (objReqListAdd == null)
+                {
+                    return new ResponeResult() { IsOk = false, MessageText = "Lỗi parse tham số!" };
+                }
+
+                Vendor vendor = JsonConvert.DeserializeObject<Vendor>(objReqListAdd.RowData.ToString());
+                if (vendor != null)
+                {
+                    vendor.SearchString =
+                        ReplaceUnicode(vendor.VendorName + " " + vendor.VendorCode);
+                    if (objReqListAdd.IsNew)
+                    {
+                        vendor.CreatedBy = this._session.UserID;
+                    }
+                    else
+                    {
+                        vendor.ModifyBy = this._session.UserID;
+                    }
+
+                    // action upload attach file 
+                    var rslUpload = new UploadController(httpContextAccessor, mapper).UploadFile(Request.Form.Files, "VendorProduct");
+                    var mapPath = (Dictionary<string, AttachFile>)rslUpload.Result.RepData;
+                    if (mapPath != null && mapPath.Count > 0)
+                    {
+                        foreach (string mapPathKey in mapPath.Keys)
+                        {
+                            string fileName = mapPathKey;
+                            var attachFile = vendor.ListAttachFile.SingleOrDefault(x => x.FileNameOriginal.Equals(fileName));
+                            if (attachFile != null)
+                            {
+                                // get data uploaded
+                                var mapPathValue = mapPath[fileName];
+
+                                // assign new value 
+                                attachFile.FileName = mapPathValue.FileName;
+                                attachFile.FileNameOriginal = mapPathValue.FileNameOriginal;
+                                attachFile.FilePath = mapPathValue.FilePath;
+                            }
+                        }
+                    }
+
+                    var dataResult = this.vendorBO.Save(vendor, objReqListAdd.IsNew);
+
+                    if (dataResult)
+                        repData.RepData = dataResult;
+                    else
+                        this.AddResponeError(ref repData, this.productBO.getMsgCode(),
+                            this.productBO.GetMessage(this.productBO.getMsgCode(), this.LangID));
+
+                    return repData;
+                }
+                else
+                {
+                    this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                        MsgCodeConst.Msg_RequestDataInvalidText, "Lỗi tham số gọi API", null);
+                    Logger.Error("EXCEPTION-CALL API", new Exception("Lỗi tham số gọi API"));
+                    return this.responeResult;
+                }
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/getvendorinfo")]
+        public ResponeResult GetVendorInfo([FromBody] ReqListSearch objReqListSearch)
+        {
+            Vendor vendor = null;
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckAuthen();
+                if (repData == null || !repData.IsOk)
+                    return repData;
+
+                var dataResult = this.vendorBO.GetInfo(objReqListSearch);
+
+                if (dataResult != null)
+                {
+                    vendor = this.mapper.Map<Vendor>(dataResult);
+
+                    #region Load info List AttachFile
+                    ReqListSearch reqListSearch = new ReqListSearch();
+                    reqListSearch.AddtionParams = new Dictionary<string, dynamic>();
+                    reqListSearch.AddtionParams.Add("KeyValue", vendor.VendorId);
+                    reqListSearch.AddtionParams.Add("OptionName", "VENDORPRODUCT");
+
+                    var lstAttachFile = this.attachFileBO.GetData(reqListSearch);
+                    vendor.ListAttachFile = lstAttachFile; 
+                    #endregion
+
+                    #region Load info VendorProduct
+                    reqListSearch = new ReqListSearch();
+                    reqListSearch.AddtionParams = new Dictionary<string, dynamic>();
+                    reqListSearch.AddtionParams.Add("VendorId", vendor.VendorId);
+                    var lstVendorProduct = this.vendorProductBO.GetData(reqListSearch);
+                    vendor.ListVendorProduct = lstVendorProduct;
+                    #endregion
+
+                    repData.RepData = vendor;
+                }
+                else
+                    this.AddResponeError(ref repData, productBO.getMsgCode(),
+                        productBO.GetMessage(this.productBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
         #endregion
 
         #region PackageUnit
@@ -1010,7 +1159,7 @@ namespace SimERP.Controllers
                     }
 
                     // action upload attach file 
-                    var rslUpload = new UploadController(httpContextAccessor, mapper).UploadFile(Request.Form.Files);
+                    var rslUpload = new UploadController(httpContextAccessor, mapper).UploadFile(Request.Form.Files, "Product");
                     var mapPath = (Dictionary<string, AttachFile>)rslUpload.Result.RepData;
                     if (mapPath != null && mapPath.Count > 0)
                     {
@@ -1733,6 +1882,41 @@ namespace SimERP.Controllers
             }
         }
 
+        #endregion
+
+        #region PaymentTerm
+        [HttpPost]
+        [Route("api/list/paymentterm")]
+        public ResponeResult GetPaymentTermData([FromBody] ReqListSearch objReqListSearch)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckSign(objReqListSearch.AuthenParams,
+                    objReqListSearch.AuthenParams.ClientUserName, objReqListSearch.AuthenParams.ClientPassword,
+                    objReqListSearch.AuthenParams.Sign);
+                if (repData == null || !repData.IsOk)
+                    return repData;
+                var dataResult = paymentTermBO.GetData(objReqListSearch);
+                if (dataResult != null)
+                {
+                    repData.RepData = dataResult;
+                    repData.TotalRow = this.paymentTermBO.TotalRows;
+                }
+                else
+                    this.AddResponeError(ref repData, paymentTermBO.getMsgCode(),
+                        paymentTermBO.GetMessage(this.paymentTermBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
         #endregion
     }
 }
