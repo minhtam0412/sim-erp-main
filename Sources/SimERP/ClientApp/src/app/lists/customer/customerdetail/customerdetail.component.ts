@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Customer } from '../model/customer';
 import { CustomerType } from '../../customertypecomponent/models/customertype';
 import { CustomerService } from '../customer.service';
@@ -11,11 +11,16 @@ import { ProductCategory } from '../../productcategory/model/ProductCategory';
 import { ProductCategoryService } from '../../productcategory/product-category.service';
 import { NotificationService } from 'src/app/common/notifyservice/notification.service';
 import { Attachfile } from '../../product/model/attachfile';
-import { Key_DefaultAttachFile } from 'src/app/common/config/globalconfig';
+import { Key_DefaultAttachFile, Key_MaxRow } from 'src/app/common/config/globalconfig';
 import { Product } from '../../product/model/product';
 import { ProductService } from '../../product/product.service';
 import { CustomerProduct } from '../model/customerproduct';
 import { ListItemType } from 'src/app/common/masterdata/commondata';
+import { User } from 'src/app/systems/user';
+import { UserService } from 'src/app/systems/user.service';
+import { ComfirmDialogComponent } from 'src/app/common/comfirm-dialog/comfirm-dialog.component';
+import { Guid } from 'guid-typescript';
+import { CustomerUser } from '../model/customeruser';
 
 @Component({
   selector: 'app-customerdetail',
@@ -27,14 +32,28 @@ export class CustomerdetailComponent implements OnInit {
   objData: Customer;
   currentIndexAttachFile = -1;
   isNewModel: boolean;
-  dataSerachProduct: string;
   lstItemType = ListItemType;
-  //---Combobox---
+
+  //----Combobox-----
   cboCustomerType: CustomerType[] = [];
   cboGroupCompany: GroupCompany[] = [];
   cboProductCategory: ProductCategory[] = [];
   lstFileToUpload: File[] = [];
+
+  //----Model Product---
+  dataProductCategoryFilter: string;
+  dataProductIsActiveFilter: number;
+  dataSerachProduct: string;
+  dataSerachEmployee: string;
+  lstObjProduct: CustomerProduct[] = [];
+  objModelProduct: CustomerProduct;
   lstProduct: Product[] = [];
+  lstUser: User[] = [];
+
+  //----Model Saler---
+  lstObjSaler: CustomerUser[] = [];
+
+  //------------------
 
   static checkIsImageFile(file: File) {
     const mimeType = file.type;
@@ -53,7 +72,7 @@ export class CustomerdetailComponent implements OnInit {
       'width:100%; height:100%;" allowfullscreen></iframe>');
   }
 
-  public autocompleteHeaderTemplate = `
+  public product_autocompleteHeaderTemplate = `
   <div class="header-row">
   <div class="col-2">Mã hàng</div>
   <div class="col-3">Tên hàng</div>
@@ -61,14 +80,26 @@ export class CustomerdetailComponent implements OnInit {
   <div class="col-3">Ngành hàng</div>
   </div>`;
 
+  public employee_autocompleteHeaderTemplate = `
+  <div class="header-row">
+  <div class="col-3">Mã nhân viên</div>
+  <div class="col-4">Tên nhân viên</div>
+  </div>`;
+
+  @ViewChild('closeAddExpenseModal', { static: true }) closeAddExpenseModal: ElementRef;
+
   constructor(private customerService: CustomerService, private customertypeService: CustomertypeService, private productCategoryService: ProductCategoryService,
     private spinnerService: Ng4LoadingSpinnerService, private modalService: NgbModal, private toastr: ToastrService, private notificationService: NotificationService,
-    private productService: ProductService) {
+    private productService: ProductService, private userService: UserService) {
 
     this.objData = new Customer();
-    this.objData.objProduct = new CustomerProduct();
+    this.objModelProduct = new CustomerProduct();
     this.objData.PaymentTermId = 50;
+
     this.dataSerachProduct = "";
+    this.dataSerachEmployee = "";
+    this.dataProductCategoryFilter = "";
+    this.dataProductIsActiveFilter = -1;
   }
 
   ngOnInit() {
@@ -76,6 +107,7 @@ export class CustomerdetailComponent implements OnInit {
     this.loadGroupCompany();
     this.loadProductCategory();
     this.SearchProduct();
+    this.SearchUser();
   }
 
   //---Load data combobox---
@@ -140,8 +172,8 @@ export class CustomerdetailComponent implements OnInit {
   }
   //---------------------Tab Hàng hóa---------------------------
   SearchProduct() {
-    this.productService.getData(this.dataSerachProduct, 1,
-      null, 0, 10).subscribe(
+    this.productService.getData(this.dataSerachProduct, null,
+      null, 0, Key_MaxRow).subscribe(
         {
           next: (res) => {
             if (!res.IsOk) {
@@ -160,30 +192,94 @@ export class CustomerdetailComponent implements OnInit {
       );
   }
 
-  saveDataModelProduct(isclose: boolean) {
+  SearchUser() {
+    this.userService.getData(this.dataSerachEmployee, 1, 0, Key_MaxRow).subscribe(
+      {
+        next: (res) => {
+          if (!res.IsOk) {
+            alert('Lỗi ' + res.MessageText);;
+          } else {
+            this.lstUser = res.RepData;
+            console.log(this.lstUser);
+          }
+        },
+        error: (err) => {
+          console.log(err);
+        },
+        complete: () => {
+        }
+      }
+    );
+  }
 
+  saveDataModelProduct(isclose: boolean) {
+    var item: CustomerProduct = this.objModelProduct;
+    this.objData.objProduct.push(item);
+    this.lstObjProduct.push(item);
+    this.AddListSaler(item.SaleId);
+    this.clearProductModel();
+    if (isclose) {
+      this.closeAddExpenseModal.nativeElement.click();
+    }
+  }
+
+  AddListSaler(SalerId: number) {
+    if (!this.lstObjSaler.find(x => x.UserId == SalerId)) {
+      var item: User = this.lstUser.find(x => x.UserId == SalerId);
+      var saler:CustomerUser = new CustomerUser();
+      saler.UserId = item.UserId;
+      saler.UserCode = item.UserCode;
+      saler.FullName = item.FullName;
+      saler.IsActive = item.IsActive;
+      saler.CreateDate = new Date();
+      
+      this.lstObjSaler.push(saler);
+    }
   }
 
   AddModelProduct() {
     this.isNewModel = true;
   }
 
+  EditModelProduct() {
+    this.isNewModel = false;
+  }
+
   CloseProductModel() {
     this.clearProductModel();
   }
 
-  clearProductModel() {
-    this.objData = new Customer();
-    this.objData.objProduct = new CustomerProduct();
+  ProductRemoveItem(ProductId: number) {
+    const modalRef = this.modalService.open(ComfirmDialogComponent, {
+      backdrop: false, scrollable: true, centered: true
+    });
+    // xử lý sau khi đóng dialog, thực hiện load lại dữ liệu nếu muốn
+    modalRef.result.then((result) => {
+      if (result != undefined && result == true) {
+        this.objData.objProduct.splice(this.objData.objProduct.findIndex(x => x.ProductId == ProductId), 1);
+        this.lstObjProduct.splice(this.lstObjProduct.findIndex(x => x.ProductId == ProductId), 1);
+      }
+    });
   }
 
-  onKeydown(event) {
+  clearProductModel() {
+    this.objModelProduct = new CustomerProduct();
+    this.dataSerachProduct = "";
+    this.dataSerachEmployee = "";
+  }
+
+  product_onKeydown(event) {
     // if (event.key === 'Enter') {
     //   console.log(event);
     // }
   }
 
-  renderDataRowAutoComplete(data: Product): string {
+  employee_onKeydown(event) {
+    // if (event.key === 'Enter') {
+    //   console.log(event);
+    // }
+  }
+  product_renderDataRowAutoComplete(data: Product): string {
     const html = `
       <div class="data-row">
         <div class="col-2">${data.ProductCode}</div>
@@ -194,16 +290,58 @@ export class CustomerdetailComponent implements OnInit {
     return html;
   }
 
-  autocompleteCallback(event) {
+  employee_renderDataRowAutoComplete(data: User): string {
+    const html = `
+      <div class="data-row">
+        <div class="col-3">${data.UserCode}</div>
+        <div class="col-4">${data.FullName}</div>
+        
+      </div>`;
+    return html;
+  }
+
+  product_autocompleteCallback(event) {
     var item: Product = this.lstProduct.find(x => x.ProductCode == event);
 
-    this.objData.objProduct.ProductId = item.ProductId;
-    this.objData.objProduct.ProductName = item.ProductName;
-    this.objData.objProduct.UnitName = item.UnitName;
-    this.objData.objProduct.Price = item.Price;
-    this.objData.objProduct.IsActive = item.IsActive;
+    this.objModelProduct.ProductId = item.ProductId;
+    this.objModelProduct.ProductCode = item.ProductCode;
+    this.objModelProduct.ProductName = item.ProductName;
+    this.objModelProduct.UnitName = item.UnitName;
+    this.objModelProduct.ProductCategoryId = item.ProductCategoryId;
+    this.objModelProduct.ProductCategoryName = item.ProductCategoryName;
+    this.objModelProduct.Price = item.Price;
+    this.objModelProduct.IsActive = item.IsActive;
     // this.objData.objProduct.ProductType = item.ProductType;
   }
+
+  employee_autocompleteCallback(event) {
+    var item: User = this.lstUser.find(x => x.UserCode == event);
+    this.objModelProduct.SaleId = item.UserId;
+    this.objModelProduct.SaleName = item.FullName;
+  }
+
+  checkValidateModelProduct() {
+    if (this.objModelProduct.ProductId <= 0 || this.objModelProduct.ProductId == undefined || this.objModelProduct.SaleId <= 0 || this.objModelProduct.SaleId == undefined)
+      return true;
+    return false;
+  }
+
+  FilterCustomerProduct() {
+    if (this.dataProductCategoryFilter == "-1" && this.dataProductIsActiveFilter == -1) {
+      this.lstObjProduct = Object.assign([], this.objData.objProduct);
+    }
+    if (this.dataProductCategoryFilter != "-1" && this.dataProductIsActiveFilter == -1) {
+      this.lstObjProduct = Object.assign([], this.objData.objProduct.filter(x => x.ProductCategoryId != null && x.ProductCategoryId.toString() == this.dataProductCategoryFilter));
+    }
+    if (this.dataProductCategoryFilter == "-1" && this.dataProductIsActiveFilter != -1) {
+      this.lstObjProduct = Object.assign([], this.objData.objProduct.filter(x => x.IsActive == (this.dataProductIsActiveFilter == 1)));
+    }
+    if (this.dataProductCategoryFilter != "-1" && this.dataProductIsActiveFilter != -1) {
+      this.lstObjProduct = Object.assign([], this.objData.objProduct.filter(x => x.ProductCategoryId != null && x.ProductCategoryId.toString() == this.dataProductCategoryFilter
+        && x.IsActive == (this.dataProductIsActiveFilter == 1)));
+    }
+  }
+
   //---------------------Tab file---------------------------
   // handle on user click delete attach file
   deleteAttachFile(index: number) {

@@ -44,5 +44,5 @@ export class Customer {
     ListAttachFile: Attachfile[] = [];
     ListAttachFileDelete: Attachfile[] = [];
     //tab hàng hóa
-    objProduct: CustomerProduct;
+    objProduct: CustomerProduct[] = [];
 }

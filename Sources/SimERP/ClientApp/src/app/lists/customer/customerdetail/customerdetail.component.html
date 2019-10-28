@@ -240,11 +240,12 @@
                                             <div class="row">
                                                 <label class="col-sm-4 control-label text-right">Ngành hàng<span class="control-label-require"></span></label>
                                                 <div class="col-sm-8">
-                                                    <select class="browser-default form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
-                                                            <option *ngFor="let item of cboProductCategory" value="{{item.ProductCategoryId}}">
-                                                                    {{item.ProductCategoryName}}
-                                                            </option>
-                                                                </select>
+                                                    <select [(ngModel)]="dataProductCategoryFilter" name="dataProductCategoryFilter" (change)="FilterCustomerProduct()" class="browser-default form-control" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                                        <option value="-1">Tất cả</option>
+                                                        <option *ngFor="let item of cboProductCategory" value="{{item.ProductCategoryId}}">
+                                                            {{item.ProductCategoryName}}
+                                                        </option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -252,11 +253,11 @@
                                             <div class="row">
                                                 <label class="col-sm-4 control-label text-right">Trạng thái<span class="control-label-require"></span></label>
                                                 <div class="col-sm-8">
-                                                    <select class="browser-default form-control" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
-                                                                        <option value="-1">Tất cả</option>
-                                                                        <option value="1">Đang cung cấp</option>
-                                                                        <option value="0">Ngừng cung cấp</option>
-                                                                      </select>
+                                                    <select [(ngModel)]="dataProductIsActiveFilter" name="dataProductIsActiveFilter" (change)="FilterCustomerProduct()" class="browser-default form-control" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                                        <option value="-1">Tất cả</option>
+                                                        <option value="1">Đang cung cấp</option>
+                                                        <option value="0">Ngừng cung cấp</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -285,8 +286,23 @@
                                             <!-- Table head -->
                                             <!-- Table body -->
                                             <tbody>
-                                                <tr>
-                                                    <td colspan="10" class="datarow-null" style="text-align: left !important;">Dữ liệu không tồn tại</td>
+                                                <tr *ngIf="lstObjProduct.length <= 0">
+                                                    <td colspan="14" class="datarow-null">Dữ liệu không tồn tại</td>
+                                                </tr>
+                                                <tr *ngFor="let row of lstObjProduct; let i = index">
+                                                    <td class="order-number">{{i + 1}}</td>
+                                                    <td class="col-name"><a (click)="EditModelProduct(i)" data-toggle="modal" data-target="#ProductModel" style="cursor: pointer; color: #337ab7">{{row.ProductCode}}</a></td>
+                                                    <td class="col-name">{{row.ProductName}}</td>
+                                                    <td class="col-active">{{row.UnitName}}</td>
+                                                    <td class="col-name">{{row.ProductCategoryName}}</td>
+                                                    <td class="col-name">{{row.SaleName}}</td>
+                                                    <td class="col-active text-right">{{row.Price}}</td>
+                                                    <td>
+                                                        <i [ngClass]="{'fas fa-check-square':row.IsActive, 'far fa-square': !row.IsActive}" [ngStyle]="{'color': '#337ab7'}"></i>
+                                                    </td>
+                                                    <td class="col-action">
+                                                        <a (click)="ProductRemoveItem(row.ProductId)"><i class="far fa-trash-alt" style='color:#337ab7;'></i></a>
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="14" class="text-left lbadd"><a data-toggle="modal" data-target="#ProductModel" (click)="AddModelProduct()"><i class="fas fa-plus-circle"></i>Thêm hàng hóa</a></td>
@@ -306,10 +322,10 @@
                                                 <label class="col-sm-4 control-label text-right">Trạng thái<span class="control-label-require"></span></label>
                                                 <div class="col-sm-8">
                                                     <select class="browser-default form-control" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
-                                                                            <option value="-1">Tất cả</option>
-                                                                            <option value="1">Đang quản lý</option>
-                                                                            <option value="0">Ngưng quản lý</option>
-                                                                          </select>
+                                                        <option value="-1">Tất cả</option>
+                                                        <option value="1">Đang quản lý</option>
+                                                        <option value="0">Ngưng quản lý</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -340,9 +356,6 @@
                                                 <tr>
                                                     <td colspan="10" class="datarow-null" style="text-align: left !important;">Dữ liệu không tồn tại</td>
                                                 </tr>
-                                                <tr>
-                                                    <td colspan="14" class="text-left lbadd"><a data-toggle="modal" data-target="#myModal"><i class="fas fa-plus-circle"></i>Thêm nhân viên sale</a></td>
-                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -358,10 +371,10 @@
                                                 <label class="col-sm-4 control-label text-right">Trạng thái<span class="control-label-require"></span></label>
                                                 <div class="col-sm-8">
                                                     <select class="browser-default form-control" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
-                                                                                <option value="-1">Tất cả</option>
-                                                                                <option value="1">Sử dụng</option>
-                                                                                <option value="0">Ngưng</option>
-                                                                              </select>
+                                                        <option value="-1">Tất cả</option>
+                                                        <option value="1">Sử dụng</option>
+                                                        <option value="0">Ngưng</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -507,34 +520,33 @@
                         <div class="row">
                             <div class="col-sm-3 text-right"><label control-label>Mã hàng hóa</label> <label class="control-label-require"></label></div>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control form-control-sm" [(ngModel)]='dataSerachProduct' (keydown)="onKeydown($event)" select-value-of="ProductCode" ngui-auto-complete [source]="this.lstProduct" [accept-user-input]="true" [list-formatter]="renderDataRowAutoComplete"
-                                    placeholder="Mã/tên thuế" display-property-name="ProductName" (valueChanged)="autocompleteCallback($event)" [header-item-template]="autocompleteHeaderTemplate" no-match-found-text='Không có dữ liệu' value-property-name="ProductCode"
-                                    max-num-list='5' tab-to-select='true'>
+                                <input type="text" class="form-control form-control-sm" [(ngModel)]='dataSerachProduct' (keydown)="product_onKeydown($event)" select-value-of="ProductCode" ngui-auto-complete [source]="this.lstProduct" [accept-user-input]="true" [list-formatter]="product_renderDataRowAutoComplete"
+                                    placeholder="Mã/tên hàng hóa " display-property-name="ProductName" (valueChanged)="product_autocompleteCallback($event)" [header-item-template]="product_autocompleteHeaderTemplate" no-match-found-text='Không có dữ liệu'
+                                    value-property-name="ProductCode" max-num-list='10' tab-to-select='true'>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-3 text-right"><label control-label>Tên hàng hóa</label> <label class="control-label-require"></label></div>
                             <div class="col-sm-9">
-                                <input type="text" [(ngModel)]="objData.objProduct.ProductName" disabled class="form-control form-control-sm">
+                                <input type="text" [(ngModel)]="objModelProduct.ProductName" disabled class="form-control form-control-sm">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-3 text-right"><label control-label>Đơn vị tính</label> <label class="control-label-require"></label></div>
                             <div class="col-sm-9">
-                                <input type="text" [(ngModel)]="objData.objProduct.UnitName" disabled class="form-control form-control-sm">
+                                <input type="text" [(ngModel)]="objModelProduct.UnitName" disabled class="form-control form-control-sm">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-3 text-right"><label control-label>Ngành hàng</label> <label class="control-label-require"></label></div>
                             <div class="col-sm-9">
-                                <input type="text" [(ngModel)]="objData.objProduct.ProductCategoryName" disabled class="form-control form-control-sm">
+                                <input type="text" [(ngModel)]="objModelProduct.ProductCategoryName" disabled class="form-control form-control-sm">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-3 text-right"><label control-label>Nhóm hàng</label> <label class="control-label-require"></label></div>
                             <div class="col-sm-9">
-                                <!-- <input type="text" [(ngModel)]="objData.objProduct.ProductType" disabled class="form-control form-control-sm"> -->
-                                <select [(ngModel)]="objData.objProduct.ProductType" name="ItemType" disabled class="browser-default form-control">
+                                <select [(ngModel)]="objModelProduct.ProductType" name="ItemType" disabled class="browser-default form-control">
                                     <option value=-1>--Chọn loại hàng hoá--</option>
                                     <option *ngFor="let item of lstItemType" value="{{item.ItemTypeId}}">
                                       {{item.ItemTypeName}}
@@ -545,20 +557,22 @@
                         <div class="row">
                             <div class="col-sm-3 text-right"><label control-label>Mã nhân viên sale</label> <label class="control-label-require"></label></div>
                             <div class="col-sm-9">
-                                <input type="text" [ngClass]="{'textvalidate': objData.objProduct.SaleId != null}" [(ngModel)]="objData.objProduct.SaleId" class="form-control form-control-sm">
+                                <input type="text" class="form-control form-control-sm" [(ngModel)]='dataSerachEmployee' (keydown)="employee_onKeydown($event)" select-value-of="UserCode" ngui-auto-complete [source]="this.lstUser" [accept-user-input]="true" [list-formatter]="employee_renderDataRowAutoComplete"
+                                    placeholder="Mã/tên nhân viên" display-property-name="UserName" (valueChanged)="employee_autocompleteCallback($event)" [header-item-template]="employee_autocompleteHeaderTemplate" no-match-found-text='Không có dữ liệu'
+                                    value-property-name="UserCode" max-num-list='5' tab-to-select='true'>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-3 text-right"><label control-label>Tên nhân viên sale</label> <label class="control-label-require"></label></div>
                             <div class="col-sm-9">
-                                <input type="text" [(ngModel)]="objData.objProduct.SaleName" disabled class="form-control form-control-sm">
+                                <input type="text" [(ngModel)]="objModelProduct.SaleName" disabled class="form-control form-control-sm">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-3 text-right"><label></label></div>
                             <div class="col-sm-9">
                                 <div class="custom-control custom-checkbox mb-3">
-                                    <input type="checkbox" class="custom-control-input" [(ngModel)]="objData.objProduct.IsSale" id="IsSale" name="IsSale">
+                                    <input type="checkbox" class="custom-control-input" [(ngModel)]="objModelProduct.IsSale" id="IsSale" name="IsSale">
                                     <label class="custom-control-label" for="IsSale">Đang sale mặt hàng này</label>
                                 </div>
                             </div>
@@ -567,11 +581,11 @@
                 </div>
 
                 <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" [ngClass]="{'pointer-events-none': (objData.objProduct.ProductId != null || objData.objProduct.SaleId != null)}" class="btn btn-info btn-sm" (click)="saveDataModelProduct(true)">
+                <div class="modal-footer" [ngClass]="{'wrapper': checkValidateModelProduct()}">
+                    <button type="button" [ngClass]="{'pointer-events-none': checkValidateModelProduct()}" class="btn btn-info btn-sm" (click)="saveDataModelProduct(true)">
                                 <i class="far fa-save"></i> Lưu(F3)
                               </button>&nbsp;
-                    <button type="button" [ngClass]="{'pointer-events-none': (objData.objProduct.ProductId != null || objData.objProduct.SaleId != null)}" class="btn btn-info btn-sm" (click)="saveDataModelProduct(false)">
+                    <button type="button" [ngClass]="{'pointer-events-none': checkValidateModelProduct()}" class="btn btn-info btn-sm" (click)="saveDataModelProduct(false)"> 
                                 <i class="far fa-save"></i> Lưu & Thêm mới
                               </button>&nbsp;
                     <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal" #closeAddExpenseModal (click)="CloseProductModel()">Đóng</button>

@@ -59,8 +59,10 @@ namespace SimERP.Business.Businesses.List
                                                 p.ProductId
                                                 ,p.ProductCode
                                                 ,p.ProductName
+                                                ,p.Price
                                                 ,u.UnitName
                                                 ,pu.PackageUnitName
+                                                ,pc.ProductCategoryId
                                                 ,pc.ProductCategoryName
                                                 ,c.CountryName
                                                 ,v.VendorName
