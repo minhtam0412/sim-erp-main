@@ -1,0 +1,380 @@
+<section class="form_content">
+  <form #form="ngForm">
+    <!--    Buttons-->
+    <div class="row">
+      <div class="col-sm-4 text-left">
+        <p class="text-uppercase"
+           style="font-size:18px;color: #587792; font-weight:bold; font-family: 'Lato', sans-serif;">
+          <span>NHÀ CUNG CẤP</span></p>
+      </div>
+      <div class="col-sm-8 text-right">
+        <div class="form-group">
+          <button type="button" class="btn btn-success btn-sm" [disabled]="form.invalid" *appCheckpermission="['SAVE']"
+                  (click)="saveData(false)">
+            <i class="far fa-save"></i> Lưu (F3)
+          </button>&nbsp;
+          <button type="button" class="btn btn-success btn-sm" [disabled]="form.invalid"
+                  *appCheckpermission="['SAVE', 'ADD']"
+                  (click)="saveData(true)">
+            <i class="far fa-check-square"></i> Lưu & Thêm mới (F4)
+          </button>&nbsp;
+          <button type="button" class="btn btn-primary btn-sm"
+                  (click)="goBack()">
+            <i class="fas fa-long-arrow-alt-left"></i> Trở về (F10)
+          </button>
+        </div>
+      </div>
+    </div>
+    <!--    Blank Row-->
+    <div class="row">
+      <div class="col-sm-12">
+        <div style="border-top:0.5px solid #d6d6d6; margin:3px 0"></div>
+      </div>
+    </div>
+    <!--    Info-->
+    <div class="row">
+
+      <div class="col-sm-6">
+        <div class="form-horizontal">
+          <div class="row">
+            <label class="col-sm-5 control-label text-right">Tên nhà cung cấp<span
+              class="control-label-require">*</span></label>
+            <div class="col-sm-7">
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="model.VendorName" name="VendorName"
+                     style="box-shadow: none; border-top: none; border-left: none; border-right: none" maxlength="250"
+                     required>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-5 control-label text-right">Địa chỉ</label>
+            <div class="col-sm-7">
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="model.Address" name="Address"
+                     maxlength="250"
+                     style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-5 control-label text-right">Nhóm</label>
+            <div class="col-sm-7">
+              <ng-select name="isActive" class="select-custom select-bottom-border" [(ngModel)]="model.VendorTypeId"
+                         name="VendorTypeId">
+                <ng-option [value]="-1">--Chọn nhóm khách hàng--</ng-option>
+                <ng-option *ngFor="let status of lstVendorType"
+                           [value]="status.VendorTypeId">{{status.VendorTypeName}}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-5 control-label text-right">Email</label>
+            <div class="col-sm-7">
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="model.Email" maxlength="50"
+                     style="box-shadow: none; border-top: none; border-left: none; border-right: none" name="Email">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <div class="form-horizontal">
+          <div class="row">
+            <label class="col-sm-5 control-label text-right">Mã nhà cung cấp<span
+              class="control-label-require">*</span></label>
+            <div class="col-sm-7">
+              <input type="text" class="form-control form-control-sm" required [(ngModel)]="model.VendorCode"
+                     maxlength="50"
+                     style="box-shadow: none; border-top: none; border-left: none; border-right: none" name="VendorCode"
+                     [disabled]="!this.isAddState">
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-5 control-label text-right">Điện thoại</label>
+            <div class="col-sm-7">
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="model.PhoneNumber" maxlength="50"
+                     style="box-shadow: none; border-top: none; border-left: none; border-right: none"
+                     name="PhoneNumber">
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-5 control-label text-right">Fax</label>
+            <div class="col-sm-7">
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="model.FaxNumber" maxlength="50"
+                     style="box-shadow: none; border-top: none; border-left: none; border-right: none" name="FaxNumber">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-5 text-right"><label control-label></label></div>
+            <div class="col-sm-7">
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="IsActive"
+                       name="IsActive" [(ngModel)]="model.IsActive">
+                <label class="custom-control-label" for="IsActive">Sử dụng</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--    Tabs-->
+    <div class="row" style="margin-top: 10px; margin-bottom: 10px">
+      <div class="col-sm-12">
+        <ngb-tabset #tabset="ngbTabset">
+
+          <ngb-tab id="tab-SupplierInfo">
+            <ng-template ngbTabTitle>Thông tin nhà cung cấp</ng-template>
+            <ng-template ngbTabContent>
+              <div class="row" style="margin-bottom: 10px">
+                <div class="col-sm-6">
+                  <div class="form-horizontal">
+                    <div class="row">
+                      <label class="col-sm-5 control-label text-right">Mã số thuế</label>
+                      <div class="col-sm-7">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="model.TaxNumber"
+                               maxlength="50"
+                               style="box-shadow: none; border-top: none; border-left: none; border-right: none"
+                               name="TaxNumber">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-sm-5 control-label text-right">Tên công ty xuất hoá đơn</label>
+                      <div class="col-sm-7">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="model.CompanyName"
+                               maxlength="250" name="CompanyName"
+                               style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-sm-5 control-label text-right">Địa chỉ xuất hoá đơn</label>
+                      <div class="col-sm-7">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="model.CompanyAddress"
+                               maxlength="250" name="CompanyAddress"
+                               style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-sm-5 control-label text-right">TK ngân hàng</label>
+                      <div class="col-sm-7">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="model.BankingNumber"
+                               maxlength="50" name="BankingNumber"
+                               style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-sm-5 control-label text-right">Ngân hàng</label>
+                      <div class="col-sm-7">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="model.BankingName"
+                               maxlength="250" name="BankingName"
+                               style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-sm-5 control-label text-right">Website</label>
+                      <div class="col-sm-7">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="model.Website"
+                               maxlength="250" name="Website"
+                               style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-5 text-right"><label control-label>Ghi chú</label></div>
+                      <div class="col-sm-7">
+                        <textarea type="text" style="border-bottom: 1px solid #ced4da;" name="TermCondition" rows="3"
+                                  [(ngModel)]="model.TrackingNote"
+                                  class="form-control-plaintext"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6">
+                  <div class="form-horizontal">
+                    <div class="row">
+                      <label class="col-sm-5 control-label text-right">Hạn thanh toán</label>
+                      <div class="col-sm-7">
+                        <ng-select name="PaymentTermId" class="select-custom select-bottom-border"
+                                   [(ngModel)]="model.PaymentTermId"
+                                   name="PaymentTermId">
+                          <ng-option [value]="-1">--Chọn hạn thanh toán--</ng-option>
+                          <ng-option *ngFor="let status of lstPaymentTerm"
+                                     [value]="status.PaymentTermId">{{status.PaymentTermName}}</ng-option>
+                        </ng-select>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-sm-5 control-label text-right">Hạn mức nợ</label>
+                      <div class="col-sm-7">
+                        <input type="number" min="0" max="999999999999999" class="form-control form-control-sm"
+                               [(ngModel)]="model.DebtCeiling" name="DebtCeiling"
+                               style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-sm-5 control-label text-right">Người đại diện</label>
+                      <div class="col-sm-7">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="model.RepresentativeName"
+                               maxlength="250" name="RepresentativeName"
+                               style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-sm-5 control-label text-right">ĐT người đại diện</label>
+                      <div class="col-sm-7">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="model.RepresentativePhone"
+                               maxlength="50" name="RepresentativePhone"
+                               style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-sm-5 control-label text-right">Email người đại diện</label>
+                      <div class="col-sm-7">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="model.RepresentativeEmail"
+                               style="box-shadow: none; border-top: none; border-left: none; border-right: none"
+                               name="RepresentativeEmail">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-sm-5 control-label text-right">Địa chỉ người đại diện</label>
+                      <div class="col-sm-7">
+                        <input type="text" class="form-control form-control-sm"
+                               [(ngModel)]="model.RepresentativeAddress" maxlength="250" name="RepresentativeAddress"
+                               style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <label class="col-sm-5 control-label text-right">Loại tiền</label>
+                      <div class="col-sm-7">
+                        <ng-select class="select-custom select-bottom-border" [(ngModel)]="model.CurrencyId"
+                                   name="CurrencyId">
+                          <ng-option [value]="-1">--Chọn loại tiền--</ng-option>
+                          <ng-option *ngFor="let status of lstCurrency"
+                                     [value]="status.CurrencyId">{{status.CurrencyName}}</ng-option>
+                        </ng-select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
+          </ngb-tab>
+
+          <ngb-tab id="tab-Product">
+            <ng-template ngbTabTitle>Hàng hoá</ng-template>
+            <ng-template ngbTabContent>
+              <div class="table-responsive" style="margin-top: 10px;">
+
+                <!-- Table  -->
+                <table class="table table-bordered table-striped table-hover table-fixed">
+
+                  <!-- Table head -->
+                  <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Mã hàng hoá</th>
+                    <th>Tên hàng hoá</th>
+                    <th>ĐVT</th>
+                    <th>Made in</th>
+                    <th>Ngành hàng</th>
+                    <th>Giá</th>
+                    <th>Trạng thái</th>
+                    <th></th>
+                  </tr>
+                  </thead>
+                  <!-- Table head -->
+
+                  <!-- Table body -->
+                  <tbody>
+                  <tr *ngIf="model?.ListVendorProduct.length <= 0">
+                    <td colspan="9" class="datarow-null">Dữ liệu không tồn tại</td>
+                  </tr>
+                  <tr *ngFor="let row of model?.ListVendorProduct; let index = index">
+                    <td class="order-number">{{index + 1}}</td>
+                    <td class="col-code">{{row.ProductCode}}</td>
+                    <td class="col-name">{{row.ProductName}}</td>
+                    <td class="col-name" style="text-align: center">{{row.UnitName}}</td>
+                    <td class="col-name" style="text-align: center">{{row.CountryName}}</td>
+                    <td class="col-name" style="text-align: center">{{row.ProductCategoryName}}</td>
+                    <td class="col-name">{{row.Price}}</td>
+                    <td class="col-active">
+                      <i [ngClass]="{'fas fa-check-square':row.IsActive, 'far fa-square': !row.IsActive}"
+                         [ngStyle]="{'color': '#337ab7'}"></i>
+                    </td>
+                    <td class="col-action">
+                      <a (click)="confirmDeleteProduct(index)"><i class="far fa-trash-alt"
+                                                                  style='color:#337ab7;'></i></a>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+              <button type="button" class="btn btn-info btn-sm" (click)="addProduct()">
+                <i class="fas fa-plus"></i> Thêm hàng hoá
+              </button>&nbsp;
+            </ng-template>
+          </ngb-tab>
+
+          <ngb-tab id="tab-AttachFile">
+            <ng-template ngbTabTitle>Tài liệu</ng-template>
+            <ng-template ngbTabContent>
+              <div style="display: none">
+                <input type="file" #file placeholder="Choose file" (change)="changeFile(file.files)" multiple
+                       style="display:none;">
+              </div>
+
+              <div class="table-responsive" style="margin-top: 10px;">
+
+                <!-- Table  -->
+                <table class="table table-bordered table-striped table-hover table-fixed">
+
+                  <!-- Table head -->
+                  <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>File</th>
+                    <th>Tên hình ảnh/Tài liệu</th>
+                    <th>Ghi chú</th>
+                    <th>Tên gốc</th>
+                    <th>Ngày update</th>
+                    <th></th>
+                  </tr>
+                  </thead>
+                  <!-- Table head -->
+
+                  <!-- Table body -->
+                  <tbody>
+                  <tr *ngIf="model?.ListAttachFile.length < 1">
+                    <td colspan="7" class="datarow-null">Dữ liệu không tồn tại</td>
+                  </tr>
+                  <tr *ngFor="let row of model.ListAttachFile; let i = index">
+                    <td class="order-number">{{i + 1}}</td>
+                    <td><img [src]="row.FilePathPreview" height="30px"></td>
+                    <td class="col-name"><input type="text"
+                                                [(ngModel)]="this.model.ListAttachFile[i].FileTitle"
+                                                name="FileTitle{{i}}"
+                                                class="form-control form-control-sm" maxlength="250"></td>
+                    <td class="col-name"><input type="text"
+                                                [(ngModel)]="this.model.ListAttachFile[i].Desctiption"
+                                                name="Desctiption{{i}}"
+                                                class="form-control form-control-sm" maxlength="500"></td>
+                    <td style="text-align: left; text-overflow: ellipsis" class="col-name"><a href="javascript:void(0)"
+                                                                                              (click)="openAttachFile(row)">{{row.FileNameOriginal}}</a>
+                    </td>
+                    <td class="col-code">{{row["CreatedDate"] | date : "dd/MM/yyyy"}}</td>
+                    <td class="col-action">
+                      <a (click)="setCurrentAttachFileIndex(i) && file.click()"><i class="fas fa-edit"
+                                                                                   style='color:#337ab7;'></i></a>&nbsp;&nbsp;&nbsp;
+                      <a (click)="deleteAttachFile(i)"><i class="far fa-trash-alt" style='color:#337ab7;'></i></a>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <button type="button" class="btn btn-info btn-sm" (click)="file.click()">
+                <i class="fas fa-plus"></i> Upload tài liệu/Hình ảnh
+              </button>&nbsp;
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset>
+      </div>
+    </div>
+  </form>
+</section>
