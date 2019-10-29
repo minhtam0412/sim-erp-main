@@ -110,15 +110,29 @@ export class SupplierlistComponent implements OnInit, AfterViewInit {
     this.vendorTypeId = -1;
   }
 
-  showConfirmDeleteDialog(cusType) {
+  showConfirmDeleteDialog(vendor) {
     const modalRef = this.modalService.open(ComfirmDialogComponent, {
       backdrop: false, scrollable: true, centered: true
     });
 
     modalRef.result.then((result) => {
       if (result !== undefined && result === true) {
-        // this.deleteData(cusType);
+        this.deleteData(vendor);
       }
+    });
+  }
+
+  deleteData(row) {
+    this.service.delete(row).subscribe(res => {
+      if (res && res.IsOk && res.RepData === true) {
+        this.notificationService.showSucess('Xoá thành công!');
+        this.searchAction();
+      } else {
+        this.notificationService.showError(res.MessageText);
+      }
+    }, err => {
+      console.log(err);
+      this.notificationService.showError('Lỗi xoá thông tin! Vui lòng liên hệ quản trị hệ thống!');
     });
   }
 

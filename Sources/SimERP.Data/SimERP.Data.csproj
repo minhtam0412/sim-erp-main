@@ -162,6 +162,7 @@
     <Compile Include="DBEntities\RefNo.cs" />
     <Compile Include="DBEntities\Role.cs" />
     <Compile Include="DBEntities\RolePermission.cs" />
+    <Compile Include="DBEntities\Stock.cs" />
     <Compile Include="DBEntities\Tax.cs" />
     <Compile Include="DBEntities\TokenRefresh.cs" />
     <Compile Include="DBEntities\Unit.cs" />

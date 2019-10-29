@@ -25,6 +25,7 @@ using AttachFile = SimERP.Business.Models.MasterData.ListDTO.AttachFile;
 using Function = SimERP.Business.Models.MasterData.ListDTO.Function;
 using Product = SimERP.Business.Models.MasterData.ListDTO.Product;
 using ProductCategory = SimERP.Business.Models.MasterData.ListDTO.ProductCategory;
+using Stock = SimERP.Business.Models.MasterData.ListDTO.Stock;
 using Vendor = SimERP.Business.Models.MasterData.ListDTO.Vendor;
 using VendorProduct = SimERP.Business.Models.MasterData.ListDTO.VendorProduct;
 
@@ -49,6 +50,7 @@ namespace SimERP.Controllers
         private IRoleList roleListBO;
         private IPaymentTerm paymentTermBO;
         private IVendorProduct vendorProductBO;
+        private IStock stockBO;
 
 
         #endregion Variables
@@ -73,6 +75,7 @@ namespace SimERP.Controllers
             this.roleListBO = this.roleListBO ?? new RoleListBO();
             this.paymentTermBO = this.paymentTermBO ?? new PaymentTermBO();
             this.vendorProductBO = this.vendorProductBO ?? new VendorProductBO();
+            this.stockBO = this.stockBO ?? new StockBO();
 
         }
         #endregion Contructor
@@ -1076,6 +1079,37 @@ namespace SimERP.Controllers
                 return responeResult;
             }
         }
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/deletevendor")]
+        public ActionResult<ResponeResult> DeleteVendor([FromBody] ReqListDelete objReqListDelete)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckSign(objReqListDelete.AuthenParams,
+                    objReqListDelete.AuthenParams.ClientUserName, objReqListDelete.AuthenParams.ClientPassword,
+                    objReqListDelete.AuthenParams.Sign);
+                if (repData == null || !repData.IsOk)
+                    return repData;
+
+                var dataResult = this.vendorBO.DeleteVendor(Convert.ToInt32(objReqListDelete.ID));
+                if (dataResult)
+                    repData.RepData = dataResult;
+                else
+                    this.AddResponeError(ref repData, this.productBO.getMsgCode(),
+                        this.productBO.GetMessage(this.productBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
         #endregion
 
         #region PackageUnit
@@ -1906,6 +1940,160 @@ namespace SimERP.Controllers
                 else
                     this.AddResponeError(ref repData, paymentTermBO.getMsgCode(),
                         paymentTermBO.GetMessage(this.paymentTermBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+        #endregion
+
+        #region Stock
+        /// <summary>
+        /// Lấy danh sách loại khách hàng
+        /// </summary>
+        /// <param name="objReqListSearch">Params tìm kiếm theo chuẩn hệ thống</param>
+        /// <returns>Danh sách loại khách hàng kiểu json</returns>
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/stock")]
+        public ResponeResult GetStockData([FromBody] ReqListSearch objReqListSearch)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckAuthen();
+                if (repData == null || !repData.IsOk)
+                    return repData;
+
+                objReqListSearch.SearchString = ReplaceUnicode(objReqListSearch.SearchString);
+                var dataResult = this.stockBO.GetData(objReqListSearch);
+                if (dataResult != null)
+                {
+                    repData.RepData = dataResult;
+                    repData.TotalRow = this.stockBO.TotalRows;
+                }
+                else
+                    this.AddResponeError(ref repData, stockBO.getMsgCode(),
+                        stockBO.GetMessage(this.stockBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/savestock")]
+        public ActionResult<ResponeResult> SaveStock([FromBody] ReqListAdd objReqListAdd)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckAuthen();
+                if (repData == null || !repData.IsOk)
+                    return repData;
+
+                Stock rowData = JsonConvert.DeserializeObject<Stock>(objReqListAdd.RowData.ToString());
+                if (rowData != null)
+                {
+                    rowData.SearchString =
+                        ReplaceUnicode(rowData.StockCode + " " + rowData.StockName);
+                    if (objReqListAdd.IsNew)
+                    {
+                        rowData.CreatedBy = this._session.UserID;
+                    }
+                    else
+                    {
+                        rowData.ModifyBy = this._session.UserID;
+                    }
+
+                    var dataResult = this.stockBO.Save(rowData, objReqListAdd.IsNew);
+                    if (dataResult)
+                        repData.RepData = dataResult;
+                    else
+                        this.AddResponeError(ref repData, this.stockBO.getMsgCode(),
+                            this.stockBO.GetMessage(this.stockBO.getMsgCode(), this.LangID));
+
+                    return repData;
+                }
+                else
+                {
+                    this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                        MsgCodeConst.Msg_RequestDataInvalidText, "Lỗi tham số gọi API", null);
+                    Logger.Error("EXCEPTION-CALL API", new Exception("Lỗi tham số gọi API"));
+                    return this.responeResult;
+                }
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/deletestock")]
+        public ActionResult<ResponeResult> DeleteStock([FromBody] ReqListDelete objReqListDelete)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckSign(objReqListDelete.AuthenParams,
+                    objReqListDelete.AuthenParams.ClientUserName, objReqListDelete.AuthenParams.ClientPassword,
+                    objReqListDelete.AuthenParams.Sign);
+                if (repData == null || !repData.IsOk)
+                    return repData;
+
+                var dataResult = this.stockBO.DeleteStock(Convert.ToInt32(objReqListDelete.ID));
+                if (dataResult)
+                    repData.RepData = dataResult;
+                else
+                    this.AddResponeError(ref repData, this.stockBO.getMsgCode(),
+                        this.stockBO.GetMessage(this.stockBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/updateSortOrderStock")]
+        public ActionResult<ResponeResult> UpdateSortOrderStock([FromBody] ReqListUpdateSortOrder reqData)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckSign(reqData.AuthenParams, reqData.AuthenParams.ClientUserName,
+                    reqData.AuthenParams.ClientPassword, reqData.AuthenParams.Sign);
+                if (repData == null || !repData.IsOk)
+                    return repData;
+
+                var dataResult =
+                    this.stockBO.UpdateSortOrder(Convert.ToInt32(reqData.UpID), Convert.ToInt32(reqData.DownID));
+                if (dataResult)
+                    repData.RepData = dataResult;
+                else
+                    this.AddResponeError(ref repData, stockBO.getMsgCode(),
+                        stockBO.GetMessage(this.stockBO.getMsgCode(), this.LangID));
 
                 return repData;
             }

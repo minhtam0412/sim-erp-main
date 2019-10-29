@@ -58,4 +58,12 @@ export class SupplierService {
     this.reqListSearch.AddtionParams['VendorId'] = vendorId;
     return this.httpClient.post<ResponeResult>(this.baseUrl + 'api/list/getvendorinfo', JSON.stringify(this.reqListSearch), {headers});
   }
+
+  delete(row: Vendor) {
+    const headers = new HttpHeaders().set('content-type', 'application/json');
+    this.reqListDelete.AuthenParams = this.authenParams;
+    this.reqListDelete.ID = row.VendorId;
+    const jsonString = JSON.stringify(this.reqListDelete);
+    return this.httpClient.post<ResponeResult>(this.baseUrl + 'api/list/deletevendor', jsonString, {headers});
+  }
 }

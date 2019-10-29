@@ -292,6 +292,7 @@ export class SupplierdetailComponent implements OnInit {
         } else {
 
         }
+        this.modelBackup = this.model;
       } else {
         this.notificationService.showError(res.MessageText);
       }
@@ -308,13 +309,13 @@ export class SupplierdetailComponent implements OnInit {
       // xử lý sau khi đóng dialog, thực hiện load lại dữ liệu nếu muốn
       modalRef.result.then((result) => {
         if (result !== undefined && result != null && result === true) {
-          this.router.navigate(['supplier']);
+          this.router.navigate(['vendor']);
         }
       }, (reason) => {
         console.log(reason);
       });
     } else {
-      this.router.navigate(['supplier']);
+      this.router.navigate(['vendor']);
     }
   }
 }

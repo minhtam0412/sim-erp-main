@@ -71,7 +71,7 @@ svg {
 }
 
 .ant-select-selection {
-  border-radius: 1;
+  border-radius: 1px;
   height: 25px;
   max-height: 25px;
   min-height: 25px;

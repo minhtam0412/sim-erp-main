@@ -1,0 +1,93 @@
+<form #form="ngForm">
+  <div class="modal-content">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h4 class="modal-title">{{isAddState ? 'Thêm mới' : 'Chỉnh sửa'}}</h4>
+      <button type="button" class="close" data-dismiss="modal" (click)="closeDialog()">&times;</button>
+    </div>
+
+    <!-- Modal body -->
+    <div class="modal-body">
+      <div class="form_content">
+        <div class="row">
+          <div class="col-sm-3 text-right"><label control-label>Mã kho</label> <label
+            class="control-label-require">*</label></div>
+          <div class="col-sm-9">
+            <input type="text" #CustomerTypeCode='ngModel' maxlength="50" [disabled]="!isAddState"
+                   class="form-control form-control-sm" [(ngModel)]="model.StockCode"
+                   name="CustomerTypeCode" required
+                   [ngClass]="{ 'is-invalid': CustomerTypeCode.touched  && CustomerTypeCode.invalid  }">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-3 text-right"><label control-label>Tên kho</label> <label
+            class="control-label-require">*</label></div>
+          <div class="col-sm-9">
+            <input type="text" class="form-control form-control-sm" #CustomerTypeId='ngModel'
+                   [(ngModel)]="model.StockName" name="CustomerTypeName" required maxlength="250"
+                   [ngClass]="{ 'is-invalid': CustomerTypeId.touched  && CustomerTypeId.invalid  }">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-3 text-right"><label control-label>Địa chỉ</label></div>
+          <div class="col-sm-9">
+            <input type="text" class="form-control form-control-sm" #Address='ngModel'
+                   [(ngModel)]="model.Address" name="Address" maxlength="250"
+                   [ngClass]="{ 'is-invalid': Address.touched  && Address.invalid  }">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-3 text-right"><label control-label>Latitude</label></div>
+          <div class="col-sm-9">
+            <input type="number" pattern="[0-9]{0,15}" class="form-control form-control-sm" #Latitude='ngModel'
+                   [(ngModel)]="model.Latitude" name="Latitude" maxlength="20"
+                   [ngClass]="{ 'is-invalid': Latitude.touched  && Latitude.invalid  }">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-3 text-right"><label control-label>Longitude</label></div>
+          <div class="col-sm-9">
+            <input type="number" pattern="[0-9]{0,15}" class="form-control form-control-sm" #Longitude='ngModel'
+                   [(ngModel)]="model.Longitude" name="Longitude" maxlength="20"
+                   [ngClass]="{ 'is-invalid': Longitude.touched  && Longitude.invalid  }">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-3 text-right"><label control-label>Ghi chú</label></div>
+          <div class="col-sm-9">
+            <textarea type="text" style="border-bottom: 1px solid #ced4da; height: auto"
+                      class="form-control form-control-sm"
+                      rows="3" [(ngModel)]="model.Notes"
+                      name="Notes"
+                      [ngClass]="{'is-invalid' : model.Notes!= undefined && model.Notes.length > 250}"></textarea>
+          </div>
+        </div>
+        <div class="row" [ngStyle]="{'margin-top':'10px', 'margin-left':'10px'}">
+          <label class="col-md-3 control-label"></label>
+          <div class="custom-control custom-checkbox mb-3">
+            <input type="checkbox" class="custom-control-input" id="IsActive" [(ngModel)]="model.IsActive"
+                   name="IsActive">
+            <label class="custom-control-label" for="IsActive">Sử dụng</label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal footer -->
+    <div class="modal-footer">
+      <button type="button" name="btnSave" *appCheckpermission="['SAVE']"
+              [disabled]="form.invalid || (model.Notes != undefined && model.Notes.length > 250)"
+              class="btn btn-info btn-sm"
+              (click)="saveData(false)">
+        <i class="far fa-save"></i> Lưu
+      </button>
+      <button type="button" name="btnSaveContinue"
+              [disabled]="form.invalid || (model.Notes != undefined && model.Notes.length > 250)"
+              class="btn btn-info btn-sm"
+              (click)="saveData(true)" *appCheckpermission="['SAVE','ADD']">
+        <i class="far fa-save"></i> Lưu & Thêm mới
+      </button>&nbsp;
+      <button type="button" class="btn btn-outline-secondary btn-sm" (click)="closeDialog()">Đóng
+      </button>
+    </div>
+  </div>
+</form>

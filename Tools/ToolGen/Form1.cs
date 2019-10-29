@@ -13,8 +13,8 @@ namespace ToolGen
 {
     public partial class Form1 : Form
     {
-        //public static string ConnectionString = "Data Source=192.168.1.8;Initial Catalog=SimERP;Persist Security Info=True;User ID=admin;Password=admin";
-        public static string ConnectionString = "Data Source=45.119.84.185;Initial Catalog=ADS;Persist Security Info=True;User ID=sa;Password=123456aqZ;MultipleActiveResultSets=true;Max Pool Size=300;Min Pool Size=5;connect timeout=0;";
+        public static string ConnectionString = "Data Source=192.168.1.8;Initial Catalog=SimERP;Persist Security Info=True;User ID=admin;Password=admin";
+        //public static string ConnectionString = "Data Source=45.119.84.185;Initial Catalog=ADS;Persist Security Info=True;User ID=sa;Password=123456aqZ;MultipleActiveResultSets=true;Max Pool Size=300;Min Pool Size=5;connect timeout=0;";
         private SqlConnection connection;
 
         public enum DataType
@@ -27,8 +27,8 @@ namespace ToolGen
             NONE
         };
 
-        List<string> lstString = new List<string> { "varchar", "nvarchar" };
-        List<string> lstNumber = new List<string> { "numeric", "int" };
+        List<string> lstString = new List<string> { "varchar", "nvarchar", "ntext" };
+        List<string> lstNumber = new List<string> { "numeric", "int", "bigint" };
         List<string> lstGuid = new List<string> { "uniqueidentifier" };
         List<string> lstBoolean = new List<string> { "bit" };
         List<string> lstDate = new List<string> { "datetimeoffset" };

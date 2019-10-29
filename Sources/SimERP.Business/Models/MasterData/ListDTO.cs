@@ -160,4 +160,9 @@ namespace SimERP.Business.Models.MasterData.ListDTO
         public string CountryName { get; set; }
         public string ProductCategoryName { get; set; }
     }
+
+    public class Stock : SimERP.Data.DBEntities.Stock
+    {
+        public string UserName { get; set; }
+    }
 }

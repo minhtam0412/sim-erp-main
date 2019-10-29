@@ -217,7 +217,7 @@ namespace SimERP.Business.Businesses.List
             }
         }
 
-        public bool DeleteVendorType(int id)
+        public bool DeleteVendor(int id)
         {
             try
             {
@@ -231,7 +231,7 @@ namespace SimERP.Business.Businesses.List
             }
             catch (Exception ex)
             {
-                this.AddMessage(MessageCode.MSGCODE_003, "Delete VendorType unsucessfull");
+                this.AddMessage(MessageCode.MSGCODE_003, "Delete Vendor unsucessful");
                 Logger.Error(GetType(), ex);
                 return false;
             }

@@ -40,6 +40,7 @@ namespace SimERP.Data.DBEntities
         public virtual DbSet<RefNo> RefNo { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<RolePermission> RolePermission { get; set; }
+        public virtual DbSet<Stock> Stock { get; set; }
         public virtual DbSet<Tax> Tax { get; set; }
         public virtual DbSet<TokenRefresh> TokenRefresh { get; set; }
         public virtual DbSet<Unit> Unit { get; set; }
@@ -65,6 +66,8 @@ namespace SimERP.Data.DBEntities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
+
             modelBuilder.Entity<AttachFile>(entity =>
             {
                 entity.HasKey(e => e.AttachId);
@@ -688,6 +691,46 @@ namespace SimERP.Data.DBEntities
                 entity.ToTable("RolePermission", "sec");
             });
 
+            modelBuilder.Entity<Stock>(entity =>
+            {
+                entity.ToTable("Stock", "inv");
+
+                entity.HasIndex(e => e.StockCode)
+                    .HasName("IX_Stock")
+                    .IsUnique();
+
+                entity.Property(e => e.Address).HasMaxLength(250);
+
+                entity.Property(e => e.IsActive)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.IsDefaultForPurchase)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.IsDefaultForSale)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Latitude).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.Longitude).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.Notes).HasMaxLength(250);
+
+                entity.Property(e => e.SearchString).HasMaxLength(2000);
+
+                entity.Property(e => e.StockCode)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.StockName)
+                    .IsRequired()
+                    .HasMaxLength(250);
+            });
+
             modelBuilder.Entity<Tax>(entity =>
             {
                 entity.ToTable("Tax", "item");
@@ -913,7 +956,8 @@ namespace SimERP.Data.DBEntities
 
             modelBuilder.Entity<VendorProduct>(entity =>
             {
-                entity.HasKey(e => e.RowId);
+                entity.HasKey(e => e.RowId)
+                    .HasName("Product_Supplier");
 
                 entity.ToTable("VendorProduct", "list");
 

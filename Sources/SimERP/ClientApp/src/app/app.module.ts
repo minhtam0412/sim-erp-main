@@ -48,8 +48,6 @@ import {ProductdetailComponent} from './lists/product/productdetail/productdetai
 import {NgSelectModule} from '@ng-select/ng-select';
 import {UserpermissionComponent} from './systems/userpermission/userpermission/userpermission.component';
 import {CheckmenupermissionDirective} from './common/checkpermission/checkmenupermission.directive';
-import {SupplierlistComponent} from './lists/supplier/supplierlist/supplierlist.component';
-import {SupplierdetailComponent} from './lists/supplier/supplierdetail/supplierdetail.component';
 import {CustomerdetailComponent} from './lists/customer/customerdetail/customerdetail.component';
 import {EncrDecrService} from './common/security/encr-decr.service';
 import {NgZorroAntdModule, NZ_I18N, NzIconModule, vi_VN} from 'ng-zorro-antd';
@@ -58,6 +56,10 @@ import vi from '@angular/common/locales/vi';
 import {IconsProviderModule} from './icons-provider.module';
 import {ZorrocustomComponent} from './lists/customcontrol/zorrocustom/zorrocustom.component';
 import {PopupproductComponent} from './lists/supplier/popupproduct/popupproduct.component';
+import {SupplierlistComponent} from './lists/supplier/vendorlist/supplierlist.component';
+import {SupplierdetailComponent} from './lists/supplier/vendordetail/supplierdetail.component';
+import {StocklistComponent} from './lists/stock/stocklist/stocklist.component';
+import {StockdetailComponent} from './lists/stock/stockdetail/stockdetail.component';
 
 registerLocaleData(vi);
 
@@ -106,7 +108,9 @@ export function tokenGetter() {
     UserpermissionComponent,
     CustomerdetailComponent,
     ZorrocustomComponent,
-    PopupproductComponent
+    PopupproductComponent,
+    StocklistComponent,
+    StockdetailComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -150,7 +154,8 @@ export function tokenGetter() {
       CustomertypedetailComponent,
       ChangepasswordComponent,
       ProductdetailComponent,
-      PopupproductComponent
+      PopupproductComponent,
+      StockdetailComponent
     ],
 
 })

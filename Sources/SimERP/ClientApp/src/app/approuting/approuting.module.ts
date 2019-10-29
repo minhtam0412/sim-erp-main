@@ -21,10 +21,11 @@ import {ProductCategoryComponent} from '../lists/productcategory/product-categor
 import {CustomerComponent} from '../lists/customer/customer/customer.component';
 import {RolelistComponent} from '../lists/rolelist/rolelist/rolelist.component';
 import {UserpermissionComponent} from '../systems/userpermission/userpermission/userpermission.component';
-import {SupplierlistComponent} from '../lists/supplier/supplierlist/supplierlist.component';
-import {SupplierdetailComponent} from '../lists/supplier/supplierdetail/supplierdetail.component';
 import {CustomerdetailComponent} from '../lists/customer/customerdetail/customerdetail.component';
 import {ZorrocustomComponent} from '../lists/customcontrol/zorrocustom/zorrocustom.component';
+import {SupplierlistComponent} from '../lists/supplier/vendorlist/supplierlist.component';
+import {SupplierdetailComponent} from '../lists/supplier/vendordetail/supplierdetail.component';
+import {StocklistComponent} from '../lists/stock/stocklist/stocklist.component';
 
 
 const routes: Routes = [
@@ -45,10 +46,11 @@ const routes: Routes = [
       {path: 'customer/:id', component: CustomerdetailComponent},
       {path: 'rolelist', component: RolelistComponent},
       {path: 'userpermission', component: UserpermissionComponent},
-      {path: 'supplier', component: SupplierlistComponent},
-      {path: 'supplierdetail', component: SupplierdetailComponent},
-      {path: 'supplierdetail/:id', component: SupplierdetailComponent},
+      {path: 'vendor', component: SupplierlistComponent},
+      {path: 'vendordetail', component: SupplierdetailComponent},
+      {path: 'vendordetail/:id', component: SupplierdetailComponent},
       {path: 'zorrocustom', component: ZorrocustomComponent},
+      {path: 'stock', component: StocklistComponent},
     ]
   },
   {

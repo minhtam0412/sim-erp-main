@@ -1,0 +1,108 @@
+<div class="header_content">
+  <section class="form_content">
+    <form>
+      <div class="row">
+        <div class="col-md-12">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Danh mục</a></li>
+              <li class="breadcrumb-item active" aria-current="page"><a href="#" [routerLink]="'/customertype'">Quản lý
+                kho</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4 text-left">
+          <p class="text-uppercase"
+             style="font-size:18px;color: #587792; font-weight:bold; font-family: 'Lato', sans-serif;">
+            <span>Kho</span>
+          </p>
+        </div>
+        <div class="col-sm-8 text-right">
+          <div class="form-group">
+            <button type="button" class="btn btn-success btn-sm" (click)="searchData()" *appCheckpermission="['VIEW']">
+              <i class="fab fa-searchengin"></i> Tìm kiếm
+            </button>&nbsp;
+            <button type="button" class="btn btn-primary btn-sm" *appCheckpermission="['ADD']"
+                    (click)="openDialog()">
+              <i class="fas fa-plus-circle"></i> Thêm mới
+            </button>&nbsp;
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-3">
+          <div class="row">
+            <label class="col-md-3 control-label">Tìm kiếm</label>
+            <div class="col-md-9">
+              <div class="input-group ">
+                <input type="text" [(ngModel)]="searchString" name="searchString" class="form-control"
+                       (keydown.enter)="searchData()">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>
+<div class="main_content">
+  <section class="form_content">
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover table-striped">
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Mã kho</th>
+          <th>Tên kho</th>
+          <th>Địa chỉ</th>
+          <th>Ghi chú</th>
+          <th>Người tạo</th>
+          <th class="col-active">Sử dụng</th>
+          <th class="col-sortorder">Sort Order</th>
+          <th class="col-action"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngIf="!dataIsAvailable">
+          <td colspan="9" class="datarow-null">Dữ liệu không tồn lại</td>
+        </tr>
+        <tr *ngFor="let row of lstDataResult; let index = index">
+          <td class="order-number">{{index + 1}}</td>
+          <td class="col-code">
+            <a (click)="openDialog(row)"> {{row.StockCode}}</a>
+          </td>
+          <td class="col-name">{{row.StockName}}</td>
+          <td class="col-name">{{row.Address}}</td>
+          <td class="col-note">{{row.Notes}}</td>
+          <td class="col-name">{{row.UserName}}</td>
+          <td>
+            <i [ngClass]="{'fas fa-check-square':row.IsActive, 'far fa-square': !row.IsActive}"
+               [ngStyle]="{'color': '#337ab7'}"></i>
+          </td>
+          <td class="col-moveaction">
+            <a (click)="index == 0 ? 'javascript:void(0)' : moveUp(index)">
+              <i class="fas fa-arrow-alt-circle-up" style="color:forestgreen; font-size:14px;"></i>
+            </a>&nbsp;&nbsp;&nbsp;
+            <a (click)="index == pagingComponent.getLimit() - 1 ? 'javascript:void(0)' : moveDown(index)">
+              <i class="fas fa-arrow-alt-circle-down" style="color:forestgreen; font-size:14px;"></i>
+            </a>
+          </td>
+          <td class="col-action">
+            <a (click)="openDialog(row)" *appCheckpermission="['EDIT']">
+              <i class="fas fa-edit" style='color:#337ab7'></i>&nbsp;&nbsp;&nbsp;
+            </a>
+            <a *appCheckpermission="['DEL']" (click)="showConfirmDeleteDialog(row)">
+              <i class="far fa-trash-alt " style='color:#337ab7'></i>
+            </a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <app-pagination (goPage)="goToPage($event)" (changeLimit)="changeLimit()" (goNext)="onNext() " (goPrev)="onPrev() "
+                    [pagesToShow]="5 " [page]="page" [perPage]="limit" [count]="total"></app-pagination>
+  </section>
+</div>
+

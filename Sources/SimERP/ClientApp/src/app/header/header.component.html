@@ -237,12 +237,16 @@
               <a [routerLink]='["/customer"]' [routerLinkActive]='["customer"]'>Quản lý khách hàng</a>
             </li>
             <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'
-                *appCheckmenupermission="'supplier'; Fn 'VIEW'">
-              <a [routerLink]='["/supplier"]' [routerLinkActive]='["supplier"]'>Quản lý nhà cung cấp</a>
+                *appCheckmenupermission="'vendor'; Fn 'VIEW'">
+              <a [routerLink]='["/vendor"]' [routerLinkActive]='["vendor"]'>Quản lý nhà cung cấp</a>
             </li>
             <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'
                 *appCheckmenupermission="'zorrocustom'; Fn 'VIEW'">
               <a [routerLink]='["/zorrocustom"]' [routerLinkActive]='["zorrocustom"]'>Custom Control Zorro</a>
+            </li>
+            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'
+                *appCheckmenupermission="'stock'; Fn 'VIEW'">
+            <a [routerLink]='["/stock"]' [routerLinkActive]='["stock"]'>Quản lý kho</a>
             </li>
           </ul>
         </li>

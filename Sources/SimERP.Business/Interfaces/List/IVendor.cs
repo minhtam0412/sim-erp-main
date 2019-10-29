@@ -12,7 +12,7 @@ namespace SimERP.Business.Interfaces.List
 
         bool Save(Vendor rowData, bool isNew);
 
-        bool DeleteVendorType(int id);
+        bool DeleteVendor(int id);
 
         bool UpdateSortOrder(int upID, int downID);
 

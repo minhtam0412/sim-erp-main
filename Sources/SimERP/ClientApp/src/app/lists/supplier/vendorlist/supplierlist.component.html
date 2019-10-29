@@ -6,7 +6,7 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="#">Danh mục</a></li>
-              <li class="breadcrumb-item active" aria-current="page"><a href="#" [routerLink]="'/supplier'">Quản lý nhà
+              <li class="breadcrumb-item active" aria-current="page"><a href="#" [routerLink]="'/vendor'">Quản lý nhà
                 cung cấp</a></li>
             </ol>
           </nav>
@@ -24,7 +24,7 @@
             <button type="button" style="" class="btn btn-success btn-sm" (click)="searchAction()">
               <i class="fab fa-searchengin" *appCheckpermission="['VIEW']"></i> Tìm kiếm
             </button>&nbsp;
-            <button type="button" style="" class="btn btn-primary btn-sm" [routerLink]="['/supplierdetail']"
+            <button type="button" style="" class="btn btn-primary btn-sm" [routerLink]="['/vendordetail']"
                     *appCheckpermission="['ADD']">
               <i class="fas fa-plus-circle"></i> Thêm mới
             </button>&nbsp;
@@ -127,7 +127,7 @@
                [ngStyle]="{'color': '#337ab7'}"></i>
           </td>
           <td class="col-action">
-            <a href="javascript:void(0)" [routerLink]="['/supplierdetail', row.VendorId]"><i class="fas fa-edit"
+            <a href="javascript:void(0)" [routerLink]="['/vendordetail', row.VendorId]"><i class="fas fa-edit"
                                                                                              style='color:#337ab7;'></i></a>&nbsp;&nbsp;&nbsp;
             <a (click)="showConfirmDeleteDialog(row)"><i class="far fa-trash-alt" style='color:#337ab7;'></i></a>
           </td>
