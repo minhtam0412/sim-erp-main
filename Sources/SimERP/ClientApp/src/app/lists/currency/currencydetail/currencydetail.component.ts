@@ -1,28 +1,28 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {NotificationService} from '../../../common/notifyservice/notification.service';
-import {Stock} from '../model/stock';
-import {StockService} from '../stock.service';
+import {Currency} from '../model/currency';
+import {CurrencyService} from '../currency.service';
 
 @Component({
-  selector: 'app-stockdetail',
-  templateUrl: './stockdetail.component.html',
-  styleUrls: ['./stockdetail.component.css']
+  selector: 'app-currencydetail',
+  templateUrl: './currencydetail.component.html',
+  styleUrls: ['./currencydetail.component.css']
 })
-export class StockdetailComponent implements OnInit {
+export class CurrencydetailComponent implements OnInit {
 
   @Input() isAddState = true;
-  @Input() rowSelected: Stock;
+  @Input() rowSelected: Currency;
   private resultCloseDialog = false;
-  model: Stock;
+  model: Currency;
 
   constructor(private activeModal: NgbActiveModal, private notificationService: NotificationService,
-              private service: StockService) {
+              private service: CurrencyService) {
   }
 
   ngOnInit() {
     if (this.isAddState) {
-      this.model = new Stock();
+      this.model = new Currency();
     } else {
       this.model = this.rowSelected;
     }
@@ -50,14 +50,14 @@ export class StockdetailComponent implements OnInit {
           this.resultCloseDialog = true;
           if (this.isAddState) {
             if (isContinue) {
-              this.model = new Stock();
+              this.model = new Currency();
             } else {
               this.closeDialog();
             }
           } else {
             if (isContinue) {
               this.isAddState = true;
-              this.model = new Stock();
+              this.model = new Currency();
             } else {
               this.closeDialog();
             }
@@ -74,5 +74,4 @@ export class StockdetailComponent implements OnInit {
       }
     });
   }
-
 }

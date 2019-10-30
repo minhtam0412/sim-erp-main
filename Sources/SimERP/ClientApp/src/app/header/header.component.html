@@ -246,7 +246,15 @@
             </li>
             <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'
                 *appCheckmenupermission="'stock'; Fn 'VIEW'">
-            <a [routerLink]='["/stock"]' [routerLinkActive]='["stock"]'>Quản lý kho</a>
+              <a [routerLink]='["/stock"]' [routerLinkActive]='["stock"]'>Quản lý kho</a>
+            </li>
+            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'
+                *appCheckmenupermission="'currency'; Fn 'VIEW'">
+              <a [routerLink]='["/currency"]' [routerLinkActive]='["currency"]'>Quản lý loại tiền tệ</a>
+            </li>
+            <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'
+                *appCheckmenupermission="'exchangerate'; Fn 'VIEW'">
+              <a [routerLink]='["/exchangerate"]' [routerLinkActive]='["exchangerate"]'>Quản lý tỷ giá</a>
             </li>
           </ul>
         </li>

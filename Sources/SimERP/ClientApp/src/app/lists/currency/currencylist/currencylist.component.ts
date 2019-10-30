@@ -1,24 +1,25 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {Stock} from '../model/stock';
 import {PaginationComponent} from '../../../pagination/pagination.component';
-import {ToastrService} from 'ngx-toastr';
-import {ComfirmDialogComponent} from '../../../common/comfirm-dialog/comfirm-dialog.component';
-import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
-import {NotificationService} from '../../../common/notifyservice/notification.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
+import {ToastrService} from 'ngx-toastr';
 import {AuthenService} from '../../../systems/authen.service';
-import {StockService} from '../stock.service';
-import {StockdetailComponent} from '../stockdetail/stockdetail.component';
+import {NotificationService} from '../../../common/notifyservice/notification.service';
+import {ComfirmDialogComponent} from '../../../common/comfirm-dialog/comfirm-dialog.component';
+import {Currency} from '../model/currency';
+import {CurrencyService} from '../currency.service';
+import {CurrencydetailComponent} from '../currencydetail/currencydetail.component';
+import {ListStatus} from '../../../common/masterdata/commondata';
 
 @Component({
-  selector: 'app-stocklist',
-  templateUrl: './stocklist.component.html',
-  styleUrls: ['./stocklist.component.css']
+  selector: 'app-currencylist',
+  templateUrl: './currencylist.component.html',
+  styleUrls: ['./currencylist.component.css']
 })
-export class StocklistComponent implements OnInit, AfterViewInit {
+export class CurrencylistComponent implements OnInit, AfterViewInit {
 
   dataIsAvailable: boolean; // xác định có data trả về khi tìm kiếm
-  lstDataResult: Stock[] = []; // danh sách CustomerType
+  lstDataResult: Currency[] = []; // danh sách CustomerType
   page = 1; // chỉ số trang hiện tại
   limit = 10; // số record cần hiển thị trên 1 trang
   total = 10; // tổng số record trả về
@@ -26,8 +27,9 @@ export class StocklistComponent implements OnInit, AfterViewInit {
   isActive = -1; // binding combo Trạng thái
 
   @ViewChild(PaginationComponent, {static: false}) pagingComponent: PaginationComponent;
+  lstStatus = ListStatus;
 
-  constructor(private modalService: NgbModal, private service: StockService, private spinnerService: Ng4LoadingSpinnerService,
+  constructor(private modalService: NgbModal, private service: CurrencyService, private spinnerService: Ng4LoadingSpinnerService,
               private toastr: ToastrService, private authenService: AuthenService, private notificationService: NotificationService) {
   }
 
@@ -72,15 +74,15 @@ export class StocklistComponent implements OnInit, AfterViewInit {
 
 
   // mở các dialog
-  openDialog(rowData?: Stock) {
+  openDialog(rowData?: Currency) {
     if (rowData !== undefined) {
-      if (!this.authenService.isHasPermission('stock', 'EDIT')) {
+      if (!this.authenService.isHasPermission('currency', 'EDIT')) {
         this.notificationService.showRestrictPermission();
         return;
       }
     }
 
-    const modalRef = this.modalService.open(StockdetailComponent, {
+    const modalRef = this.modalService.open(CurrencydetailComponent, {
       backdrop: 'static', scrollable: true, centered: true, backdropClass: 'backdrop-modal'
     });
 
@@ -114,7 +116,7 @@ export class StocklistComponent implements OnInit, AfterViewInit {
     });
   }
 
-  deleteData(row: Stock) {
+  deleteData(row: Currency) {
     this.service.deleteData(row).subscribe(res => {
       if (res !== undefined) {
         if (!res.IsOk) {
@@ -170,8 +172,8 @@ export class StocklistComponent implements OnInit, AfterViewInit {
   }
 
   moveUp(index: number) {
-    const upID = this.lstDataResult[index].StockId;
-    const downID = this.lstDataResult[index - 1].StockId;
+    const upID = this.lstDataResult[index].CurrencyId;
+    const downID = this.lstDataResult[index - 1].CurrencyId;
     this.service.updateSortOrder(upID, downID).subscribe(res => {
       if (res === undefined || !res.IsOk) {
         this.toastr.error('Lỗi cập nhật Sort Order!');
@@ -183,8 +185,8 @@ export class StocklistComponent implements OnInit, AfterViewInit {
   }
 
   moveDown(index: number) {
-    const downID = this.lstDataResult[index].StockId;
-    const upID = this.lstDataResult[index + 1].StockId;
+    const downID = this.lstDataResult[index].CurrencyId;
+    const upID = this.lstDataResult[index + 1].CurrencyId;
     this.service.updateSortOrder(upID, downID).subscribe(res => {
       if (res === undefined || !res.IsOk) {
         this.toastr.error('Lỗi cập nhật Sort Order!');
@@ -195,4 +197,8 @@ export class StocklistComponent implements OnInit, AfterViewInit {
     });
   }
 
+
+  clearIsActive() {
+    this.isActive = -1;
+  }
 }

@@ -26,6 +26,8 @@ import {ZorrocustomComponent} from '../lists/customcontrol/zorrocustom/zorrocust
 import {SupplierlistComponent} from '../lists/supplier/vendorlist/supplierlist.component';
 import {SupplierdetailComponent} from '../lists/supplier/vendordetail/supplierdetail.component';
 import {StocklistComponent} from '../lists/stock/stocklist/stocklist.component';
+import {CurrencylistComponent} from '../lists/currency/currencylist/currencylist.component';
+import {ExchangeratelistComponent} from '../lists/exchangerate/exchangeratelist/exchangeratelist.component';
 
 
 const routes: Routes = [
@@ -51,6 +53,8 @@ const routes: Routes = [
       {path: 'vendordetail/:id', component: SupplierdetailComponent},
       {path: 'zorrocustom', component: ZorrocustomComponent},
       {path: 'stock', component: StocklistComponent},
+      {path: 'currency', component: CurrencylistComponent},
+      {path: 'exchangerate', component: ExchangeratelistComponent},
     ]
   },
   {

@@ -18,7 +18,7 @@ export class MasterdataService {
     this.baseUrl = ROOT_URL;
   }
 
-  getData(apiURL: string) {
+  getData(apiURL: string, isActive?: boolean) {
     this.reqListSearch.MaxRow = Key_MaxRow;
     this.reqListSearch.AuthenParams = this.authenParams;
     const jsonString = JSON.stringify(this.reqListSearch);
@@ -60,5 +60,9 @@ export class MasterdataService {
 
   getProductData() {
     return this.getData('api/list/product');
+  }
+
+  getCurrencyData() {
+    return this.getData('api/list/currency', true);
   }
 }

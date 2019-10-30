@@ -88,9 +88,8 @@ export class SupplierlistComponent implements OnInit, AfterViewInit {
     // xử lý sau khi đóng dialog, thực hiện load lại dữ liệu nếu muốn
     modalRef.result.then((result) => {
       if (result !== undefined && result === true) {
-        console.log(result);
-        // const startRow = this.getStartRow();
-        // this.LoadData(startRow);
+        const startRow = this.getStartRow();
+        this.loadData(startRow);
       }
     }, (reason) => {
       console.log(reason);

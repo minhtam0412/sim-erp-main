@@ -141,6 +141,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Businesses\List\AttachFileBO.cs" />
+    <Compile Include="Businesses\List\ExchangeRateBO.cs" />
+    <Compile Include="Businesses\List\CurrencyBO.cs" />
     <Compile Include="Businesses\List\StockBO.cs" />
     <Compile Include="Businesses\List\PaymentTermBO.cs" />
     <Compile Include="Businesses\List\ProductBO.cs" />
@@ -161,6 +163,8 @@
     <Compile Include="Businesses\User\UserPermissionBO.cs" />
     <Compile Include="Businesses\User\UserBO.cs" />
     <Compile Include="Interfaces\List\IAttachFile.cs" />
+    <Compile Include="Interfaces\List\IExchangeRate.cs" />
+    <Compile Include="Interfaces\List\ICurrency.cs" />
     <Compile Include="Interfaces\List\IStock.cs" />
     <Compile Include="Interfaces\List\IPaymentTerm.cs" />
     <Compile Include="Interfaces\List\IProduct.cs" />

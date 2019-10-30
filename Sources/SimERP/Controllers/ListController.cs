@@ -28,6 +28,8 @@ using ProductCategory = SimERP.Business.Models.MasterData.ListDTO.ProductCategor
 using Stock = SimERP.Business.Models.MasterData.ListDTO.Stock;
 using Vendor = SimERP.Business.Models.MasterData.ListDTO.Vendor;
 using VendorProduct = SimERP.Business.Models.MasterData.ListDTO.VendorProduct;
+using Currency = SimERP.Business.Models.MasterData.ListDTO.Currency;
+using ExchangeRate = SimERP.Business.Models.MasterData.ListDTO.ExchangeRate;
 
 namespace SimERP.Controllers
 {
@@ -51,6 +53,8 @@ namespace SimERP.Controllers
         private IPaymentTerm paymentTermBO;
         private IVendorProduct vendorProductBO;
         private IStock stockBO;
+        private ICurrency currencyBO;
+        private IExchangeRate exchangeRateBO;
 
 
         #endregion Variables
@@ -76,6 +80,8 @@ namespace SimERP.Controllers
             this.paymentTermBO = this.paymentTermBO ?? new PaymentTermBO();
             this.vendorProductBO = this.vendorProductBO ?? new VendorProductBO();
             this.stockBO = this.stockBO ?? new StockBO();
+            this.currencyBO = this.currencyBO ?? new CurrencyBO();
+            this.exchangeRateBO = this.exchangeRateBO ?? new ExchangeRateBO();
 
         }
         #endregion Contructor
@@ -2094,6 +2100,272 @@ namespace SimERP.Controllers
                 else
                     this.AddResponeError(ref repData, stockBO.getMsgCode(),
                         stockBO.GetMessage(this.stockBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+        #endregion
+
+        #region Currency
+        /// <summary>
+        /// Lấy danh sách loại khách hàng
+        /// </summary>
+        /// <param name="objReqListSearch">Params tìm kiếm theo chuẩn hệ thống</param>
+        /// <returns>Danh sách loại khách hàng kiểu json</returns>
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/currency")]
+        public ResponeResult GetCurrencyData([FromBody] ReqListSearch objReqListSearch)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckAuthen();
+                if (repData == null || !repData.IsOk)
+                    return repData;
+
+                objReqListSearch.SearchString = ReplaceUnicode(objReqListSearch.SearchString);
+                var dataResult = this.currencyBO.GetData(objReqListSearch);
+                if (dataResult != null)
+                {
+                    repData.RepData = dataResult;
+                    repData.TotalRow = this.currencyBO.TotalRows;
+                }
+                else
+                    this.AddResponeError(ref repData, currencyBO.getMsgCode(),
+                        currencyBO.GetMessage(this.currencyBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/savecurrency")]
+        public ActionResult<ResponeResult> SaveCurrency([FromBody] ReqListAdd objReqListAdd)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckAuthen();
+                if (repData == null || !repData.IsOk)
+                    return repData;
+
+                Currency rowData = JsonConvert.DeserializeObject<Currency>(objReqListAdd.RowData.ToString());
+                if (rowData != null)
+                {
+                    rowData.SearchString =
+                        ReplaceUnicode(rowData.CurrencyId + " " + rowData.CurrencyName);
+                    if (objReqListAdd.IsNew)
+                    {
+                        rowData.CreatedBy = this._session.UserID;
+                    }
+                    else
+                    {
+                        rowData.ModifyBy = this._session.UserID;
+                    }
+
+                    var dataResult = this.currencyBO.Save(rowData, objReqListAdd.IsNew);
+                    if (dataResult)
+                        repData.RepData = dataResult;
+                    else
+                        this.AddResponeError(ref repData, this.currencyBO.getMsgCode(),
+                            this.currencyBO.GetMessage(this.currencyBO.getMsgCode(), this.LangID));
+
+                    return repData;
+                }
+                else
+                {
+                    this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                        MsgCodeConst.Msg_RequestDataInvalidText, "Lỗi tham số gọi API", null);
+                    Logger.Error("EXCEPTION-CALL API", new Exception("Lỗi tham số gọi API"));
+                    return this.responeResult;
+                }
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/deletecurrency")]
+        public ActionResult<ResponeResult> DeleteCurrency([FromBody] ReqListDelete objReqListDelete)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckSign(objReqListDelete.AuthenParams,
+                    objReqListDelete.AuthenParams.ClientUserName, objReqListDelete.AuthenParams.ClientPassword,
+                    objReqListDelete.AuthenParams.Sign);
+                if (repData == null || !repData.IsOk)
+                    return repData;
+
+                var dataResult = this.currencyBO.DeleteCurrency(Convert.ToString(objReqListDelete.ID));
+                if (dataResult)
+                    repData.RepData = dataResult;
+                else
+                    this.AddResponeError(ref repData, this.currencyBO.getMsgCode(),
+                        this.currencyBO.GetMessage(this.currencyBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/updateSortOrdercurrency")]
+        public ActionResult<ResponeResult> UpdateSortOrdercurrency([FromBody] ReqListUpdateSortOrder reqData)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckSign(reqData.AuthenParams, reqData.AuthenParams.ClientUserName,
+                    reqData.AuthenParams.ClientPassword, reqData.AuthenParams.Sign);
+                if (repData == null || !repData.IsOk)
+                    return repData;
+
+                var dataResult =
+                    this.currencyBO.UpdateSortOrder(Convert.ToInt32(reqData.UpID), Convert.ToInt32(reqData.DownID));
+                if (dataResult)
+                    repData.RepData = dataResult;
+                else
+                    this.AddResponeError(ref repData, currencyBO.getMsgCode(),
+                        currencyBO.GetMessage(this.currencyBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+        #endregion
+
+        #region ExchangeRate
+        /// <summary>
+        /// Lấy danh sách loại khách hàng
+        /// </summary>
+        /// <param name="objReqListSearch">Params tìm kiếm theo chuẩn hệ thống</param>
+        /// <returns>Danh sách loại khách hàng kiểu json</returns>
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/exchangerate")]
+        public ResponeResult GetExchangeRateData([FromBody] ReqListSearch objReqListSearch)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckAuthen();
+                if (repData == null || !repData.IsOk)
+                    return repData;
+
+                objReqListSearch.SearchString = ReplaceUnicode(objReqListSearch.SearchString);
+                var dataResult = this.exchangeRateBO.GetData(objReqListSearch);
+                if (dataResult != null)
+                {
+                    repData.RepData = dataResult;
+                    repData.TotalRow = this.exchangeRateBO.TotalRows;
+                }
+                else
+                    this.AddResponeError(ref repData, exchangeRateBO.getMsgCode(),
+                        exchangeRateBO.GetMessage(this.exchangeRateBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/saveexchangerate")]
+        public ActionResult<ResponeResult> SaveExchangeRate([FromBody] ReqListAdd objReqListAdd)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckAuthen();
+                if (repData == null || !repData.IsOk)
+                    return repData;
+
+                ExchangeRate rowData = JsonConvert.DeserializeObject<ExchangeRate>(objReqListAdd.RowData.ToString());
+                if (rowData != null)
+                {
+                    var dataResult = this.exchangeRateBO.Save(rowData, objReqListAdd.IsNew);
+                    if (dataResult)
+                        repData.RepData = dataResult;
+                    else
+                        this.AddResponeError(ref repData, this.exchangeRateBO.getMsgCode(),
+                            this.exchangeRateBO.GetMessage(this.exchangeRateBO.getMsgCode(), this.LangID));
+
+                    return repData;
+                }
+                else
+                {
+                    this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                        MsgCodeConst.Msg_RequestDataInvalidText, "Lỗi tham số gọi API", null);
+                    Logger.Error("EXCEPTION-CALL API", new Exception("Lỗi tham số gọi API"));
+                    return this.responeResult;
+                }
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/deleteexchangerate")]
+        public ActionResult<ResponeResult> DeleteExchangeRate([FromBody] ReqListDelete objReqListDelete)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckSign(objReqListDelete.AuthenParams,
+                    objReqListDelete.AuthenParams.ClientUserName, objReqListDelete.AuthenParams.ClientPassword,
+                    objReqListDelete.AuthenParams.Sign);
+                if (repData == null || !repData.IsOk)
+                    return repData;
+
+                var dataResult = this.exchangeRateBO.DeleteExchangeRate(Convert.ToInt32(objReqListDelete.ID));
+                if (dataResult)
+                    repData.RepData = dataResult;
+                else
+                    this.AddResponeError(ref repData, this.exchangeRateBO.getMsgCode(),
+                        this.exchangeRateBO.GetMessage(this.exchangeRateBO.getMsgCode(), this.LangID));
 
                 return repData;
             }

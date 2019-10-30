@@ -1,12 +1,13 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {CookieService} from 'ngx-cookie-service';
+import {setTheme} from 'ngx-bootstrap/utils';
 
 declare var $: any;
 
 @Component({
   selector: 'app-root',
   template: `
-      <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
   `,
   styleUrls: ['./app.component.css']
 })
@@ -15,6 +16,7 @@ export class AppComponent implements OnInit, OnDestroy {
   isLogin = false;
 
   constructor(private changeDetectorRefs: ChangeDetectorRef, private  cookieService: CookieService) {
+    setTheme('bs4');
   }
 
   login() {

@@ -165,4 +165,13 @@ namespace SimERP.Business.Models.MasterData.ListDTO
     {
         public string UserName { get; set; }
     }
+
+    public class Currency : SimERP.Data.DBEntities.Currency
+    {
+        public string UserName { get; set; }
+    }
+    public class ExchangeRate : SimERP.Data.DBEntities.ExchangeRate
+    {
+        public string CurrencyName { get; set; }
+    }
 }

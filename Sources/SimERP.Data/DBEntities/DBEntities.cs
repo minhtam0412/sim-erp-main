@@ -17,6 +17,7 @@ namespace SimERP.Data.DBEntities
 
         public virtual DbSet<AttachFile> AttachFile { get; set; }
         public virtual DbSet<Country> Country { get; set; }
+        public virtual DbSet<Currency> Currency { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<CustomerCommission> CustomerCommission { get; set; }
         public virtual DbSet<CustomerDelivery> CustomerDelivery { get; set; }
@@ -24,6 +25,7 @@ namespace SimERP.Data.DBEntities
         public virtual DbSet<CustomerSale> CustomerSale { get; set; }
         public virtual DbSet<CustomerType> CustomerType { get; set; }
         public virtual DbSet<District> District { get; set; }
+        public virtual DbSet<ExchangeRate> ExchangeRate { get; set; }
         public virtual DbSet<Fiscal> Fiscal { get; set; }
         public virtual DbSet<Function> Function { get; set; }
         public virtual DbSet<GroupCompany> GroupCompany { get; set; }
@@ -37,6 +39,7 @@ namespace SimERP.Data.DBEntities
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ProductCategory> ProductCategory { get; set; }
         public virtual DbSet<Province> Province { get; set; }
+        public virtual DbSet<ReasonInOut> ReasonInOut { get; set; }
         public virtual DbSet<RefNo> RefNo { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<RolePermission> RolePermission { get; set; }
@@ -113,6 +116,28 @@ namespace SimERP.Data.DBEntities
                 entity.Property(e => e.SearchString)
                     .HasMaxLength(500)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Currency>(entity =>
+            {
+                entity.ToTable("Currency", "list");
+
+                entity.Property(e => e.CurrencyId)
+                    .HasMaxLength(5)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.CurrencyName)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.IsActive)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Notes).HasMaxLength(250);
+
+                entity.Property(e => e.SearchString).HasMaxLength(2000);
             });
 
             modelBuilder.Entity<Customer>(entity =>
@@ -316,6 +341,20 @@ namespace SimERP.Data.DBEntities
                 entity.Property(e => e.DistrictName)
                     .IsRequired()
                     .HasMaxLength(250);
+            });
+
+            modelBuilder.Entity<ExchangeRate>(entity =>
+            {
+                entity.ToTable("ExchangeRate", "list");
+
+                entity.Property(e => e.CurrencyId)
+                    .IsRequired()
+                    .HasMaxLength(5)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ExchangeRating).HasColumnType("numeric(18, 0)");
+
+                entity.Property(e => e.Notes).HasMaxLength(250);
             });
 
             modelBuilder.Entity<Fiscal>(entity =>
@@ -631,6 +670,27 @@ namespace SimERP.Data.DBEntities
                     .IsUnicode(false);
 
                 entity.Property(e => e.ProvinceName)
+                    .IsRequired()
+                    .HasMaxLength(250);
+            });
+
+            modelBuilder.Entity<ReasonInOut>(entity =>
+            {
+                entity.HasKey(e => e.ReasonId);
+
+                entity.ToTable("ReasonInOut", "inv");
+
+                entity.Property(e => e.IsActive)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.IsStockIn)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Notes).HasMaxLength(250);
+
+                entity.Property(e => e.ReasonName)
                     .IsRequired()
                     .HasMaxLength(250);
             });

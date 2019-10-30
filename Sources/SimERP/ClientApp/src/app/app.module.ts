@@ -60,8 +60,18 @@ import {SupplierlistComponent} from './lists/supplier/vendorlist/supplierlist.co
 import {SupplierdetailComponent} from './lists/supplier/vendordetail/supplierdetail.component';
 import {StocklistComponent} from './lists/stock/stocklist/stocklist.component';
 import {StockdetailComponent} from './lists/stock/stockdetail/stockdetail.component';
+import {CurrencylistComponent} from './lists/currency/currencylist/currencylist.component';
+import {CurrencydetailComponent} from './lists/currency/currencydetail/currencydetail.component';
+import {ExchangeratelistComponent} from './lists/exchangerate/exchangeratelist/exchangeratelist.component';
+import {ExchangeratedetailComponent} from './lists/exchangerate/exchangeratedetail/exchangeratedetail.component';
+import {BsDatepickerModule} from 'ngx-bootstrap';
+// đăng ký locale cho control datetime picker
+import {defineLocale} from 'ngx-bootstrap/chronos';
+import {viLocale} from 'ngx-bootstrap/locale';
 
 registerLocaleData(vi);
+
+defineLocale('vi', viLocale);
 
 export function tokenGetter() {
   const objToken = JSON.parse(localStorage.getItem(Key_UserInfo));
@@ -110,7 +120,11 @@ export function tokenGetter() {
     ZorrocustomComponent,
     PopupproductComponent,
     StocklistComponent,
-    StockdetailComponent
+    StockdetailComponent,
+    CurrencylistComponent,
+    CurrencydetailComponent,
+    ExchangeratelistComponent,
+    ExchangeratedetailComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -138,7 +152,8 @@ export function tokenGetter() {
     NgSelectModule,
     NgZorroAntdModule,
     IconsProviderModule,
-    NzIconModule
+    NzIconModule,
+    BsDatepickerModule.forRoot(),
   ],
   providers: [AuthGuard,
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
@@ -155,7 +170,9 @@ export function tokenGetter() {
       ChangepasswordComponent,
       ProductdetailComponent,
       PopupproductComponent,
-      StockdetailComponent
+      StockdetailComponent,
+      CurrencydetailComponent,
+      ExchangeratedetailComponent
     ],
 
 })

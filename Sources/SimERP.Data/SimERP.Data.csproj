@@ -136,6 +136,7 @@
     <Compile Include="ConnectionFactory.cs" />
     <Compile Include="DBEntities\AttachFile.cs" />
     <Compile Include="DBEntities\Country.cs" />
+    <Compile Include="DBEntities\Currency.cs" />
     <Compile Include="DBEntities\Customer.cs" />
     <Compile Include="DBEntities\CustomerCommission.cs" />
     <Compile Include="DBEntities\CustomerDelivery.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="DBEntities\CustomerType.cs" />
     <Compile Include="DBEntities\DBEntities.cs" />
     <Compile Include="DBEntities\District.cs" />
+    <Compile Include="DBEntities\ExchangeRate.cs" />
     <Compile Include="DBEntities\Fiscal.cs" />
     <Compile Include="DBEntities\Function.cs" />
     <Compile Include="DBEntities\GroupCompany.cs" />
@@ -159,6 +161,7 @@
     <Compile Include="DBEntities\ProductSupplier.cs" />
     <Compile Include="DBEntities\ProductVendor.cs" />
     <Compile Include="DBEntities\Province.cs" />
+    <Compile Include="DBEntities\ReasonInOut.cs" />
     <Compile Include="DBEntities\RefNo.cs" />
     <Compile Include="DBEntities\Role.cs" />
     <Compile Include="DBEntities\RolePermission.cs" />

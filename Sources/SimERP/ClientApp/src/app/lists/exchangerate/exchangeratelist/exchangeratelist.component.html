@@ -7,7 +7,7 @@
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="#">Danh mục</a></li>
               <li class="breadcrumb-item active" aria-current="page"><a href="#" [routerLink]="'/customertype'">Quản lý
-                kho</a></li>
+                tỷ giá</a></li>
             </ol>
           </nav>
         </div>
@@ -16,7 +16,7 @@
         <div class="col-sm-4 text-left">
           <p class="text-uppercase"
              style="font-size:18px;color: #587792; font-weight:bold; font-family: 'Lato', sans-serif;">
-            <span>Kho</span>
+            <span>Tỷ giá</span>
           </p>
         </div>
         <div class="col-sm-8 text-right">
@@ -32,13 +32,41 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-3">
+        <div class="col-md-3">
           <div class="row">
-            <label class="col-md-3 control-label">Tìm kiếm</label>
-            <div class="col-md-9">
-              <div class="input-group ">
-                <input type="text" [(ngModel)]="searchString" name="searchString" class="form-control"
-                       (keydown.enter)="searchData()">
+            <label class="col-sm-12 control-label">Tìm kiếm</label>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="input-group mb-3 ">
+                <input type="text" [(ngModel)]="searchString" name="searchString" class="form-control form-control-sm"
+                       placeholder="Mã, tên loại tiền tệ" (keydown.enter)="searchData()">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="row">
+            <label class="col-sm-12 control-label">Từ ngày</label>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="input-group mb-3 ">
+                <input placeholder="Chọn ngày" type="text" class="form-control" bsDatepicker #dpFromDate="bsDatepicker"
+                       [bsConfig]="bsConfig" [(ngModel)]="fromDate" name="fromDate">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="row">
+            <label class="col-sm-12 control-label">Đến ngày</label>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="input-group mb-3 ">
+                <input placeholder="Chọn ngày" type="text" class="form-control" bsDatepicker #dpToDate="bsDatepicker"
+                       [bsConfig]="bsConfig" [(ngModel)]="toDate" name="toDate">
               </div>
             </div>
           </div>
@@ -54,41 +82,28 @@
         <thead>
         <tr>
           <th>#</th>
-          <th>Mã kho</th>
-          <th>Tên kho</th>
-          <th>Địa chỉ</th>
+          <th>Mã loại tiền tệ</th>
+          <th>Tên loại tiền tệ</th>
+          <th>Ngày</th>
+          <th>Tỷ giá</th>
           <th>Ghi chú</th>
-          <th>Người tạo</th>
-          <th class="col-active">Sử dụng</th>
-          <th class="col-sortorder">Sort Order</th>
           <th class="col-action"></th>
         </tr>
         </thead>
         <tbody>
         <tr *ngIf="!dataIsAvailable">
-          <td colspan="9" class="datarow-null">Dữ liệu không tồn tại</td>
+          <td colspan="7" class="datarow-null">Dữ liệu không tồn tại</td>
         </tr>
         <tr *ngFor="let row of lstDataResult; let index = index">
           <td class="order-number">{{index + 1}}</td>
           <td class="col-code">
-            <a (click)="openDialog(row)"> {{row.StockCode}}</a>
+            <a (click)="openDialog(row)"> {{row.CurrencyId}}</a>
           </td>
-          <td class="col-name">{{row.StockName}}</td>
-          <td class="col-name">{{row.Address}}</td>
+          <td class="col-name">{{row.CurrencyName}}</td>
+          <td class="col-name" style="text-align: center">{{row.ExchangeDate|date:"dd/MM/yyyy"}}</td>
+          <td class="col-name">{{row.ExchangeRating}}</td>
           <td class="col-note">{{row.Notes}}</td>
-          <td class="col-name">{{row.UserName}}</td>
-          <td>
-            <i [ngClass]="{'fas fa-check-square':row.IsActive, 'far fa-square': !row.IsActive}"
-               [ngStyle]="{'color': '#337ab7'}"></i>
-          </td>
-          <td class="col-moveaction">
-            <a (click)="index == 0 ? 'javascript:void(0)' : moveUp(index)">
-              <i class="fas fa-arrow-alt-circle-up" style="color:forestgreen; font-size:14px;"></i>
-            </a>&nbsp;&nbsp;&nbsp;
-            <a (click)="index == pagingComponent.getLimit() - 1 ? 'javascript:void(0)' : moveDown(index)">
-              <i class="fas fa-arrow-alt-circle-down" style="color:forestgreen; font-size:14px;"></i>
-            </a>
-          </td>
+
           <td class="col-action">
             <a (click)="openDialog(row)" *appCheckpermission="['EDIT']">
               <i class="fas fa-edit" style='color:#337ab7'></i>&nbsp;&nbsp;&nbsp;

@@ -1,38 +1,62 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {Stock} from '../model/stock';
 import {PaginationComponent} from '../../../pagination/pagination.component';
-import {ToastrService} from 'ngx-toastr';
-import {ComfirmDialogComponent} from '../../../common/comfirm-dialog/comfirm-dialog.component';
-import {Ng4LoadingSpinnerService} from 'ng4-loading-spinner';
-import {NotificationService} from '../../../common/notifyservice/notification.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AuthenService} from '../../../systems/authen.service';
-import {StockService} from '../stock.service';
-import {StockdetailComponent} from '../stockdetail/stockdetail.component';
+import {NotificationService} from '../../../common/notifyservice/notification.service';
+import {ComfirmDialogComponent} from '../../../common/comfirm-dialog/comfirm-dialog.component';
+import {ExchangeRate} from '../model/exchangerate';
+import {ExchangerateService} from '../exchangerate.service';
+import {ExchangeratedetailComponent} from '../exchangeratedetail/exchangeratedetail.component';
+import {BsDatepickerConfig, BsLocaleService} from 'ngx-bootstrap';
+import {Observable} from 'rxjs/internal/Observable';
+import {forkJoin} from 'rxjs/internal/observable/forkJoin';
+import {MasterdataService} from '../../../common/masterdata/masterdata.service';
+import {ResponeResult} from '../../../common/commomodel/ResponeResult';
+import {Currency} from '../../currency/model/currency';
+import * as moment from 'moment';
 
 @Component({
-  selector: 'app-stocklist',
-  templateUrl: './stocklist.component.html',
-  styleUrls: ['./stocklist.component.css']
+  selector: 'app-exchangeratelist',
+  templateUrl: './exchangeratelist.component.html',
+  styleUrls: ['./exchangeratelist.component.css']
 })
-export class StocklistComponent implements OnInit, AfterViewInit {
+export class ExchangeratelistComponent implements OnInit, AfterViewInit {
+
+  // setup datetimepicker
+  locale = 'vi';
+  colorTheme = 'theme-blue';
 
   dataIsAvailable: boolean; // xác định có data trả về khi tìm kiếm
-  lstDataResult: Stock[] = []; // danh sách CustomerType
+  lstDataResult: ExchangeRate[] = []; // danh sách CustomerType
   page = 1; // chỉ số trang hiện tại
   limit = 10; // số record cần hiển thị trên 1 trang
   total = 10; // tổng số record trả về
   searchString: string; // binding textbox
   isActive = -1; // binding combo Trạng thái
+  fromDate: Date = null;
+  toDate: Date = null;
+  lstCurrency: Currency[] = [];
 
   @ViewChild(PaginationComponent, {static: false}) pagingComponent: PaginationComponent;
 
-  constructor(private modalService: NgbModal, private service: StockService, private spinnerService: Ng4LoadingSpinnerService,
-              private toastr: ToastrService, private authenService: AuthenService, private notificationService: NotificationService) {
+  bsConfig: Partial<BsDatepickerConfig>;
+
+  constructor(private modalService: NgbModal, private service: ExchangerateService,
+              private authenService: AuthenService, private notificationService: NotificationService,
+              private localeService: BsLocaleService, private masterdataService: MasterdataService) {
+    this.loadCommonData().subscribe(res => {
+      this.lstCurrency = (res[0] as ResponeResult).RepData;
+    });
   }
 
   ngOnInit() {
+    this.localeService.use(this.locale);
+    this.bsConfig = Object.assign({}, {containerClass: this.colorTheme, showWeekNumbers: false});
+  }
 
+  loadCommonData(): Observable<any[]> {
+    const reqCurrency = this.masterdataService.getCurrencyData();
+    return forkJoin([reqCurrency]);
   }
 
   // tìm kiếm dữ liệu
@@ -43,12 +67,14 @@ export class StocklistComponent implements OnInit, AfterViewInit {
 
   LoadData(startRow: number) {
     const limit = this.pagingComponent.getLimit();
-    this.spinnerService.show();
-    this.service.getData(this.searchString, Number(this.isActive) === -1 ? null : Number(this.isActive), startRow, limit).subscribe(
+    const isActive = Number(this.isActive) === -1 ? null : Number(this.isActive);
+    const fromDate = moment.utc(this.fromDate).local().toDate();
+    const toDate = moment.utc(this.toDate).local().toDate();
+    this.service.getData(this.searchString, isActive, startRow, limit, fromDate, toDate).subscribe(
       {
         next: (res) => {
           if (!res.IsOk) {
-            this.toastr.error(res.MessageText);
+            this.notificationService.showError(res.MessageText);
             this.lstDataResult = [];
             this.total = 0;
             this.dataIsAvailable = false;
@@ -60,11 +86,10 @@ export class StocklistComponent implements OnInit, AfterViewInit {
         },
         error: (err) => {
           console.log(err);
-          this.toastr.error('Lỗi tìm kiếm thông tin!');
+          this.notificationService.showError('Lỗi tìm kiếm thông tin!');
           this.dataIsAvailable = false;
         },
         complete: () => {
-          this.spinnerService.hide();
         }
       }
     );
@@ -72,18 +97,20 @@ export class StocklistComponent implements OnInit, AfterViewInit {
 
 
   // mở các dialog
-  openDialog(rowData?: Stock) {
+  openDialog(rowData?: ExchangeRate) {
     if (rowData !== undefined) {
-      if (!this.authenService.isHasPermission('stock', 'EDIT')) {
+      if (!this.authenService.isHasPermission('exchangerate', 'EDIT')) {
         this.notificationService.showRestrictPermission();
         return;
       }
     }
 
-    const modalRef = this.modalService.open(StockdetailComponent, {
+    const modalRef = this.modalService.open(ExchangeratedetailComponent, {
       backdrop: 'static', scrollable: true, centered: true, backdropClass: 'backdrop-modal'
     });
 
+    modalRef.componentInstance.bsConfig = this.bsConfig;
+    modalRef.componentInstance.lstCurrency = this.lstCurrency;
     if (rowData === undefined) {
       modalRef.componentInstance.isAddState = true;
     } else {
@@ -102,32 +129,32 @@ export class StocklistComponent implements OnInit, AfterViewInit {
     });
   }
 
-  showConfirmDeleteDialog(cusType) {
+  showConfirmDeleteDialog(rowData) {
     const modalRef = this.modalService.open(ComfirmDialogComponent, {
       backdrop: false, scrollable: true, centered: true
     });
 
     modalRef.result.then((result) => {
       if (result !== undefined && result === true) {
-        this.deleteData(cusType);
+        this.deleteData(rowData);
       }
     });
   }
 
-  deleteData(row: Stock) {
+  deleteData(row: ExchangeRate) {
     this.service.deleteData(row).subscribe(res => {
       if (res !== undefined) {
         if (!res.IsOk) {
-          this.toastr.info('Xoá thất bại!');
+          this.notificationService.showInfo('Xoá thất bại!');
         } else {
-          this.toastr.success('Xoá thành công!');
+          this.notificationService.showSucess('Xoá thành công!');
           this.searchData();
         }
       } else {
-        this.toastr.error('Lỗi xoá thông tin!');
+        this.notificationService.showError('Lỗi xoá thông tin!');
       }
     }, err => {
-      this.toastr.error('Lỗi xoá thông tin!');
+      this.notificationService.showError('Lỗi xoá thông tin!');
     });
   }
 
@@ -168,31 +195,4 @@ export class StocklistComponent implements OnInit, AfterViewInit {
     const startRow = (this.page - 1) * this.pagingComponent.getLimit();
     return startRow;
   }
-
-  moveUp(index: number) {
-    const upID = this.lstDataResult[index].StockId;
-    const downID = this.lstDataResult[index - 1].StockId;
-    this.service.updateSortOrder(upID, downID).subscribe(res => {
-      if (res === undefined || !res.IsOk) {
-        this.toastr.error('Lỗi cập nhật Sort Order!');
-      } else {
-        const startRow = this.getStartRow();
-        this.LoadData(startRow);
-      }
-    });
-  }
-
-  moveDown(index: number) {
-    const downID = this.lstDataResult[index].StockId;
-    const upID = this.lstDataResult[index + 1].StockId;
-    this.service.updateSortOrder(upID, downID).subscribe(res => {
-      if (res === undefined || !res.IsOk) {
-        this.toastr.error('Lỗi cập nhật Sort Order!');
-      } else {
-        const startRow = this.getStartRow();
-        this.LoadData(startRow);
-      }
-    });
-  }
-
 }

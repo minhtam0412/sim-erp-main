@@ -34,7 +34,8 @@
               "node_modules/font-awesome/css/font-awesome.min.css",
               "src/assets/css/sm-blue.css",
               "src/assets/css/sm-core-css.css",
-              "node_modules/ngx-toastr/toastr.css"
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/ngx-bootstrap/datepicker/bs-datepicker.css"
             ],
             "scripts": [
               "node_modules/crypto-js/crypto-js.js"

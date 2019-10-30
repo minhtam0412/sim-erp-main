@@ -1,0 +1,75 @@
+<form #form="ngForm" novalidate>
+  <div class="modal-content">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h4 class="modal-title">{{isAddState ? 'Thêm mới' : 'Chỉnh sửa'}}</h4>
+      <button type="button" class="close" data-dismiss="modal" (click)="closeDialog()">&times;</button>
+    </div>
+
+    <!-- Modal body -->
+    <div class="modal-body">
+      <div class="form_content">
+        <div class="row">
+          <div class="col-sm-4 text-right"><label control-label>Tiền tệ</label> <label
+            class="control-label-require">*</label></div>
+          <div class="col-sm-8">
+            <div class="input-group mb-3 ">
+              <ng-select #CurrencyId='ngModel' [(ngModel)]="model.CurrencyId" name="CurrencyId"
+                         class="select-custom select-full-border" (clear)="clearCurrencyId()"
+                         [ngClass]="{ 'is-invalid': CurrencyId.touched  && CurrencyId.invalid  }">
+                <ng-option [value]='-1'>--Chọn loại tiền tệ--</ng-option>
+                <ng-option *ngFor="let status of lstCurrency"
+                           [value]="status.CurrencyId">{{status.CurrencyId}} / {{status.CurrencyName}}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4 text-right"><label control-label>Ngày tỷ giá</label> <label
+            class="control-label-require">*</label></div>
+          <div class="col-sm-8">
+            <input placeholder="Chọn ngày" type="text" class="form-control" bsDatepicker #dpExchangeDate="bsDatepicker"
+                   [bsConfig]="bsConfig" [(ngModel)]="model.ExchangeDate" name="ExchangeDate" #ExchangeDate='ngModel'
+                   [ngClass]="{ 'is-invalid': ExchangeDate.touched  && ExchangeDate.invalid  }">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4 text-right"><label control-label>Tỷ giá</label> <label
+            class="control-label-require">*</label></div>
+          <div class="col-sm-8">
+            <input type="number" class="form-control form-control-sm" #ExchangeRating='ngModel'
+                   [(ngModel)]="model.ExchangeRating" name="ExchangeRating" required
+                   [ngClass]="{ 'is-invalid': ExchangeRating.touched  && ExchangeRating.invalid  }">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4 text-right"><label control-label>Ghi chú</label></div>
+          <div class="col-sm-8">
+            <textarea type="text" style="border-bottom: 1px solid #ced4da; height: auto"
+                      class="form-control form-control-sm"
+                      rows="3" [(ngModel)]="model.Notes"
+                      name="Notes"
+                      [ngClass]="{'is-invalid' : model.Notes!= undefined && model.Notes.length > 250}"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal footer -->
+    <div class="modal-footer">
+      <button type="button" name="btnSave" *appCheckpermission="['SAVE']"
+              [disabled]="form.invalid || (model.Notes != undefined && model.Notes.length > 250)"
+              class="btn btn-info btn-sm"
+              (click)="saveData(false)">
+        <i class="far fa-save"></i> Lưu
+      </button>
+      <button type="button" name="btnSaveContinue"
+              [disabled]="form.invalid || (model.Notes != undefined && model.Notes.length > 250)"
+              class="btn btn-info btn-sm"
+              (click)="saveData(true)" *appCheckpermission="['SAVE','ADD']">
+        <i class="far fa-save"></i> Lưu & Thêm mới
+      </button>&nbsp;
+      <button type="button" class="btn btn-outline-secondary btn-sm" (click)="closeDialog()">Đóng
+      </button>
+    </div>
+  </div>
+</form>
