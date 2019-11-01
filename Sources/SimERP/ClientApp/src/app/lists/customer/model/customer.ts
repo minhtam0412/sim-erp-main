@@ -1,5 +1,8 @@
 ﻿import { Attachfile } from '../../product/model/attachfile';
 import { CustomerProduct } from './customerproduct';
+import { CustomerSale } from './customersale';
+import { CustomerCommission } from './customercommission';
+import { CustomerDelivery } from './customerdelivery';
 
 export class Customer {
     CustomerId: any;
@@ -25,6 +28,7 @@ export class Customer {
     RepresentativeAddress: string;
     RepresentativeEmail: string;
     CreatedBy: number;
+    CreateName: string = "";
     CreatedDate: Date;
     ModifyBy: number;
     ModifyDate: Date;
@@ -40,9 +44,15 @@ export class Customer {
     IsCompany: boolean;
     IsActive: boolean = true;
     SortOrder: number;
+    //tab hàng hóa
+    objProduct: CustomerProduct[] = [];
+    //tab saler
+    objSaler: CustomerSale[] = [];
+    //tab commission
+    objCommission: CustomerCommission[] = [];
+    //tab delivery
+    objDelivery: CustomerDelivery[] = [];
     //tab file đính kèm
     ListAttachFile: Attachfile[] = [];
     ListAttachFileDelete: Attachfile[] = [];
-    //tab hàng hóa
-    objProduct: CustomerProduct[] = [];
 }

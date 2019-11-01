@@ -5,14 +5,14 @@
                 <p class="text-uppercase" style="font-size:18px;color: #587792; font-weight:bold; font-family: 'Lato', sans-serif;"><span>Thêm mới/Edit khách hàng</span></p>
             </div>
             <div class="col-sm-8 text-right">
-                <div class="form-group">
-                    <button type="submit" class="btn btn-success btn-sm" style="background-color: #5cb85c; border-color: #4cae4c">
+                <div class="form-group" [ngClass]="{'wrapper': checkValidateAction()}">
+                    <button type="button" [ngClass]="{'pointer-events-none': checkValidateAction()}" (click)="SaveData(true)" class="btn btn-success btn-sm" style="background-color: #5cb85c; border-color: #4cae4c">
                         <i class="far fa-save"></i> Lưu & Đóng
                     </button>&nbsp;
-                    <button type="button" class="btn btn-success btn-sm" style="background-color: #5cb85c; border-color: #4cae4c">
+                    <button type="button" [ngClass]="{'pointer-events-none': checkValidateAction()}" (click)="SaveData(false)" class="btn btn-success btn-sm" style="background-color: #5cb85c; border-color: #4cae4c">
                         <i class="far fa-check-square"></i> Lưu & Thêm mới
                     </button>&nbsp;
-                    <button type="button" class="btn btn-success btn-sm" style="background-color: #337ab7; border-color: #2e6da4;" [routerLink]="['/purchase']" routerLinkActive="router-link-active">
+                    <button type="button" #closePageDetail class="btn btn-success btn-sm" style="background-color: #337ab7; border-color: #2e6da4;" [routerLink]="['/customer']" routerLinkActive="router-link-active">
                         <i class="fas fa-long-arrow-alt-left"></i> Trở về
                     </button>&nbsp;
                 </div>
@@ -33,9 +33,9 @@
                         </div>
                     </div>
                     <div class="row">
-                        <label class="col-sm-3 control-label text-right">Địa chỉ<span class="control-label-require"></span></label>
+                        <label class="col-sm-3 control-label text-right">Địa chỉ<span class="control-label-require">*</span></label>
                         <div class="col-sm-7">
-                            <textarea type="text" [(ngModel)]="objData.Address" name="Address" class="form-control " rows="5" style="box-shadow: none; border-top: none; border-left: none; border-right: none"></textarea>
+                            <textarea type="text" [(ngModel)]="objData.Address" name="Address" rows="2" class="form-control-plaintext" style="border-bottom: 1px solid #ced4da;"></textarea>
                         </div>
                     </div>
                     <div class="row">
@@ -179,7 +179,7 @@
                                     <div class="row">
                                         <label class="col-sm-3 control-label text-right">Ghi chú<span class="control-label-require"></span></label>
                                         <div class="col-sm-7">
-                                            <textarea type="text" [(ngModel)]="objData.Notes" name="Notes" class="form-control " rows="5" style="box-shadow: none; border-top: none; border-left: none; border-right: none"></textarea>
+                                            <textarea type="text" [(ngModel)]="objData.Notes" name="Notes" class="form-control-plaintext" rows="2" style="border-bottom: 1px solid #ced4da;"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -200,9 +200,9 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <label class="col-sm-3 control-label text-right">Hạn mức nợ<span class="control-label-require"></span></label>
+                                        <label class="col-sm-3 control-label text-right">Hạn mức nợ<span class="control-label-require">*</span></label>
                                         <div class="col-sm-7">
-                                            <input type="text" [(ngModel)]="objData.DebtCeiling" name="DebtCeiling" class="form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                            <input type="number" [(ngModel)]="objData.DebtCeiling" name="DebtCeiling" class="form-control " style="box-shadow: none; border-top: none; border-left: none; border-right: none">
                                         </div>
                                     </div>
                                     <div class="row">
@@ -226,7 +226,7 @@
                                     <div class="row">
                                         <label class="col-sm-3 control-label text-right">Địa chỉ người ĐD<span class="control-label-require"></span></label>
                                         <div class="col-sm-7">
-                                            <textarea type="text" [(ngModel)]="objData.RepresentativeAddress" name="RepresentativeAddress" class="form-control " rows="5" style="box-shadow: none; border-top: none; border-left: none; border-right: none"></textarea>
+                                            <textarea type="text" [(ngModel)]="objData.RepresentativeAddress" name="RepresentativeAddress" class="form-control-plaintext" rows="2" style="border-bottom: 1px solid #ced4da;"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -291,7 +291,7 @@
                                                 </tr>
                                                 <tr *ngFor="let row of lstObjProduct; let i = index">
                                                     <td class="order-number">{{i + 1}}</td>
-                                                    <td class="col-name"><a (click)="EditModelProduct(i)" data-toggle="modal" data-target="#ProductModel" style="cursor: pointer; color: #337ab7">{{row.ProductCode}}</a></td>
+                                                    <td class="col-name"><a style="cursor: pointer; color: #337ab7">{{row.ProductCode}}</a></td>
                                                     <td class="col-name">{{row.ProductName}}</td>
                                                     <td class="col-active">{{row.UnitName}}</td>
                                                     <td class="col-name">{{row.ProductCategoryName}}</td>
@@ -321,7 +321,7 @@
                                             <div class="row">
                                                 <label class="col-sm-4 control-label text-right">Trạng thái<span class="control-label-require"></span></label>
                                                 <div class="col-sm-8">
-                                                    <select class="browser-default form-control" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                                    <select [(ngModel)]="dataSalerIsActiveFilter" name="dataSalerIsActiveFilter" (change)="FilterCustomerSaler()" class="browser-default form-control" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
                                                         <option value="-1">Tất cả</option>
                                                         <option value="1">Đang quản lý</option>
                                                         <option value="0">Ngưng quản lý</option>
@@ -353,8 +353,22 @@
                                             <!-- Table head -->
                                             <!-- Table body -->
                                             <tbody>
-                                                <tr>
-                                                    <td colspan="10" class="datarow-null" style="text-align: left !important;">Dữ liệu không tồn tại</td>
+                                                <tr *ngIf="lstObjSaler.length <= 0">
+                                                    <td colspan="8" class="datarow-null">Dữ liệu không tồn tại</td>
+                                                </tr>
+                                                <tr *ngFor="let row of lstObjSaler; let i = index">
+                                                    <td class="order-number">{{i + 1}}</td>
+                                                    <td class="col-name"><a (click)="EditModelSaler(i)" data-toggle="modal" data-target="#SalertModel" style="cursor: pointer; color: #337ab7">{{row.UserCode}}</a></td>
+                                                    <td class="col-name">{{row.FullName}}</td>
+                                                    <td>{{row.CreatedDate | date:"dd/MM/yyyy"}}</td>
+                                                    <td>{{row.FromDate | date : "dd/MM/yyyy"}}</td>
+                                                    <td>{{row.ToDate | date : "dd/MM/yyyy"}}</td>
+                                                    <td class="col-active">
+                                                        <i [ngClass]="{'fas fa-check-square':row.IsActive, 'far fa-square': !row.IsActive}" [ngStyle]="{'color': '#337ab7'}"></i>
+                                                    </td>
+                                                    <td class="col-action">
+                                                        <a (click)="EditModelSaler(i)" data-toggle="modal" data-target="#SalertModel"><i class="fas fa-edit" style='color:#337ab7;'></i></a>
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -370,7 +384,7 @@
                                             <div class="row">
                                                 <label class="col-sm-4 control-label text-right">Trạng thái<span class="control-label-require"></span></label>
                                                 <div class="col-sm-8">
-                                                    <select class="browser-default form-control" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+                                                    <select [(ngModel)]="dataCommissionIsActiveFilter" name="dataCommissionIsActiveFilter" class="browser-default form-control" (change)="FilterCustomerCommission()" style="box-shadow: none; border-top: none; border-left: none; border-right: none">
                                                         <option value="-1">Tất cả</option>
                                                         <option value="1">Sử dụng</option>
                                                         <option value="0">Ngưng</option>
@@ -403,11 +417,27 @@
                                             <!-- Table head -->
                                             <!-- Table body -->
                                             <tbody>
-                                                <tr>
-                                                    <td colspan="10" class="datarow-null" style="text-align: left !important;">Dữ liệu không tồn tại</td>
+                                                <tr *ngIf="lstObjCommission.length <= 0">
+                                                    <td colspan="9" class="datarow-null">Dữ liệu không tồn tại</td>
+                                                </tr>
+                                                <tr *ngFor="let row of lstObjCommission; let i = index">
+                                                    <td class="order-number">{{i + 1}}</td>
+                                                    <td class="col-name"><a style="cursor: pointer; color: #337ab7">{{row.BeneficiaryName}}</a></td>
+                                                    <td class="col-note">{{row.Notes}}</td>
+                                                    <td class="col-name">{{row.PhoneNumber}}</td>
+                                                    <td class="col-name">{{row.BankAccount}}</td>
+                                                    <td class="col-name">{{row.BankName}}</td>
+                                                    <td class="col-name">{{row.CreatedDate | date : "dd/MM/yyyy"}}</td>
+                                                    <td class="col-active">
+                                                        <i [ngClass]="{'fas fa-check-square':row.IsActive, 'far fa-square': !row.IsActive}" [ngStyle]="{'color': '#337ab7'}"></i>
+                                                    </td>
+                                                    <td class="col-action">
+                                                        <a (click)="EditModelCommission(row.PhoneNumber)" data-toggle="modal" data-target="#CommissionModel"><i class="fas fa-edit" style='color:#337ab7;'></i></a>&nbsp;&nbsp;
+                                                        <a (click)="CommissionRemoveItem(row.PhoneNumber)"><i class="far fa-trash-alt" style='color:#337ab7;'></i></a>
+                                                    </td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="14" class="text-left lbadd"><a data-toggle="modal" data-target="#myModal"><i class="fas fa-plus-circle"></i>Thêm hoa hồng</a></td>
+                                                    <td colspan="14" class="text-left lbadd"><a (click)="AddModelCommission()" data-toggle="modal" data-target="#CommissionModel"><i class="fas fa-plus-circle"></i>Thêm hoa hồng</a></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -428,17 +458,31 @@
                                                     <th>Nơi Giao Hàng</th>
                                                     <th>Địa Chỉ</th>
                                                     <th>Ngày Tạo</th>
+                                                    <th>Trạng Thái</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
                                             <!-- Table head -->
                                             <!-- Table body -->
                                             <tbody>
-                                                <tr>
-                                                    <td colspan="10" class="datarow-null" style="text-align: left !important;">Dữ liệu không tồn tại</td>
+                                                <tr *ngIf="objData.objDelivery.length <= 0">
+                                                    <td colspan="6" class="datarow-null">Dữ liệu không tồn tại</td>
+                                                </tr>
+                                                <tr *ngFor="let row of objData.objDelivery; let i = index">
+                                                    <td class="order-number">{{i + 1}}</td>
+                                                    <td class="col-name"><a (click)="EditModelDelivery(i)" data-toggle="modal" data-target="#DeliveryModel" style="cursor: pointer; color: #337ab7">{{row.DeliveryPlace}}</a></td>
+                                                    <td class="col-note">{{row.DeliveryAddress}}</td>
+                                                    <td>{{row.CreatedDate | date : "dd/MM/yyyy"}}</td>
+                                                    <td class="col-active">
+                                                        <i [ngClass]="{'fas fa-check-square':row.IsActive, 'far fa-square': !row.IsActive}" [ngStyle]="{'color': '#337ab7'}"></i>
+                                                    </td>
+                                                    <td class="col-action">
+                                                        <a (click)="EditModelDelivery(i)" data-toggle="modal" data-target="#DeliveryModel"><i class="fas fa-edit" style='color:#337ab7;'></i></a>&nbsp;&nbsp;
+                                                        <a (click)="DeliveryRemoveItem(i)"><i class="far fa-trash-alt" style='color:#337ab7;'></i></a>
+                                                    </td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="14" class="text-left lbadd"><a data-toggle="modal" data-target="#myModal"><i class="fas fa-plus-circle"></i>Thêm thông tin giao hàng</a></td>
+                                                    <td colspan="14" class="text-left lbadd"><a (click)="AddModelDelivery()" data-toggle="modal" data-target="#DeliveryModel"><i class="fas fa-plus-circle"></i>Thêm thông tin giao hàng</a></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -591,6 +635,234 @@
                     <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal" #closeAddExpenseModal (click)="CloseProductModel()">Đóng</button>
                 </div>
 
+            </div>
+        </div>
+    </div>
+
+    <!-- The Modal Saler -->
+    <div class="modal fade" id="SalertModel" data-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Update Thông tin sale</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="form_content">
+                        <div class="row">
+                            <div class="col-sm-3 text-right"><label control-label>Ngày bắt đầu</label> <label class="control-label-require"></label></div>
+                            <div class="col-sm-7">
+                                <div class="input-group ">
+                                    <input class="form-control form-control-sm " [(ngModel)]="fromDate" placeholder="" name="FromDate" ngbDatepicker #FromDate="ngbDatepicker" style="box-shadow: none; border-top: none; border-left: none; border-right: none;">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-sm btn-outline-secondary calendar " (click)="FromDate.toggle()" type="button">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                  </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-7">
+                                <div class="custom-control custom-checkbox mb-3" style="padding-top: 8px;">
+                                    <input type="checkbox" [(ngModel)]="IsToDate" name="IsToDate" id="IsToDate" class="custom-control-input">
+                                    <label class="custom-control-label" for="IsToDate">Kết thúc sale</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="IsToDate">
+                            <div class="col-sm-3 text-right"><label control-label>Ngày kết thúc</label> <label class="control-label-require"></label></div>
+                            <div class="col-sm-7">
+                                <div class="input-group">
+                                    <input class="form-control form-control-sm" [(ngModel)]="toDate" placeholder="" name="ToDate" ngbDatepicker #ToDate="ngbDatepicker" style="box-shadow: none; border-top: none; border-left: none; border-right: none;">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-sm btn-outline-secondary calendar" (click)="ToDate.toggle()" type="button">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                  </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info btn-sm" (click)="saveDataModelSaler(true)">
+                                <i class="far fa-save"></i> Lưu(F3)
+                              </button>&nbsp;
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal" #closeAddExpenseModalSaler (click)="CloseSalerModel()">Đóng</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- The Modal Saler -->
+    <div class="modal fade" id="CommissionModel" data-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Add/Edit Người nhận hoa hồng</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="form_content">
+                        <div class="row">
+                            <div class="col-sm-3 text-right"><label control-label>Ngày tạo</label> <label class="control-label-require"></label></div>
+                            <div class="col-sm-9">
+                                <div class="input-group wrapper">
+                                    <input class="form-control form-control-sm pointer-events-none" [(ngModel)]="dtcreate" placeholder="" disabled name="objModelCommission.CreatedDate" ngbDatepicker #CommissionDate="ngbDatepicker" style="box-shadow: none; border-top: none; border-left: none; border-right: none;">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-sm btn-outline-secondary calendar pointer-events-none" (click)="CommissionDate.toggle()" type="button">
+                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                          </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 text-right"><label control-label>Người hưởng thụ</label> <label class="control-label-require"></label></div>
+                            <div class="col-sm-9">
+                                <input type="text" #BeneficiaryName='ngModel' [(ngModel)]="objModelCommission.BeneficiaryName" name="objModelCommission.BeneficiaryName" class="form-control form-control-sm" required [ngClass]="{'is-invalid': BeneficiaryName.touched  && BeneficiaryName.invalid}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 text-right"><label control-label>Điện thoại</label> <label class="control-label-require"></label></div>
+                            <div class="col-sm-9">
+                                <input type="text" #objModelCommission_PhoneNumber='ngModel' [(ngModel)]="objModelCommission.PhoneNumber" name="objModelCommission.PhoneNumber" class="form-control form-control-sm" required [ngClass]="{'is-invalid': objModelCommission_PhoneNumber.touched  && objModelCommission_PhoneNumber.invalid}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 text-right"><label control-label>Email</label> <label class="control-label-require"></label></div>
+                            <div class="col-sm-9">
+                                <input type="text" [(ngModel)]="objModelCommission.Email" name="objModelCommission.Email" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 text-right"><label control-label>Tài khoản</label> <label class="control-label-require"></label></div>
+                            <div class="col-sm-9">
+                                <input type="text" [(ngModel)]="objModelCommission.BankAccount" name="objModelCommission.BankAccount" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 text-right"><label control-label>Tại ngân hàng</label> <label class="control-label-require"></label></div>
+                            <div class="col-sm-9">
+                                <input type="text" [(ngModel)]="objModelCommission.BankName" name="objModelCommission.BankName" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-3 control-label text-right">Ghi chú<span class="control-label-require"></span></label>
+                            <div class="col-sm-9">
+                                <textarea type="text" [(ngModel)]="objModelCommission.Notes" name="objModelCommission.Notes" rows="2" maxlength="2000" class="form-control-plaintext" style="border-bottom: 1px solid #ced4da;"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-9">
+                                <div class="custom-control custom-checkbox mb-3" style="padding-top: 8px;">
+                                    <input type="checkbox" [(ngModel)]="objModelCommission.IsActive" name="objModelCommission.IsActive" id="objModelCommission.IsActive" class="custom-control-input">
+                                    <label class="custom-control-label" for="objModelCommission.IsActive">Đang nhận hoa hồng</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer" [ngClass]="{'wrapper': checkValidateModelCommission()}">
+                    <button type="button" [ngClass]="{'pointer-events-none': checkValidateModelCommission()}" class="btn btn-info btn-sm" (click)="saveDataModelCommission(true)">
+                                <i class="far fa-save"></i> Lưu(F3)
+                              </button>&nbsp;
+                    <button type="button" [ngClass]="{'pointer-events-none': checkValidateModelCommission()}" class="btn btn-info btn-sm" (click)="saveDataModelCommission(false)"> 
+                                <i class="far fa-save"></i> Lưu & Thêm mới
+                              </button>&nbsp;
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal" #closeAddExpenseModalCommission (click)="CloseCommissionModel()">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- The Modal Delivery -->
+    <div class="modal fade" id="DeliveryModel" data-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Add/Edit Địa chỉ giao hàng</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="form_content">
+                        <div class="row">
+                            <div class="col-sm-3 text-right"><label control-label>Ngày tạo</label> <label class="control-label-require"></label></div>
+                            <div class="col-sm-9">
+                                <div class="input-group wrapper">
+                                    <input class="form-control form-control-sm pointer-events-none" [(ngModel)]="dtcreate" placeholder="" disabled name="objModelDelivery.CreatedDate" ngbDatepicker #DeliveryDate="ngbDatepicker" style="box-shadow: none; border-top: none; border-left: none; border-right: none;">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-sm btn-outline-secondary calendar pointer-events-none" (click)="DeliveryDate.toggle()" type="button">
+                                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                                          </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 text-right"><label control-label>Nơi giao hàng</label> <label class="control-label-require"></label></div>
+                            <div class="col-sm-9">
+                                <input type="text" #DeliveryPlace='ngModel' [(ngModel)]="objModelDelivery.DeliveryPlace" name="objModelDelivery.DeliveryPlace" class="form-control form-control-sm" required [ngClass]="{'is-invalid': DeliveryPlace.touched  && DeliveryPlace.invalid}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 text-right"><label control-label>Địa chỉ</label> <label class="control-label-require"></label></div>
+                            <div class="col-sm-9">
+                                <input type="text" #DeliveryAddress='ngModel' [(ngModel)]="objModelDelivery.DeliveryAddress" name="objModelDelivery.DeliveryAddress" class="form-control form-control-sm" required [ngClass]="{'is-invalid': DeliveryAddress.touched  && DeliveryAddress.invalid}">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 text-right"><label control-label>Latitude</label> <label class="control-label-require"></label></div>
+                            <div class="col-sm-9">
+                                <input type="text" [(ngModel)]="objModelDelivery.Latitude" name="objModelDelivery.Latitude" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 text-right"><label control-label>Longitude</label> <label class="control-label-require"></label></div>
+                            <div class="col-sm-9">
+                                <input type="text" [(ngModel)]="objModelDelivery.Longitude" name="objModelDelivery.Longitude" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-sm-3 control-label text-right">Ghi chú<span class="control-label-require"></span></label>
+                            <div class="col-sm-9">
+                                <textarea type="text" [(ngModel)]="objModelDelivery.Notes" name="objModelDelivery.Notes" rows="2" maxlength="2000" class="form-control-plaintext" style="border-bottom: 1px solid #ced4da;"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-9">
+                                <div class="custom-control custom-checkbox mb-3" style="padding-top: 8px;">
+                                    <input type="checkbox" [(ngModel)]="objModelDelivery.IsActive" name="objModelDelivery.IsActive" id="objModelDelivery.IsActive" class="custom-control-input">
+                                    <label class="custom-control-label" for="objModelDelivery.IsActive">Sử dụng</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer" [ngClass]="{'wrapper': checkValidateModelDelivery()}">
+                    <button type="button" [ngClass]="{'pointer-events-none': checkValidateModelDelivery()}" class="btn btn-info btn-sm" (click)="saveDataModelDelivery(true)">
+                                <i class="far fa-save"></i> Lưu(F3)
+                              </button>&nbsp;
+                    <button type="button" [ngClass]="{'pointer-events-none': checkValidateModelDelivery()}" class="btn btn-info btn-sm" (click)="saveDataModelDelivery(false)"> 
+                                <i class="far fa-save"></i> Lưu & Thêm mới
+                              </button>&nbsp;
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal" #closeAddExpenseModalDelivery (click)="CloseDeliveryModel()">Đóng</button>
+                </div>
             </div>
         </div>
     </div>

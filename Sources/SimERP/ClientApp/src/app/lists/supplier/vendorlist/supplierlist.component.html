@@ -55,7 +55,7 @@
             <div class="col-sm-12">
               <div class="input-group mb-3 ">
                 <ng-select [(ngModel)]="vendorTypeId" name="vendorTypeId" class="select-custom select-full-border"
-                           (clear)="clearIsActive()" (clear)="clearVendorType()">
+                           (clear)="clearVendorType()">
                   <ng-option [value]="-1">--Tất cả--</ng-option>
                   <ng-option *ngFor="let status of lstVendorType"
                              [value]="status.VendorTypeId">{{status.VendorTypeName}}</ng-option>
@@ -128,7 +128,7 @@
           </td>
           <td class="col-action">
             <a href="javascript:void(0)" [routerLink]="['/vendordetail', row.VendorId]"><i class="fas fa-edit"
-                                                                                             style='color:#337ab7;'></i></a>&nbsp;&nbsp;&nbsp;
+                                                                                           style='color:#337ab7;'></i></a>&nbsp;&nbsp;&nbsp;
             <a (click)="showConfirmDeleteDialog(row)"><i class="far fa-trash-alt" style='color:#337ab7;'></i></a>
           </td>
         </tr>

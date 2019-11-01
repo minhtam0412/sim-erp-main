@@ -154,6 +154,7 @@
         <Folder Include="ClientApp\src\assets\images\avatars\" />
         <Folder Include="ClientApp\src\assets\images\logo\" />
         <Folder Include="ClientApp\src\assets\js\" />
+        <Folder Include="Upload\Customer\" />
         <Folder Include="Upload\VendorProduct\" />
         <Folder Include="Upload\Product\" />
     </ItemGroup>

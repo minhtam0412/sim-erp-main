@@ -74,7 +74,7 @@ namespace SimERP.Business
                 param.Add("UserId", userId);
                
                 string sqlQuery = "SELECT m.RoleId, m.RoleName FROM [sec].[Role] m with(nolock) WHERE m.RoleId NOT IN ( " +
-                    "SELECT t.RoleId FROM[sec].[UserRole] t with(nolock) JOIN[sec].Role r ON r.RoleId = t.RoleId " + sqlWhere + " )";
+                    "SELECT t.RoleId FROM [sec].[UserRole] t with(nolock) JOIN [sec].Role r ON r.RoleId = t.RoleId " + sqlWhere + " )";
 
                 using (var multiResult = conn.QueryMultiple(sqlQuery, param))
                 {

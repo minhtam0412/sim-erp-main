@@ -47,7 +47,19 @@ export class CustomerService {
     return this.httpClient.post<ResponeResult>(ROOT_URL + 'api/list/customer', jsonString, { headers });
   }
 
-  Insert(obj: Customer, isNew: boolean) {
+  getDataDefault(customerId: number){
+
+    this.AuthenParams.Sign = 'tai.ngo';
+    this.SearchParams.AuthenParams = this.AuthenParams;
+    this.SearchParams.SearchString = customerId.toString();
+
+    const jsonString = JSON.stringify(this.SearchParams);
+
+    const headers = new HttpHeaders().set('content-type', 'application/json');
+    return this.httpClient.post<ResponeResult>(ROOT_URL + 'api/list/getcustomerdetail', jsonString, { headers });
+  }
+
+  Insert(obj: Customer, formData: FormData, isNew: boolean) {
 
     this.AuthenParams.Sign = 'tai.ngo';
     const headers = new HttpHeaders().set('content-type', 'application/json');
@@ -55,8 +67,8 @@ export class CustomerService {
     this.InsertParams.RowData = obj;
     this.InsertParams.IsNew = isNew;
 
-    const jsonString = JSON.stringify(this.InsertParams);
-    return this.httpClient.post<ResponeResult>(ROOT_URL + 'api/list/savecustomer', jsonString, { headers });
+    formData.append('formData', JSON.stringify(this.InsertParams));
+    return this.httpClient.post<ResponeResult>(ROOT_URL + 'api/list/savecustomer', formData);
   }
 
   Delete(Id: any) {

@@ -1058,7 +1058,7 @@ namespace SimERP.Controllers
                     reqListSearch.AddtionParams.Add("OptionName", "VENDORPRODUCT");
 
                     var lstAttachFile = this.attachFileBO.GetData(reqListSearch);
-                    vendor.ListAttachFile = lstAttachFile; 
+                    vendor.ListAttachFile = lstAttachFile;
                     #endregion
 
                     #region Load info VendorProduct
@@ -1604,33 +1604,113 @@ namespace SimERP.Controllers
 
         [Authorize]
         [HttpPost]
-        [Route("api/list/savecustomer")]
-        public ActionResult<ResponeResult> SaveCustomer([FromBody] ReqListAdd reqData)
+        [Route("api/list/getcustomerdetail")]
+        public ActionResult<ResponeResult> GetCustomerDetail([FromBody] ReqListSearch reqData)
         {
             try
             {
-                int pageID = -1;
                 //Check security & data request
                 var repData = this.CheckSign(reqData.AuthenParams, reqData.AuthenParams.ClientUserName,
                     reqData.AuthenParams.ClientPassword, reqData.AuthenParams.Sign);
                 if (repData == null || !repData.IsOk)
                     return repData;
 
-                if (reqData.IsNew)
-                    reqData.RowData.CreatedDate = DateTimeOffset.Now;
-                else
-                    reqData.RowData.ModifyDate = DateTimeOffset.Now;
-
-                var dataResult = customerBO.Save(JsonConvert.DeserializeObject<Data.DBEntities.Customer>(reqData.RowData.ToString()), reqData.IsNew);
-
-
-                if (dataResult)
+                var dataResult = customerBO.GetCustomerDetail(Convert.ToInt32(reqData.SearchString));
+                if (dataResult != null)
+                {
                     repData.RepData = dataResult;
+                }
                 else
                     this.AddResponeError(ref repData, customerBO.getMsgCode(),
                         customerBO.GetMessage(this.customerBO.getMsgCode(), this.LangID));
 
                 return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/savecustomer")]
+        public async System.Threading.Tasks.Task<ActionResult<ResponeResult>> SaveCustomer()
+        {
+            ReqListAdd objReqListAdd = null;
+            try
+            {
+                var repData = this.CheckAuthen();
+
+
+                if (repData == null || !repData.IsOk)
+                    return repData;
+
+                if (Request.HasFormContentType)
+                {
+                    if (Request.Form.ContainsKey("formData"))
+                    {
+                        var form = await Request.ReadFormAsync();
+                        string formData = form["formData"];
+                        objReqListAdd = JsonConvert.DeserializeObject<ReqListAdd>(formData);
+                    }
+                }
+
+                if (objReqListAdd == null)
+                {
+                    return new ResponeResult() { IsOk = false, MessageText = "Lỗi parse tham số!" };
+                }
+
+                Business.Models.MasterData.ListDTO.Customer customer = JsonConvert.DeserializeObject<Business.Models.MasterData.ListDTO.Customer>(objReqListAdd.RowData.ToString());
+
+                if (customer != null)
+                {
+                    if (objReqListAdd.IsNew)
+                        customer.CreatedDate = DateTimeOffset.Now;
+                    else
+                        customer.ModifyDate = DateTimeOffset.Now;
+
+                    // action upload attach file 
+                    var rslUpload = new UploadController(httpContextAccessor, mapper).UploadFile(Request.Form.Files, "Customer");
+                    var mapPath = (Dictionary<string, AttachFile>)rslUpload.Result.RepData;
+                    if (mapPath != null && mapPath.Count > 0)
+                    {
+                        foreach (string mapPathKey in mapPath.Keys)
+                        {
+                            string fileName = mapPathKey;
+                            var attachFile = customer.ListAttachFile.SingleOrDefault(x => x.FileNameOriginal.Equals(fileName));
+                            if (attachFile != null)
+                            {
+                                // get data uploaded
+                                var mapPathValue = mapPath[fileName];
+
+                                // assign new value 
+                                attachFile.FileName = mapPathValue.FileName;
+                                attachFile.FileNameOriginal = mapPathValue.FileNameOriginal;
+                                attachFile.FilePath = mapPathValue.FilePath;
+                            }
+                        }
+                    }
+
+                    var dataResult = customerBO.Save(customer, objReqListAdd.IsNew);
+                    if (dataResult)
+                        repData.RepData = dataResult;
+                    else
+                        this.AddResponeError(ref repData, customerBO.getMsgCode(),
+                            customerBO.GetMessage(this.customerBO.getMsgCode(), this.LangID));
+
+                    return repData;
+                }
+                else
+                {
+                    this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                        MsgCodeConst.Msg_RequestDataInvalidText, "Lỗi tham số gọi API", null);
+                    Logger.Error("EXCEPTION-CALL API", new Exception("Lỗi tham số gọi API"));
+                    return this.responeResult;
+                }
             }
             catch (Exception ex)
             {

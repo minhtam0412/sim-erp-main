@@ -82,7 +82,6 @@ namespace SimERP.Business
                             ? db.Role.Max(u => (int?)u.SortOrder) + 1
                             : 1;
 
-
                         db.Role.Add(rowData);
                     }
                     else

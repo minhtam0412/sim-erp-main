@@ -8,6 +8,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { ComfirmDialogComponent } from 'src/app/common/comfirm-dialog/comfirm-dialog.component';
 import { CustomertypeService } from '../../customertypecomponent/customertype.service';
+import { ListStatus } from 'src/app/common/masterdata/commondata';
 
 @Component({
   selector: 'app-customer',
@@ -23,7 +24,7 @@ export class CustomerComponent implements OnInit {
   lstDataResult: Customer[] = [];
   objModel: Customer;
   isNewModel: boolean;
-
+  lstStatus = ListStatus;
 
   total = 10;
   page = 1;
@@ -94,29 +95,12 @@ export class CustomerComponent implements OnInit {
     );
   }
 
-  saveDataModel(isclose: boolean) {
-    this.customerService.Insert(this.objModel, this.isNewModel).subscribe(res => {
-       if (res !== undefined) {
-         if (!res.IsOk) {
-           this.toastr.error(res.MessageText, 'Thông báo!');
-         } else {
-           this.SearchData();
-           this.clearModel();
-           this.toastr.success(this.isNewModel ? 'Thêm dữ liệu thành công' : 'Dữ liệu đã được chỉnh sửa', 'Thông báo!');
-           if (isclose) {
-             this.closeAddExpenseModal.nativeElement.click();
-           }
-         }
-       } else {
-         this.toastr.error("Lỗi xử lý hệ thống", 'Thông báo!');
-       }
-     }, err => {
-       console.log(err);
-     });
-  }
-
   clearModel() {
     this.objModel = new Customer();
+  }
+
+  clearIsActive() {
+    this.cboIsActive = -1;
   }
 
   CloseModel() {
@@ -159,6 +143,10 @@ export class CustomerComponent implements OnInit {
     return false;
   }
 
+  clearustomerType(){
+    this.cboCustomerType = -1;
+  }
+
   actionUp(index: number) {
     if (index == 0) return;
     var objcusr: number = this.lstDataResult[index].CustomerId;
@@ -198,11 +186,6 @@ export class CustomerComponent implements OnInit {
       }, err => {
         console.log(err);
       });
-  }
-
-  EditModel(index: number) {
-     this.isNewModel = false;
-     this.objModel = this.lstDataResult[index];
   }
 
   SearchData() {

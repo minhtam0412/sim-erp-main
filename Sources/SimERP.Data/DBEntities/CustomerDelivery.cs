@@ -15,7 +15,7 @@ namespace SimERP.Data.DBEntities
         public int? WardId { get; set; }
         public decimal? Latitude { get; set; }
         public decimal? Longitude { get; set; }
-        public long CustomerId { get; set; }
+        public int CustomerId { get; set; }
         public int? GroupCompanyId { get; set; }
         public DateTimeOffset? CreatedDate { get; set; }
         public int? CreatedBy { get; set; }

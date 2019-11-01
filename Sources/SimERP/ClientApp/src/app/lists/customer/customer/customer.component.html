@@ -21,7 +21,7 @@
                         <button type="button" class="btn btn-success btn-sm" (click)="SerachAction()">
                 <i class="fab fa-searchengin"></i> Tìm kiếm
               </button>&nbsp;
-                        <button type="button" class="btn btn-primary btn-sm" [routerLink]="['/customer','123456']">
+                        <button type="button" class="btn btn-primary btn-sm" [routerLink]="['/customerdetail']">
                 <i class="fas fa-plus-circle"></i> Thêm mới
               </button>
                     </div>
@@ -47,14 +47,12 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="input-group mb-3 ">
-                                <select [(ngModel)]="cboCustomerType" name="cboCustomerType" class="browser-default form-control">
-                    <option value="-1">
-                      Tất cả
-                    </option>
-                    <option *ngFor="let item of lstCustomerType" value="{{item.CustomerTypeId}}">
-                      {{item.CustomerTypeName}}
-                    </option>
-                  </select>
+                                <div class="input-group mb-3 ">
+                                    <ng-select [(ngModel)]="cboCustomerType" name="cboCustomerType" class="select-custom select-full-border" (clear)="clearustomerType()">
+                                        <ng-option [value]="-1">--Tất cả--</ng-option>
+                                        <ng-option *ngFor="let item of lstCustomerType" [value]="item.CustomerTypeId">{{item.CustomerTypeName}}</ng-option>
+                                    </ng-select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -66,11 +64,9 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="input-group mb-3 ">
-                                <select [(ngModel)]="cboIsActive" name="cboIsActive" class="browser-default form-control">
-                    <option value="-1">Tất cả</option>
-                    <option value="1">Sử dụng</option>
-                    <option value="0">Ngưng</option>
-                  </select>
+                                <ng-select [(ngModel)]="cboIsActive" name="cboIsActive" class="select-custom select-full-border" (clear)="clearIsActive()">
+                                    <ng-option *ngFor="let status of lstStatus" [value]="status.StatusId">{{status.StatusName}}</ng-option>
+                                </ng-select>
                             </div>
                         </div>
                     </div>
@@ -107,11 +103,11 @@
                     </tr>
                     <tr *ngFor="let row of lstDataResult; let i = index">
                         <td class="order-number">{{i + 1}}</td>
-                        <td class="col-code"><a (click)="EditModel(i)" data-toggle="modal" data-target="#formModal" style="cursor: pointer; color: #337ab7">{{row.CustomerCode}}</a></td>
+                        <td class="col-code"><a href="javascript:void(0)" [routerLink]="['/customerdetail', row.CustomerId]" data-toggle="modal" data-target="#formModal" style="cursor: pointer; color: #337ab7">{{row.CustomerCode}}</a></td>
                         <td class="col-name">{{row.CustomerName}}</td>
                         <td class="col-address">{{row.Address}}</td>
                         <td>{{row.PhoneNumber}}</td>
-                        <td>{{row.Email}}</td>
+                        <td class="col-name">{{row.Email}}</td>
                         <td class="col-name">{{row.RepresentativeName}}</td>
 
                         <td>
@@ -122,7 +118,7 @@
                             <a (click)="actionDow(i)"><i class="fas fa-arrow-alt-circle-down" style="color:forestgreen; font-size:14px"></i></a>
                         </td>
                         <td class="col-action">
-                            <a (click)="EditModel(i)" data-toggle="modal" data-target="#formModal"><i class="fas fa-edit" style='color:#337ab7;'></i></a>&nbsp;&nbsp;&nbsp;
+                            <a href="javascript:void(0)" [routerLink]="['/customerdetail', row.CustomerId]"><i class="fas fa-edit" style='color:#337ab7;'></i></a>&nbsp;&nbsp;&nbsp;
                             <a (click)="openDialog(row.CustomerId)"><i class="far fa-trash-alt" style='color:#337ab7;'></i></a>
                         </td>
                     </tr>
@@ -131,68 +127,4 @@
         </div>
         <app-pagination (goPage)="goToPage($event)" (changeLimit)="changeLimit()" (goNext)="onNext()" (goPrev)="onPrev()" [pagesToShow]="5" [page]="page" [perPage]="limit" [count]="total"></app-pagination>
     </section>
-</div>
-
-<!-- The Modal -->
-<div class="modal fade" id="formModal" data-backdrop="static">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">THÊM MỚI/CHỈNH SỬA</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-
-            <!-- Modal body -->
-            <div class="modal-body">
-                <div class="form_content">
-                    <div class="row">
-                        <div class="col-sm-3 text-right"><label control-label>Page name</label> <label class="control-label-require">*</label></div>
-                        <div class="col-sm-9">
-                            <input type="text" #PageName='ngModel' [(ngModel)]="objModel.CustomerName" name="PageName" class="form-control form-control-sm" required maxlength="250" [ngClass]="{ 'is-invalid': PageName.touched  && PageName.invalid  }">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-3 text-right"><label control-label>Controller name</label> <label class="control-label-require">*</label></div>
-                        <div class="col-sm-9">
-                            <input type="text" #ControllerName='ngModel' [(ngModel)]="objModel.CustomerName" class="form-control form-control-sm" required maxlength="250" [ngClass]="{ 'is-invalid': ControllerName.touched  && ControllerName.invalid } ">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-3 text-right"><label control-label>Action name</label> <label class="control-label-require">*</label></div>
-                        <div class="col-sm-9">
-                            <input type="text" #ActionName='ngModel' [(ngModel)]="objModel.CustomerName" class="form-control form-control-sm" required maxlength="250" [ngClass]="{ 'is-invalid': ActionName.touched  && ActionName.invalid }">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-sm-3 text-right"><label></label></div>
-                        <div class="col-sm-9">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="custom-control custom-checkbox mb-3">
-                                        <input type="checkbox" class="custom-control-input" [(ngModel)]="objModel.IsActive" id="IsActive" name="IsActive">
-                                        <label class="custom-control-label" for="IsActive">Active</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal footer -->
-            <div class="modal-footer" [ngClass]="{'wrapper': checkValidateModel()}">
-                <button type="button" [ngClass]="{'pointer-events-none': checkValidateModel()}" class="btn btn-info btn-sm" (click)="saveDataModel(true)">
-            <i class="far fa-save"></i> Lưu(F3)
-          </button>&nbsp;
-                <button type="button" [ngClass]="{'pointer-events-none': checkValidateModel()}" class="btn btn-info btn-sm" (click)="saveDataModel(false)">
-            <i class="far fa-save"></i> Lưu & Thêm mới
-          </button>&nbsp;
-                <button type="button" class="btn btn-outline-secondary btn-sm" data-dismiss="modal" #closeAddExpenseModal (click)="CloseModel()">Đóng</button>
-            </div>
-
-        </div>
-    </div>
 </div>

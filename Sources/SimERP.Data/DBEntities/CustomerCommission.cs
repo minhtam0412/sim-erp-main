@@ -17,5 +17,6 @@ namespace SimERP.Data.DBEntities
         public int? ModifyBy { get; set; }
         public DateTimeOffset? ModifyDate { get; set; }
         public bool IsActive { get; set; }
+        public int CustomerId { get; set; }
     }
 }

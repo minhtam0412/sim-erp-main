@@ -12,9 +12,10 @@ namespace SimERP.Business
     {
         List<Models.MasterData.ListDTO.Customer> GetData(string searchString, int? customerType, bool? IsActive, int startRow,
             int maxRows);
-        bool Save(Customer rowData, bool isNew);
+        bool Save(Models.MasterData.ListDTO.Customer rowData, bool isNew);
         bool Delete(long id);
         bool UpdateSortOrder(long upID, long downID);
         List<GroupCompany> GetListGroupCompany();
+        Models.MasterData.ListDTO.Customer GetCustomerDetail(int customerId);
     }
 }

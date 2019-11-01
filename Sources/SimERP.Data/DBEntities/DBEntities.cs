@@ -281,8 +281,6 @@ namespace SimERP.Data.DBEntities
 
                 entity.ToTable("CustomerProduct", "list");
 
-                entity.Property(e => e.RowId).ValueGeneratedNever();
-
                 entity.Property(e => e.IsActive)
                     .IsRequired()
                     .HasDefaultValueSql("((1))");

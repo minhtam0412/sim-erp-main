@@ -73,9 +73,32 @@ namespace SimERP.Business.Models.MasterData.ListDTO
         public string CreateName { get; set; }
     }
 
+    public class CustomerSale : Data.DBEntities.CustomerSale
+    {
+        public string UserCode { get; set; }
+        public string UserName { get; set; }
+        public string FullName { get; set; }
+    }
+
+    public class CustomerProduct : Data.DBEntities.CustomerProduct
+    {
+        public string ProductCode { get; set; }
+        public string ProductName { get; set; }
+        public string UnitName { get; set; }
+        public string SaleName { get; set; }
+        public Guid? ProductCategoryId { get; set; }
+        public string ProductCategoryName { get; set; }
+    }
+
     public class Customer : Data.DBEntities.Customer
     {
+        public List<AttachFile> ListAttachFile { get; set; }
+        public List<AttachFile> ListAttachFileDelete { get; set; }
         public string CreateName { get; set; }
+        public List<CustomerProduct> objProduct { get; set; }
+        public List<CustomerSale> objSaler { get; set; }
+        public List<CustomerCommission> objCommission { get; set; }
+        public List<CustomerDelivery> objDelivery { get; set; }
     }
 
     public class Role : Data.DBEntities.Role

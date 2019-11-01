@@ -4,7 +4,7 @@ import { CustomerType } from '../../customertypecomponent/models/customertype';
 import { CustomerService } from '../customer.service';
 import { CustomertypeService } from '../../customertypecomponent/customertype.service';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbDateStruct, NgbDate, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { GroupCompany } from '../model/groupcompany';
 import { ProductCategory } from '../../productcategory/model/ProductCategory';
@@ -20,7 +20,11 @@ import { User } from 'src/app/systems/user';
 import { UserService } from 'src/app/systems/user.service';
 import { ComfirmDialogComponent } from 'src/app/common/comfirm-dialog/comfirm-dialog.component';
 import { Guid } from 'guid-typescript';
-import { CustomerUser } from '../model/customeruser';
+import { CustomerSale } from '../model/customersale';
+import { CustomerCommission } from '../model/customercommission';
+import { CustomerDelivery } from '../model/customerdelivery';
+import { AuthenService } from 'src/app/systems/authen.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-customerdetail',
@@ -29,11 +33,13 @@ import { CustomerUser } from '../model/customeruser';
 })
 export class CustomerdetailComponent implements OnInit {
 
+  customerId: number;
   objData: Customer;
   currentIndexAttachFile = -1;
   isNewModel: boolean;
+  indexEdit: number;
   lstItemType = ListItemType;
-
+  userAuthenInfo: any;
   //----Combobox-----
   cboCustomerType: CustomerType[] = [];
   cboGroupCompany: GroupCompany[] = [];
@@ -51,8 +57,23 @@ export class CustomerdetailComponent implements OnInit {
   lstUser: User[] = [];
 
   //----Model Saler---
-  lstObjSaler: CustomerUser[] = [];
+  IsToDate: boolean;
+  dataSalerIsActiveFilter: number;
+  fromDate: NgbDateStruct;
+  toDate: NgbDateStruct;
+  lstObjSaler: CustomerSale[] = [];
 
+  //----Model Commission---
+  commissionIdEdit: string = "";
+  dataCommissionIsActiveFilter: number;
+  isNewModelCommission: boolean;
+  dtcreate: NgbDateStruct;
+  objModelCommission: CustomerCommission;
+  lstObjCommission: CustomerCommission[] = [];
+
+  //----Model Delivery---
+  objModelDelivery: CustomerDelivery;
+  isNewModelDelivery: boolean;
   //------------------
 
   static checkIsImageFile(file: File) {
@@ -86,20 +107,33 @@ export class CustomerdetailComponent implements OnInit {
   <div class="col-4">Tên nhân viên</div>
   </div>`;
 
+  @ViewChild('closePageDetail', { static: true }) closePageDetail: ElementRef;
   @ViewChild('closeAddExpenseModal', { static: true }) closeAddExpenseModal: ElementRef;
+  @ViewChild('closeAddExpenseModalSaler', { static: true }) closeAddExpenseModalSaler: ElementRef;
+  @ViewChild('closeAddExpenseModalCommission', { static: true }) closeAddExpenseModalCommission: ElementRef;
+  @ViewChild('closeAddExpenseModalDelivery', { static: true }) closeAddExpenseModalDelivery: ElementRef;
 
   constructor(private customerService: CustomerService, private customertypeService: CustomertypeService, private productCategoryService: ProductCategoryService,
     private spinnerService: Ng4LoadingSpinnerService, private modalService: NgbModal, private toastr: ToastrService, private notificationService: NotificationService,
-    private productService: ProductService, private userService: UserService) {
+    private productService: ProductService, private userService: UserService, private calendar: NgbCalendar, private authen: AuthenService, private activatedRoute: ActivatedRoute,) {
 
     this.objData = new Customer();
     this.objModelProduct = new CustomerProduct();
+    this.objModelCommission = new CustomerCommission();
+    this.objModelDelivery = new CustomerDelivery();
     this.objData.PaymentTermId = 50;
+    
+    this.userAuthenInfo = authen.extractAccessTokenData();
+    this.userAuthenInfo = this.userAuthenInfo;
 
     this.dataSerachProduct = "";
     this.dataSerachEmployee = "";
-    this.dataProductCategoryFilter = "";
+    this.dataProductCategoryFilter = "-1";
     this.dataProductIsActiveFilter = -1;
+    this.dataSalerIsActiveFilter = -1;
+    this.dataCommissionIsActiveFilter = -1;
+    this.indexEdit = -1;
+    this.IsToDate = false;
   }
 
   ngOnInit() {
@@ -108,6 +142,42 @@ export class CustomerdetailComponent implements OnInit {
     this.loadProductCategory();
     this.SearchProduct();
     this.SearchUser();
+
+    this.customerId = this.activatedRoute.snapshot.params['id'];
+    this.isNewModel = this.customerId === undefined || this.customerId == null;
+
+    console.log("customerId: " + this.customerId);
+    console.log("isNewModel: " + this.isNewModel);
+
+    if(!this.isNewModel){
+      this.loadDataDefault(this.customerId);
+    }
+
+  }
+
+  //---Load data default---
+  loadDataDefault(customerId: number) {
+    this.customerService.getDataDefault(customerId).subscribe(
+      {
+        next: (res) => {
+          if (!res.IsOk) {
+            this.toastr.error(res.MessageText, 'Thông báo!');
+          } else {
+            this.objData = res.RepData;
+            console.log(res.RepData);
+            this.lstObjProduct = Object.assign([], this.objData.objProduct);
+            this.lstObjSaler = Object.assign([], this.objData.objSaler);
+            this.lstObjCommission = Object.assign([], this.objData.objCommission);
+          }
+        },
+        error: (err) => {
+          console.log(err);
+        },
+        complete: () => {
+          
+        }
+      }
+    );
   }
 
   //---Load data combobox---
@@ -170,6 +240,43 @@ export class CustomerdetailComponent implements OnInit {
       }
     );
   }
+
+  SaveData(isclose: boolean){
+    if(!this.objData.IsGroupCompany)
+      this.objData.GroupCompanyId = null;
+    this.objData.CreatedBy = this.userAuthenInfo.UserId;
+
+    console.log(this.lstFileToUpload);
+    const formData = new FormData();
+    Array.from(this.lstFileToUpload).map((file) => {
+      return formData.append(file.name, file, file.name);
+    });
+
+    this.customerService.Insert(this.objData, formData, this.isNewModel).subscribe(res => {
+      if (res !== undefined) {
+        if (!res.IsOk) {
+          this.toastr.error(res.MessageText, 'Thông báo!');
+        } else {
+          this.toastr.success(this.isNewModel ? 'Thêm dữ liệu thành công' : 'Dữ liệu đã được chỉnh sửa', 'Thông báo!');
+          if (isclose) {
+            this.closePageDetail.nativeElement.click();
+          }
+        }
+      } else {
+        this.toastr.error("Lỗi xử lý hệ thống", 'Thông báo!');
+      }
+    }, err => {
+      console.log(err);
+    });
+  }
+
+  checkValidateAction(){
+    if (this.objData.CustomerName.length <= 0 || this.objData.CustomerCode.length <= 0 || 
+      this.objData.Address.length <= 0 || this.objData.DebtCeiling < 0)
+      return true;
+    return false;
+  }
+
   //---------------------Tab Hàng hóa---------------------------
   SearchProduct() {
     this.productService.getData(this.dataSerachProduct, null,
@@ -180,7 +287,6 @@ export class CustomerdetailComponent implements OnInit {
               this.toastr.error(res.MessageText, 'Thông báo!');
             } else {
               this.lstProduct = res.RepData;
-              console.log(this.lstProduct);
             }
           },
           error: (err) => {
@@ -193,14 +299,13 @@ export class CustomerdetailComponent implements OnInit {
   }
 
   SearchUser() {
-    this.userService.getData(this.dataSerachEmployee, 1, 0, Key_MaxRow).subscribe(
+    this.userService.getData(this.dataSerachEmployee, -1, 0, Key_MaxRow).subscribe(
       {
         next: (res) => {
           if (!res.IsOk) {
             alert('Lỗi ' + res.MessageText);;
           } else {
             this.lstUser = res.RepData;
-            console.log(this.lstUser);
           }
         },
         error: (err) => {
@@ -223,26 +328,12 @@ export class CustomerdetailComponent implements OnInit {
     }
   }
 
-  AddListSaler(SalerId: number) {
-    if (!this.lstObjSaler.find(x => x.UserId == SalerId)) {
-      var item: User = this.lstUser.find(x => x.UserId == SalerId);
-      var saler:CustomerUser = new CustomerUser();
-      saler.UserId = item.UserId;
-      saler.UserCode = item.UserCode;
-      saler.FullName = item.FullName;
-      saler.IsActive = item.IsActive;
-      saler.CreateDate = new Date();
-      
-      this.lstObjSaler.push(saler);
-    }
-  }
-
   AddModelProduct() {
-    this.isNewModel = true;
+    // this.isNewModel = true;
   }
 
   EditModelProduct() {
-    this.isNewModel = false;
+    // this.isNewModel = false;
   }
 
   CloseProductModel() {
@@ -256,6 +347,13 @@ export class CustomerdetailComponent implements OnInit {
     // xử lý sau khi đóng dialog, thực hiện load lại dữ liệu nếu muốn
     modalRef.result.then((result) => {
       if (result != undefined && result == true) {
+        var item = this.objData.objProduct.find(x => x.ProductId == ProductId);
+
+        if (this.objData.objProduct.filter(x => x.SaleId == item.SaleId).length <= 1) {
+          this.SalerRemoveItem(item.SaleId);
+          this.RefreshFilterSaler();
+        }
+
         this.objData.objProduct.splice(this.objData.objProduct.findIndex(x => x.ProductId == ProductId), 1);
         this.lstObjProduct.splice(this.lstObjProduct.findIndex(x => x.ProductId == ProductId), 1);
       }
@@ -342,6 +440,226 @@ export class CustomerdetailComponent implements OnInit {
     }
   }
 
+  //---------------------Tab Saler---------------------
+  saveDataModelSaler(isclose: boolean) {
+    if (this.indexEdit != -1 && this.indexEdit != undefined) {
+      var item: CustomerSale = this.lstObjSaler[this.indexEdit];
+      if (this.fromDate != null) {
+        let fromDate = new Date(this.fromDate.year + "-" + this.fromDate.month + "-" + this.fromDate.day);
+        item.FromDate = fromDate;
+      }
+
+      if(!this.IsToDate){
+        this.toDate = null;
+        item.ToDate = null;
+      }
+        
+      if (this.toDate != null) {
+        let toDate = new Date(this.toDate.year + "-" + this.toDate.month + "-" + this.toDate.day);
+        item.ToDate = toDate;
+      }
+
+      this.lstObjSaler[this.lstObjSaler.findIndex(x => x.SaleId == item.SaleId)] = item;
+      this.objData.objSaler[this.objData.objSaler.findIndex(x => x.SaleId == item.SaleId)] = item;
+
+      if (isclose) {
+        this.closeAddExpenseModalSaler.nativeElement.click();
+      }
+    }
+  }
+
+  AddListSaler(SalerId: number) {
+    if (!this.lstObjSaler.find(x => x.SaleId == SalerId)) {
+      var item: User = this.lstUser.find(x => x.UserId == SalerId);
+      var saler: CustomerSale = new CustomerSale();
+      saler.SaleId = item.UserId;
+      saler.UserCode = item.UserCode;
+      saler.FullName = item.FullName;
+      saler.IsActive = item.IsActive;
+      saler.CreatedDate = new Date();
+
+      console.log(saler.CreatedDate);
+
+      this.objData.objSaler.push(saler);
+      this.lstObjSaler.push(saler);
+      this.RefreshFilterSaler();
+    }
+  }
+
+  EditModelSaler(index: number) {
+    this.indexEdit = index;
+    if (this.lstObjSaler[index].FromDate != undefined && this.lstObjSaler[index].FromDate != null) {
+      let fromdate_tem = new Date(this.lstObjSaler[index].FromDate.toString());
+      var dtfrom: NgbDate = new NgbDate(fromdate_tem.getFullYear(), fromdate_tem.getMonth() + 1, fromdate_tem.getDate());
+      this.fromDate = dtfrom;
+    }
+
+    if (this.lstObjSaler[index].ToDate != undefined && this.lstObjSaler[index].ToDate != null) {
+      this.IsToDate = true;
+      let todate_tem = new Date(this.lstObjSaler[index].ToDate.toString());
+      var dtto: NgbDate = new NgbDate(todate_tem.getFullYear(), todate_tem.getMonth() + 1, todate_tem.getDate());
+      this.toDate = dtto;
+    }
+  }
+
+  CloseSalerModel() {
+    this.indexEdit = -1;
+    this.fromDate = null;
+    this.toDate = null;
+    this.IsToDate = false;
+  }
+
+  SalerRemoveItem(SaleId: number) {
+    this.objData.objSaler.splice(this.objData.objSaler.findIndex(x => x.SaleId == SaleId), 1);
+    this.lstObjSaler.splice(this.lstObjSaler.findIndex(x => x.SaleId == SaleId), 1);
+  }
+
+  FilterCustomerSaler() {
+    if (this.dataSalerIsActiveFilter == -1)
+      this.lstObjSaler = Object.assign([], this.objData.objSaler);
+    else
+      this.lstObjSaler = Object.assign([], this.objData.objSaler.filter(x => x.IsActive == (this.dataSalerIsActiveFilter == 1)));
+  }
+
+  RefreshFilterSaler() {
+    this.dataSalerIsActiveFilter = -1;
+    this.FilterCustomerSaler();
+  }
+
+  //---------------------Tab Commission---------------------
+  saveDataModelCommission(isclose: boolean) {
+    this.objModelCommission.CreatedDate = new Date(this.dtcreate.year, this.dtcreate.month, this.dtcreate.day);
+    if (this.isNewModelCommission) {
+      this.lstObjCommission.push(this.objModelCommission);
+      this.objData.objCommission.push(this.objModelCommission)
+    }
+    else {
+      this.lstObjCommission[this.lstObjCommission.findIndex(x => x.PhoneNumber == this.commissionIdEdit)] = this.objModelCommission;
+      this.objData.objCommission[this.objData.objCommission.findIndex(x => x.PhoneNumber == this.commissionIdEdit)] = this.objModelCommission;
+    }
+
+    this.clearCommissionModel();
+
+    if (isclose) {
+      this.closeAddExpenseModalCommission.nativeElement.click();
+    }
+  }
+
+  CloseCommissionModel() {
+
+  }
+
+  AddModelCommission() {
+    this.isNewModelCommission = true;
+    this.dtcreate = this.calendar.getToday();
+  }
+
+  EditModelCommission(PhoneNumber: string) {
+    this.isNewModelCommission = false;
+    this.commissionIdEdit = PhoneNumber;
+
+    var index = this.lstObjCommission.findIndex(x => x.PhoneNumber == PhoneNumber);
+    if (this.lstObjCommission[index].CreatedDate != undefined && this.lstObjCommission[index].CreatedDate != null) {
+      let date_tem = new Date(this.lstObjCommission[index].CreatedDate.toString());
+      var dt: NgbDate = new NgbDate(date_tem.getFullYear(), date_tem.getMonth(), date_tem.getDate());
+      this.dtcreate = dt;
+    }
+
+    this.objModelCommission = Object.assign({}, this.lstObjCommission[index]);
+  }
+
+  CommissionRemoveItem(PhoneNumber: string) {
+    const modalRef = this.modalService.open(ComfirmDialogComponent, {
+      backdrop: false, scrollable: true, centered: true
+    });
+    // xử lý sau khi đóng dialog, thực hiện load lại dữ liệu nếu muốn
+    modalRef.result.then((result) => {
+      if (result != undefined && result == true) {
+        this.lstObjCommission.splice(this.lstObjCommission.findIndex(x => x.PhoneNumber == PhoneNumber), 1);
+      }
+    });
+  }
+
+  clearCommissionModel() {
+    this.objModelCommission = new CustomerCommission();
+    // this.dataCommissionIsActiveFilter = -1;
+  }
+
+  FilterCustomerCommission() {
+    if (this.dataCommissionIsActiveFilter == -1) {
+      this.lstObjCommission = Object.assign([], this.objData.objCommission);
+    }
+    if (this.dataCommissionIsActiveFilter != -1) {
+      this.lstObjCommission = Object.assign([], this.objData.objCommission.filter(x => x.IsActive == (this.dataCommissionIsActiveFilter == 1)));
+    }
+  }
+
+  checkValidateModelCommission() {
+    if (this.objModelCommission.BeneficiaryName.length <= 0 || this.objModelCommission.PhoneNumber.length <= 0)
+      return true;
+    return false;
+  }
+  //---------------------Tab Delivery---------------------
+  saveDataModelDelivery(isclose: boolean){
+    this.objModelDelivery.CreatedDate = new Date(this.dtcreate.year, this.dtcreate.month, this.dtcreate.day);
+    this.objModelDelivery.CreatedBy = this.userAuthenInfo.UserId;
+    if (this.isNewModelDelivery) {
+      this.objData.objDelivery.push(this.objModelDelivery)
+    }
+    else {
+      this.objData.objDelivery[this.indexEdit] = this.objModelDelivery;
+    }
+
+    this.clearDeliveryModel();
+
+    if (isclose) {
+      this.closeAddExpenseModalDelivery.nativeElement.click();
+    }
+  }
+
+  AddModelDelivery(){
+    this.isNewModelDelivery = true;
+    this.clearDeliveryModel();
+    this.dtcreate = this.calendar.getToday();
+  }
+
+  EditModelDelivery(index: number){
+    this.indexEdit = index;
+    this.isNewModelDelivery = false;
+
+    if (this.objData.objDelivery[index].CreatedDate != undefined && this.objData.objDelivery[index].CreatedDate != null) {
+      let date_tem = new Date(this.objData.objDelivery[index].CreatedDate.toString());
+      var dt: NgbDate = new NgbDate(date_tem.getFullYear(), date_tem.getMonth(), date_tem.getDate());
+      this.dtcreate = dt;
+    }
+    this.objModelDelivery = Object.assign({}, this.objData.objDelivery[index]);
+  }
+
+  DeliveryRemoveItem(index: number) {
+    const modalRef = this.modalService.open(ComfirmDialogComponent, {
+      backdrop: false, scrollable: true, centered: true
+    });
+    // xử lý sau khi đóng dialog, thực hiện load lại dữ liệu nếu muốn
+    modalRef.result.then((result) => {
+      if (result != undefined && result == true) {
+        this.objData.objDelivery.splice(index, 1);
+      }
+    });
+  }
+
+  clearDeliveryModel(){
+    this.objModelDelivery = new CustomerDelivery();
+  }
+
+  checkValidateModelDelivery() {
+    if (this.objModelDelivery.DeliveryPlace.length <= 0 || this.objModelDelivery.DeliveryAddress.length <= 0)
+      return true;
+    return false;
+  }
+
+  CloseDeliveryModel(){
+
+  }
   //---------------------Tab file---------------------------
   // handle on user click delete attach file
   deleteAttachFile(index: number) {
@@ -433,7 +751,7 @@ export class CustomerdetailComponent implements OnInit {
       const attachfile: Attachfile = new Attachfile();
       attachfile.FileNameOriginal = file.name;
       attachfile.FileSize = file.size;
-      attachfile.OptionName = 'PRODUCT';
+      attachfile.OptionName = 'CUSTOMER';
 
 
       // Current state is EditMode

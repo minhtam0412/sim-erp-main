@@ -1,7 +1,7 @@
 import { Guid } from 'guid-typescript';
 
 export class CustomerProduct {
-    RowId: any;
+    RowId: number;
     CustomerId: number;
     ProductId: number;
     ProductCode: string;
@@ -14,6 +14,6 @@ export class CustomerProduct {
     ProductCategoryName: string = "";
     ProductType: number;
     Notes: string;
-    IsActive: boolean;
-    IsSale:boolean;
+    IsActive: boolean = true;
+    IsSale:boolean = false;
 }
