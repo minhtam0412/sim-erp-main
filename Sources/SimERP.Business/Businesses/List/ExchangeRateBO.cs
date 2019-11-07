@@ -87,7 +87,6 @@ namespace SimERP.Business
                 return null;
             }
         }
-
         public bool Save(ExchangeRate rowData, bool isNew)
         {
             try
@@ -113,7 +112,6 @@ namespace SimERP.Business
                 return false;
             }
         }
-
         public bool DeleteExchangeRate(int id)
         {
             try
@@ -131,6 +129,51 @@ namespace SimERP.Business
                 this.AddMessage(MessageCode.MSGCODE_003, "Delete ExchangeRate unsucessful");
                 Logger.Error(GetType(), ex);
                 return false;
+            }
+        }
+
+        public List<ExchangeRate> GetLastestData(ReqListSearch reqListSearch)
+        {
+            try
+            {
+                using (IDbConnection conn = IConnect.GetOpenConnection())
+                {
+                    DynamicParameters param = new DynamicParameters();
+
+                    string sqlQuery = @"SELECT count(1)
+                                        FROM list.ExchangeRate er
+                                        JOIN list.Currency c
+                                          ON er.CurrencyId = c.CurrencyId
+                                        WHERE er.ExchangeDate = (SELECT
+                                            MAX(er1.ExchangeDate)
+                                          FROM list.ExchangeRate er1
+                                          WHERE er.CurrencyId
+                                          = er1.CurrencyId) AND c.IsActive = 1
+                                            ;SELECT c.CurrencyId
+                                         ,c.CurrencyName
+                                         ,er.ExchangeDate
+                                         ,er.ExchangeRating
+                                        FROM list.ExchangeRate er
+                                        JOIN list.Currency c
+                                          ON er.CurrencyId = c.CurrencyId
+                                        WHERE er.ExchangeDate = (SELECT
+                                            MAX(er1.ExchangeDate)
+                                          FROM list.ExchangeRate er1
+                                          WHERE er.CurrencyId
+                                          = er1.CurrencyId) AND c.IsActive = 1";
+
+                    using (var multiResult = conn.QueryMultiple(sqlQuery, param))
+                    {
+                        this.TotalRows = multiResult.Read<int>().Single();
+                        return multiResult.Read<ExchangeRate>().ToList();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                this.AddMessage(MessageCode.MSGCODE_001, ex.Message);
+                Logger.Error(GetType(), ex);
+                return null;
             }
         }
     }

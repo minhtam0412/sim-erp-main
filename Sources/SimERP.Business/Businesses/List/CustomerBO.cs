@@ -122,7 +122,7 @@ namespace SimERP.Business
 
                     var delivery = conn.QueryMultiple(sqlQuery, param);
                     dataResult.objDelivery = delivery.Read<CustomerDelivery>().ToList();
-
+                    //--List FileAttach
                     dataResult.ListAttachFile = new List<Models.MasterData.ListDTO.AttachFile>();
 
                     return dataResult;

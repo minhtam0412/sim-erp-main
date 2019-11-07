@@ -6,6 +6,7 @@ namespace SimERP.Data.DBEntities
     public partial class CustomerCommission
     {
         public long RowId { get; set; }
+        public int CustomerId { get; set; }
         public string BeneficiaryName { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
@@ -17,6 +18,5 @@ namespace SimERP.Data.DBEntities
         public int? ModifyBy { get; set; }
         public DateTimeOffset? ModifyDate { get; set; }
         public bool IsActive { get; set; }
-        public int CustomerId { get; set; }
     }
 }

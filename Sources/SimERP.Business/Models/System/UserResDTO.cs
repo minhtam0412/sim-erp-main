@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SimERP.Business.Models.MasterData.ListDTO;
+using SimERP.Data.DBEntities;
 
 namespace SimERP.Business.Models.System
 {
@@ -25,5 +26,10 @@ namespace SimERP.Business.Models.System
         public bool IsSecondPassword { get; set; } = false;
         public bool IsFirstChangePassword { get; set; } = false;
         public string PageDefault { get; set; }
+    }
+
+    public class UserDTO: User
+    {
+        public string CreatedName { get; set; }
     }
 }

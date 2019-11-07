@@ -28,6 +28,8 @@ import {SupplierdetailComponent} from '../lists/supplier/vendordetail/supplierde
 import {StocklistComponent} from '../lists/stock/stocklist/stocklist.component';
 import {CurrencylistComponent} from '../lists/currency/currencylist/currencylist.component';
 import {ExchangeratelistComponent} from '../lists/exchangerate/exchangeratelist/exchangeratelist.component';
+import {SaleorderlistComponent} from '../vouchers/saleorder/saleorderlist/saleorderlist.component';
+import {SaleorderdetailComponent} from '../vouchers/saleorder/saleorderdetail/saleorderdetail.component';
 
 
 const routes: Routes = [
@@ -56,6 +58,9 @@ const routes: Routes = [
       {path: 'stock', component: StocklistComponent},
       {path: 'currency', component: CurrencylistComponent},
       {path: 'exchangerate', component: ExchangeratelistComponent},
+      {path: 'saleorder', component: SaleorderlistComponent},
+      {path: 'saleorderdetail', component: SaleorderdetailComponent},
+      {path: 'saleorderdetail/:id', component: SaleorderdetailComponent},
     ]
   },
   {

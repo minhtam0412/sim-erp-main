@@ -47,7 +47,7 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="input-group mb-3 ">
-                                <div class="input-group mb-3 ">
+                                <div class="input-group mb-3">
                                     <ng-select [(ngModel)]="cboCustomerType" name="cboCustomerType" class="select-custom select-full-border" (clear)="clearustomerType()">
                                         <ng-option [value]="-1">--Tất cả--</ng-option>
                                         <ng-option *ngFor="let item of lstCustomerType" [value]="item.CustomerTypeId">{{item.CustomerTypeName}}</ng-option>
@@ -103,7 +103,7 @@
                     </tr>
                     <tr *ngFor="let row of lstDataResult; let i = index">
                         <td class="order-number">{{i + 1}}</td>
-                        <td class="col-code"><a href="javascript:void(0)" [routerLink]="['/customerdetail', row.CustomerId]" data-toggle="modal" data-target="#formModal" style="cursor: pointer; color: #337ab7">{{row.CustomerCode}}</a></td>
+                        <td class="col-code"><a href="javascript:void(0)" [routerLink]="['/customerdetail', row.CustomerId]" style="cursor: pointer; color: #337ab7">{{row.CustomerCode}}</a></td>
                         <td class="col-name">{{row.CustomerName}}</td>
                         <td class="col-address">{{row.Address}}</td>
                         <td>{{row.PhoneNumber}}</td>

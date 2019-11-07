@@ -21,8 +21,22 @@ export class MasterdataService {
   getData(apiURL: string, isActive?: boolean) {
     this.reqListSearch.MaxRow = Key_MaxRow;
     this.reqListSearch.AuthenParams = this.authenParams;
+    this.reqListSearch.IsActive = isActive;
     const jsonString = JSON.stringify(this.reqListSearch);
     const headers = new HttpHeaders().set('content-type', 'application/json');
+    return this.httpClient.post<ResponeResult>(this.baseUrl + apiURL, jsonString, {headers});
+  }
+
+  private getCustomer(apiURL: string, isActive?: boolean) {
+    this.reqListSearch.AuthenParams = this.authenParams;
+    this.reqListSearch.StartRow = 0;
+    this.reqListSearch.MaxRow = Key_MaxRow;
+    this.reqListSearch.IsActive = isActive;
+    this.reqListSearch.SearchString = null;
+    const param = {'dataserach': this.reqListSearch, 'customertypeID': null};
+    const jsonString = JSON.stringify(param);
+    const headers = new HttpHeaders().set('content-type', 'application/json');
+    console.log(jsonString);
     return this.httpClient.post<ResponeResult>(this.baseUrl + apiURL, jsonString, {headers});
   }
 
@@ -65,4 +79,17 @@ export class MasterdataService {
   getCurrencyData() {
     return this.getData('api/list/currency', true);
   }
+
+  getStockData() {
+    return this.getData('api/list/stock', true);
+  }
+
+  getCustomerData() {
+    return this.getCustomer('api/list/customer', true);
+  }
+
+  getExchangeRateLastestData() {
+    return this.getData('api/list/exchangeratelastest');
+  }
+
 }

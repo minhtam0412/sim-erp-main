@@ -12,7 +12,7 @@
                     <button type="button" [ngClass]="{'pointer-events-none': checkValidateAction()}" (click)="SaveData(false)" class="btn btn-success btn-sm" style="background-color: #5cb85c; border-color: #4cae4c">
                         <i class="far fa-check-square"></i> Lưu & Thêm mới
                     </button>&nbsp;
-                    <button type="button" #closePageDetail class="btn btn-success btn-sm" style="background-color: #337ab7; border-color: #2e6da4;" [routerLink]="['/customer']" routerLinkActive="router-link-active">
+                    <button type="button" (click)="goBack()" #closePageDetail class="btn btn-success btn-sm" style="background-color: #337ab7; border-color: #2e6da4;">
                         <i class="fas fa-long-arrow-alt-left"></i> Trở về
                     </button>&nbsp;
                 </div>
@@ -495,50 +495,51 @@
                                 <div style="display: none">
                                     <input type="file" #file placeholder="Choose file" (change)="changeFile(file.files)" multiple style="display:none;">
                                 </div>
-                                <div class="table-responsive">
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
 
-                                    <!-- Table  -->
-                                    <table class="table table-bordered table-striped table-hover table-fixed">
+                                        <!-- Table  -->
+                                        <table class="table table-bordered table-striped table-hover table-fixed">
 
-                                        <!-- Table head -->
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Image</th>
-                                                <th>Tên hình ảnh/Tài liệu</th>
-                                                <th>Ghi chú</th>
-                                                <th>File Name</th>
-                                                <th>Ngày update</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <!-- Table head -->
+                                            <!-- Table head -->
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Image</th>
+                                                    <th>Tên hình ảnh/Tài liệu</th>
+                                                    <th>Ghi chú</th>
+                                                    <th>File Name</th>
+                                                    <th>Ngày update</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <!-- Table head -->
 
-                                        <!-- Table body -->
-                                        <tbody>
-                                            <tr *ngIf="objData.ListAttachFile.length < 1">
-                                                <td colspan="10" class="datarow-null">Dữ liệu không tồn tại</td>
-                                            </tr>
-                                            <tr *ngFor="let row of objData.ListAttachFile; let i = index">
-                                                <td class="order-number">{{i + 1}}</td>
-                                                <td><img [src]="row.FilePathPreview" height="40px"></td>
-                                                <td class="col-name"><input type="text" [(ngModel)]="objData.ListAttachFile[i].FileTitle" name="FileTitle{{i}}" class="form-control " maxlength="250"></td>
-                                                <td class="col-name"><input type="text" [(ngModel)]="objData.ListAttachFile[i].Desctiption" name="Desctiption{{i}}" class="form-control " maxlength="500"></td>
-                                                <td style="text-align: left; text-overflow: ellipsis" class="col-name"><a href="javascript:void(0)" (click)="openAttachFile(row)">{{row.FileNameOriginal}}</a>
-                                                </td>
-                                                <td class="col-code">{{row["CreatedDate"] | date : "dd/MM/yyyy"}}</td>
-                                                <td class="col-action">
-                                                    <a (click)="setCurrentAttachFileIndex(i) && file.click()"><i class="fas fa-edit" style="color:#337ab7"></i></a>&nbsp;&nbsp;&nbsp;
-                                                    <a (click)="deleteAttachFile(i)"><i class="far fa-trash-alt" style="color:#337ab7"></i></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="14" class="text-left lbadd"><a (click)="file.click()"><i class="fas fa-plus-circle"></i>Upload tài liệu/Hình ảnh</a></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                            <!-- Table body -->
+                                            <tbody>
+                                                <tr *ngIf="objData.ListAttachFile.length < 1">
+                                                    <td colspan="10" class="datarow-null">Dữ liệu không tồn tại</td>
+                                                </tr>
+                                                <tr *ngFor="let row of objData.ListAttachFile; let i = index">
+                                                    <td class="order-number">{{i + 1}}</td>
+                                                    <td><img [src]="row.FilePathPreview" height="30px"></td>
+                                                    <td class="col-name"><input type="text" [(ngModel)]="objData.ListAttachFile[i].FileTitle" name="FileTitle{{i}}" class="form-control " maxlength="250"></td>
+                                                    <td class="col-name"><input type="text" [(ngModel)]="objData.ListAttachFile[i].Desctiption" name="Desctiption{{i}}" class="form-control " maxlength="500"></td>
+                                                    <td style="text-align: left; text-overflow: ellipsis" class="col-name"><a href="javascript:void(0)" (click)="openAttachFile(row)">{{row.FileNameOriginal}}</a>
+                                                    </td>
+                                                    <td class="col-code">{{row["CreatedDate"] | date : "dd/MM/yyyy"}}</td>
+                                                    <td class="col-action">
+                                                        <a (click)="setCurrentAttachFileIndex(i) && file.click()"><i class="fas fa-edit" style="color:#337ab7"></i></a>&nbsp;&nbsp;&nbsp;
+                                                        <a (click)="deleteAttachFile(i)"><i class="far fa-trash-alt" style="color:#337ab7"></i></a>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="14" class="text-left lbadd"><a (click)="file.click()"><i class="fas fa-plus-circle"></i>Upload tài liệu/Hình ảnh</a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-
 
                             </div>
                         </div>

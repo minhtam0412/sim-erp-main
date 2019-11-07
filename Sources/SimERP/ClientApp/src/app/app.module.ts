@@ -68,6 +68,9 @@ import {BsDatepickerModule} from 'ngx-bootstrap';
 // đăng ký locale cho control datetime picker
 import {defineLocale} from 'ngx-bootstrap/chronos';
 import {viLocale} from 'ngx-bootstrap/locale';
+import {SaleorderdetailComponent} from './vouchers/saleorder/saleorderdetail/saleorderdetail.component';
+import {SaleorderlistComponent} from './vouchers/saleorder/saleorderlist/saleorderlist.component';
+import {LibLocaleModule} from './common/locale/lib-locale/lib-locale.module';
 
 registerLocaleData(vi);
 
@@ -124,7 +127,9 @@ export function tokenGetter() {
     CurrencylistComponent,
     CurrencydetailComponent,
     ExchangeratelistComponent,
-    ExchangeratedetailComponent
+    ExchangeratedetailComponent,
+    SaleorderlistComponent,
+    SaleorderdetailComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -154,6 +159,7 @@ export function tokenGetter() {
     IconsProviderModule,
     NzIconModule,
     BsDatepickerModule.forRoot(),
+    LibLocaleModule
   ],
   providers: [AuthGuard,
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
@@ -172,7 +178,8 @@ export function tokenGetter() {
       PopupproductComponent,
       StockdetailComponent,
       CurrencydetailComponent,
-      ExchangeratedetailComponent
+      ExchangeratedetailComponent,
+      SaleorderdetailComponent
     ],
 
 })

@@ -96,6 +96,8 @@ namespace SimERP.Data
 
         string getErrorCode();
 
+        int GetMaxSortOrder(Func<T, int> columnSelector);
+
         #endregion
 
         #region Insert, Update, Delete

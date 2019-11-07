@@ -14,6 +14,7 @@ export class User {
   UserTypeName: string = '';
   CreatedDate: Date;
   CreatedBy: number;
+  CreatedName: string;
   Gender: number;
   UserTypeId: number;
   IsFirstChangePassword: Boolean;

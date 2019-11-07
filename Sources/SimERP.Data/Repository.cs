@@ -602,6 +602,15 @@ namespace SimERP.Data
             }
         }
 
+        public int GetMaxSortOrder(Func<T, int> columnSelector)
+        {
+            using (var db = new DBEntities.DBEntities())
+            {
+                var maxSortOrder = db.Set<T>().Max(columnSelector);
+                return maxSortOrder + 1;
+            }                
+        }
+
         #endregion
 
         #region Generate RefNo
@@ -835,30 +844,6 @@ namespace SimERP.Data
             //}
             return string.Empty;
         }
-        //public  GetUserByID(Guid userID)
-        //{
-        //    try
-        //    {
-        //        using (var db = new DBEntities())
-        //        {
-        //            DynamicParameters param = new DynamicParameters();
-        //            param.Add("UserID", userID);
-        //            param.Add("LanguageID", this.LangID);
-
-        //            string sqlQuery = @"SELECT u.UserID, u.UserName, l.FullName, u.SignatureImage
-        //                                FROM  acc.[User] u with(nolock)
-        //                                   inner join acc.[UserProfile] p with(nolock) on p.UserID=u.UserID
-        //                                   left join acc.UserProfileLang l with(nolock) on l.ProfileID=p.ProfileID
-        //                                WHERE p.UserID = @UserID and l.LanguageID = @LanguageID";
-
-        //            return db.Database.Connection.Query<string>(sqlQuery, param).First();
-        //        }
-        //    }
-        //    catch
-        //    {
-        //        throw;
-        //    }
-        //}
 
         #endregion
 

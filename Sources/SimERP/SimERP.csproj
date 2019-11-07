@@ -48,7 +48,7 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
         <PackageReference Include="Microsoft.Extensions.Primitives" Version="2.2.0" />
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.9" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.10" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="4.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="4.0.1" />
@@ -139,6 +139,8 @@
 
     <ItemGroup>
         <Folder Include="ClientApp\src\app\common\loading\" />
+        <Folder Include="ClientApp\src\app\common\locale\lib-locale\" />
+        <Folder Include="ClientApp\src\app\common\locale\pipes\" />
         <Folder Include="ClientApp\src\app\header\" />
         <Folder Include="ClientApp\src\app\lists\customertypecomponent\customertypedetail\" />
         <Folder Include="ClientApp\src\app\lists\customertypecomponent\customertypelist\" />
@@ -149,6 +151,8 @@
         <Folder Include="ClientApp\src\app\systems\firstchangepassword\" />
         <Folder Include="ClientApp\src\app\vouchers\purchase\models\" />
         <Folder Include="ClientApp\src\app\vouchers\purchase\purchasemanagement\" />
+        <Folder Include="ClientApp\src\app\vouchers\saleorder\model\" />
+        <Folder Include="ClientApp\src\app\vouchers\saleorder\saleorderdetail\" />
         <Folder Include="ClientApp\src\assets\css\" />
         <Folder Include="ClientApp\src\assets\font\poppins\" />
         <Folder Include="ClientApp\src\assets\images\avatars\" />

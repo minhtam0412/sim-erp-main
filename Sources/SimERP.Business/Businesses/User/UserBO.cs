@@ -215,7 +215,7 @@ namespace SimERP.Business
             }
         }
 
-        public List<User> GetData(string searchString, bool? IsActive, int startRow, int maxRows)
+        public List<UserDTO> GetData(string searchString, bool? IsActive, int startRow, int maxRows)
         {
             try
             {
@@ -245,14 +245,14 @@ namespace SimERP.Business
                     }
 
                     string sqlQuery = @" SELECT Count(1) FROM  [acc].[User] t with(nolock) " + sqlWhere +
-                                      @";SELECT t.* FROM [acc].[User] t with(nolock) 
+                                      @";SELECT t.*, u.FullName AS 'CreatedName' FROM [acc].[User] t with(nolock) LEFT JOIN [acc].[User] u ON u.UserId = t.CreatedBy
                                           " + sqlWhere + " ORDER BY t.CreatedDate OFFSET " + startRow +
                                       " ROWS FETCH NEXT " + maxRows + " ROWS ONLY";
 
                     using (var multiResult = conn.QueryMultiple(sqlQuery, param))
                     {
                         this.TotalRows = multiResult.Read<int>().Single();
-                        return multiResult.Read<User>().ToList();
+                        return multiResult.Read<UserDTO>().ToList();
                     }
                 }
             }

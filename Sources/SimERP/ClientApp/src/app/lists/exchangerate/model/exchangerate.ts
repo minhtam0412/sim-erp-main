@@ -7,5 +7,4 @@ export class ExchangeRate {
 
   // custom properties
   CurrencyName: string;
-  ExchangeDateNonOffset: Date;
 }

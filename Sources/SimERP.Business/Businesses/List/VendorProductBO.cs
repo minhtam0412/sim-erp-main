@@ -94,52 +94,6 @@ namespace SimERP.Business.Businesses.List
             return false;
         }
 
-        public bool UpdateSortOrder(int upID, int downID)
-        {
-            try
-            {
-                using (IDbConnection conn = IConnect.GetOpenConnection())
-                {
-                    DynamicParameters param = new DynamicParameters();
-                    param.Add("UpID", upID);
-                    param.Add("DownID", downID);
-
-                    string sqlQuery =
-                        @" UPDATE [list].[Vendor] SET SortOrder = SortOrder - 1 WHERE VendorId = @UpID;
-                                         UPDATE [list].[Vendor] SET SortOrder = SortOrder + 1 WHERE VendorId = @DownID;";
-
-                    conn.Query(sqlQuery, param);
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                this.AddMessage(MessageCode.MSGCODE_002, "Lưu không thành công: " + ex.Message);
-                Logger.Error(GetType(), ex);
-                return false;
-            }
-        }
-
-        public bool DeleteVendorType(int id)
-        {
-            try
-            {
-                using (var db = new DBEntities())
-                {
-                    //TODO LIST: Kiểm tra sử dụng trước khi xóa
-                    db.Vendor.Remove(db.Vendor.Find(id));
-                    db.SaveChanges();
-                    return true;
-                }
-            }
-            catch (Exception ex)
-            {
-                this.AddMessage(MessageCode.MSGCODE_003, "Delete VendorType unsucessfull");
-                Logger.Error(GetType(), ex);
-                return false;
-            }
-        }
-
         #region Private methods
 
         private bool CheckExistCode(string VendorCode)

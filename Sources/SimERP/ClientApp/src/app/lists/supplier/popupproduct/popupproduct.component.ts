@@ -86,6 +86,10 @@ export class PopupproductComponent implements OnInit {
     if (!this.resultDialog) {
       this.model = null;
     }
+    if (this.productCode == null || this.productCode.length === 0) {
+      this.notificationService.showInfo('Vui lòng chọn sản phẩm!');
+      return;
+    }
     this.activeModal.close(this.model);
   }
 }

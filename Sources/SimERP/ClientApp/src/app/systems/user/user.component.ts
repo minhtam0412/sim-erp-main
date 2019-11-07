@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { User } from '../user';
 import { PaginationComponent } from 'src/app/pagination/pagination.component';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
-import { NgbModal, NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbDateStruct, NgbCalendar, NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { ComfirmDialogComponent } from 'src/app/common/comfirm-dialog/comfirm-dialog.component';
 import { UserService } from '../user.service';
@@ -165,7 +165,6 @@ export class UserComponent implements OnInit {
     });
   }
 
-
   clearModel() {
     this.objModel = new User();
   }
@@ -176,7 +175,7 @@ export class UserComponent implements OnInit {
     this.dtcreate = this.calendar.getToday();
     this.objModel.CreatedBy = this.userAuthenInfo.UserId;
     this.objModel.Gender = parseInt(this.temGender);
-    this.temCreateBy = this.userAuthenInfo.UserName;
+    this.temCreateBy = this.userAuthenInfo.FullName;
     this.clearModel();
   }
 
@@ -184,7 +183,12 @@ export class UserComponent implements OnInit {
     this.isNewModel = false;
     this.objModel = this.lstDataResult[index];
     this.temGender = this.objModel.Gender.toString();
-    this.temCreateBy = this.objModel.CreatedBy.toString();
+    this.temCreateBy = this.objModel.CreatedName;
+    
+    let date_tem = new Date(this.objModel.CreatedDate.toString());
+    var dt: NgbDate = new NgbDate(date_tem.getFullYear(), date_tem.getMonth() + 1, date_tem.getDate());
+    this.dtcreate = dt;
+    console.log(this.objModel);
   }
 
   getStartRow(): number {

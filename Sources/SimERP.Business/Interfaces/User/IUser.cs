@@ -15,7 +15,7 @@ namespace SimERP.Business
         UserResDTO Login(string userName, string passWord);
         UserResDTO GetInfo(string userName);
         UserResDTO GetInfo(int UserId);
-        List<User> GetData(string searchString, bool? IsActive, int startRow, int maxRows);
+        List<UserDTO> GetData(string searchString, bool? IsActive, int startRow, int maxRows);
         bool Save(User user, bool isNew);
         bool DeleteUser(int userID);
         bool ResetPassUser(int userID);

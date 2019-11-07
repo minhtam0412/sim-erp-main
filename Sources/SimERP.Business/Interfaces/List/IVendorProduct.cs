@@ -10,7 +10,5 @@ namespace SimERP.Business.Interfaces.List
         List<VendorProduct> GetData(ReqListSearch reqListSearch);
 
         bool Save(VendorProduct rowData, bool isNew);
-
-        bool DeleteVendorType(int id);
     }
 }

@@ -1,0 +1,154 @@
+<div class="header_content">
+  <section class="form_content">
+    <form>
+      <div class="row">
+        <div class="col-md-12">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="#">Bán hàng</a></li>
+              <li class="breadcrumb-item active" aria-current="page"><a href="#" [routerLink]="'/saleorder'">Quản lý đơn
+                đặt hàng</a></li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-4 text-left">
+          <p class="text-uppercase"
+             style="font-size:18px;color: #587792; font-weight:bold; font-family: 'Lato', sans-serif;">
+            <span>Đơn đặt hàng</span></p>
+        </div>
+        <div class="col-sm-8 text-right">
+          <div class="form-group">
+            <button type="button" style="" class="btn btn-success btn-sm" (click)="searchAction()">
+              <i class="fab fa-searchengin" *appCheckpermission="['VIEW']"></i> Tìm kiếm
+            </button>&nbsp;
+            <button type="button" style="" class="btn btn-primary btn-sm" [routerLink]="['/saleorderdetail']"
+                    *appCheckpermission="['ADD']">
+              <i class="fas fa-plus-circle"></i> Thêm mới
+            </button>&nbsp;
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3">
+          <div class="row">
+            <label class="col-sm-12 control-label">Tìm kiếm</label>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="input-group mb-3 ">
+                <input type="text" [(ngModel)]="searchString" name="searchString" class="form-control form-control-sm"
+                       placeholder="Mã CT, Mã KH, Tên khách hàng" (keydown.enter)="searchAction()">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="row">
+            <label class="col-sm-12 control-label">Từ ngày</label>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="input-group mb-3 ">
+                <input placeholder="Chọn ngày" type="text" class="form-control" bsDatepicker
+                       [bsConfig]="bsConfig" [(ngModel)]="fromDate" name="fromDate" #fromDateRef='ngModel'
+                       [ngClass]="{ 'is-invalid': fromDateRef.touched  && fromDateRef.invalid  }">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="row">
+            <label class="col-sm-12 control-label">Đến ngày</label>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="input-group mb-3 ">
+                <input placeholder="Chọn ngày" type="text" class="form-control" bsDatepicker
+                       [bsConfig]="bsConfig" [(ngModel)]="toDate" name="toDate" #toDateRef='ngModel'
+                       [ngClass]="{ 'is-invalid': toDateRef.touched  && toDateRef.invalid  }">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="row">
+            <label class="col-sm-12 control-label">Trạng thái</label>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="input-group mb-3 ">
+                <ng-select [(ngModel)]="voucherStatus" name="isActive" class="select-custom select-full-border"
+                           (clear)="clearVoucherStatus()">
+                  <ng-option *ngFor="let status of lstStatus"
+                             [value]="status.StatusId">{{status.StatusName}}</ng-option>
+                </ng-select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </section>
+</div>
+<div class="main_content">
+  <section class="form_content">
+    <div class="table-responsive">
+
+      <!-- Table  -->
+      <table class="table table-bordered table-striped table-hover table-fixed">
+
+        <!-- Table head -->
+        <thead>
+        <tr>
+          <th>#</th>
+          <th>Mã CT</th>
+          <th>Ngày đặt</th>
+          <th>Ngày giao</th>
+          <th>Khách hàng</th>
+          <th>Ghi chú</th>
+          <th>Nhân viên bán hàng</th>
+          <th>Giá trị đơn hàng</th>
+          <th>Giá trị đã xuất</th>
+          <th>Trạng thái</th>
+          <th></th>
+        </tr>
+        </thead>
+        <!-- Table head -->
+
+        <!-- Table body -->
+        <tbody>
+        <tr *ngIf="lstDataResult?.length <= 0">
+          <td colspan="11" class="datarow-null">Dữ liệu không tồn tại</td>
+        </tr>
+        <tr *ngFor="let row of lstDataResult; let i = index">
+          <td class="order-number">{{i + 1}}</td>
+          <td class="col-code"><a href="javascript:void(0)" [routerLink]="['/saleorderdetail', row.SaleInvoiceId]"
+                                  style="cursor: pointer; color: #337ab7">{{row.SaleInvoiceCode}}</a></td>
+          <td class="col-name-center">{{row.CreatedDate|date:'dd/MM/yyyy HH:mm:ss'}}</td>
+          <td class="col-name-center">{{row.PostedDate|date:'dd/MM/yyyy HH:mm:ss'}}</td>
+          <td class="col-name" style="text-align: center">{{row.CustomerName}}</td>
+          <td class="col-name" style="text-align: center">{{row.DeliveryNotes}}</td>
+          <td class="col-name" style="text-align: center">{{row.SaleRefFullName}}</td>
+          <td class="col-name-right">{{row.TotalAmount|localNumber:''}}</td>
+          <td class="col-name-right"></td>
+          <td class="col-name-center">{{showVoucherStatus(row.VoucherStatus)}}</td>
+          <td class="col-action">
+            <a href="javascript:void(0)" [routerLink]="['/saleorderdetail', row.SaleInvoiceId]"><i class="fas fa-edit"
+                                                                                                   style='color:#337ab7;'></i></a>&nbsp;&nbsp;&nbsp;
+            <a (click)="showConfirmDeleteDialog(row)"><i class="far fa-trash-alt" style='color:#337ab7;'></i></a>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <app-pagination (goPage)="goToPage($event)" (changeLimit)="changeLimit()" (goNext)="onNext()" (goPrev)="onPrev()"
+                    [pagesToShow]="5" [page]="page" [perPage]="limit" [count]="total"></app-pagination>
+  </section>
+</div>

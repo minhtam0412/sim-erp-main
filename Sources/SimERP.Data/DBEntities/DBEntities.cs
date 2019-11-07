@@ -43,6 +43,10 @@ namespace SimERP.Data.DBEntities
         public virtual DbSet<RefNo> RefNo { get; set; }
         public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<RolePermission> RolePermission { get; set; }
+        public virtual DbSet<SaleInvoice> SaleInvoice { get; set; }
+        public virtual DbSet<SaleInvoiceDetail> SaleInvoiceDetail { get; set; }
+        public virtual DbSet<SaleReturn> SaleReturn { get; set; }
+        public virtual DbSet<SaleReturnDetail> SaleReturnDetail { get; set; }
         public virtual DbSet<Stock> Stock { get; set; }
         public virtual DbSet<Tax> Tax { get; set; }
         public virtual DbSet<TokenRefresh> TokenRefresh { get; set; }
@@ -69,8 +73,6 @@ namespace SimERP.Data.DBEntities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
-
             modelBuilder.Entity<AttachFile>(entity =>
             {
                 entity.HasKey(e => e.AttachId);
@@ -749,6 +751,275 @@ namespace SimERP.Data.DBEntities
                 entity.ToTable("RolePermission", "sec");
             });
 
+            modelBuilder.Entity<SaleInvoice>(entity =>
+            {
+                entity.ToTable("SaleInvoice", "sale");
+
+                entity.HasIndex(e => e.SaleInvoiceCode)
+                    .HasName("IX_SaleInvoiceUnique")
+                    .IsUnique();
+
+                entity.Property(e => e.Amount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.AmountSub).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.ChargeAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.CurrencyId)
+                    .IsRequired()
+                    .HasMaxLength(5)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CustomerAddress).HasMaxLength(250);
+
+                entity.Property(e => e.CustomerCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CustomerFax)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CustomerName).HasMaxLength(250);
+
+                entity.Property(e => e.CustomerPhone)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.DeliveryAddress).HasMaxLength(250);
+
+                entity.Property(e => e.DeliveryNotes).HasMaxLength(250);
+
+                entity.Property(e => e.DeliveryPlace).HasMaxLength(250);
+
+                entity.Property(e => e.DiscountAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.DiscountItemAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.DiscountPercent).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.DiscountTotalAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.ExchangeRate).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.FeeAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.IsSaleInvoice)
+                    .IsRequired()
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.Latitude).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.Longitude).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.Notes).HasMaxLength(500);
+
+                entity.Property(e => e.RRefCode)
+                    .HasColumnName("rRefCode")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.RRefType).HasColumnName("rRefType");
+
+                entity.Property(e => e.ReferenceCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SaleInvoiceCode)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SearchString)
+                    .HasMaxLength(2000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TaxAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.TotalStandardCost).HasColumnType("numeric(18, 2)");
+            });
+
+            modelBuilder.Entity<SaleInvoiceDetail>(entity =>
+            {
+                entity.ToTable("SaleInvoiceDetail", "sale");
+
+                entity.Property(e => e.Amount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.ChargeAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.DiscountAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.DiscountPercent).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.DiscountTotalAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.ExpireDate).HasColumnType("date");
+
+                entity.Property(e => e.LotNumber)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ManufactureDate).HasColumnType("date");
+
+                entity.Property(e => e.Notes).HasMaxLength(500);
+
+                entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.ProductCode)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ProductName)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.SerialNumber)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.StandardCost).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.TaxAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.TaxPercent).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.TotalStandardCost).HasColumnType("numeric(18, 2)");
+            });
+
+            modelBuilder.Entity<SaleReturn>(entity =>
+            {
+                entity.ToTable("SaleReturn", "sale");
+
+                entity.HasIndex(e => e.SaleReturnCode)
+                    .HasName("IX_SaleReturn_Qnique")
+                    .IsUnique();
+
+                entity.Property(e => e.Amount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.AmountSub).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.ChargeAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.CustomerAddress).HasMaxLength(250);
+
+                entity.Property(e => e.CustomerCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CustomerName).HasMaxLength(250);
+
+                entity.Property(e => e.CustomerPhone)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.DeliveryAddress).HasMaxLength(250);
+
+                entity.Property(e => e.DeliveryNotes).HasMaxLength(250);
+
+                entity.Property(e => e.DeliveryPlace).HasMaxLength(250);
+
+                entity.Property(e => e.DiscountAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.DiscountItemAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.DiscountPercent).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.DiscountTotalAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.FeeAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.Latitude).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.Longitude).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.Notes).HasMaxLength(500);
+
+                entity.Property(e => e.RRefCode)
+                    .HasColumnName("rRefCode")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.RRefType).HasColumnName("rRefType");
+
+                entity.Property(e => e.ReferenceCode)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SaleReturnCode)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SearchString)
+                    .HasMaxLength(2000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TaxAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.TotalStandardCost).HasColumnType("numeric(18, 2)");
+            });
+
+            modelBuilder.Entity<SaleReturnDetail>(entity =>
+            {
+                entity.ToTable("SaleReturnDetail", "sale");
+
+                entity.Property(e => e.Amount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.ChargeAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.DiscountAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.DiscountPercent).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.DiscountTotalAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.ExpireDate).HasColumnType("date");
+
+                entity.Property(e => e.LotNumber)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ManufactureDate).HasColumnType("date");
+
+                entity.Property(e => e.Notes).HasMaxLength(500);
+
+                entity.Property(e => e.Price).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.ProductCode)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ProductName)
+                    .IsRequired()
+                    .HasMaxLength(250);
+
+                entity.Property(e => e.Quantity).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.SerialNumber)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.StandardCost).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.TaxAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.TaxPercent).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.TotalAmount).HasColumnType("numeric(18, 2)");
+
+                entity.Property(e => e.TotalStandardCost).HasColumnType("numeric(18, 2)");
+            });
+
             modelBuilder.Entity<Stock>(entity =>
             {
                 entity.ToTable("Stock", "inv");
@@ -1014,8 +1285,7 @@ namespace SimERP.Data.DBEntities
 
             modelBuilder.Entity<VendorProduct>(entity =>
             {
-                entity.HasKey(e => e.RowId)
-                    .HasName("Product_Supplier");
+                entity.HasKey(e => e.RowId);
 
                 entity.ToTable("VendorProduct", "list");
 

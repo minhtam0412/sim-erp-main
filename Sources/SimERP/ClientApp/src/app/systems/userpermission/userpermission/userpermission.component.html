@@ -58,16 +58,16 @@
                                 <!-- Table head -->
                                 <thead>
                                     <tr>
-                                        <th style="border-bottom: none; border-top: none; font-size: 14px; padding-bottom: 15px;">Danh sách nhóm quyền</th>
-                                        <th style="border-bottom: none; border-top: none; padding-bottom: 15px;"></th>
-                                        <th style="border-bottom: none; border-top: none; font-size: 14px; padding-bottom: 15px;">Nhóm quyền được áp dụng</th>
+                                        <th style="border: none; font-size: 14px; padding-top: 10px; padding-bottom: 10px; border-radius: 10px; width: 50%;">Danh sách nhóm quyền</th>
+                                        <th style="border: none; padding-bottom: 15px; background-color: white;"></th>
+                                        <th style="border: none; font-size: 14px; padding-top: 10px; padding-bottom: 10px; border-radius: 10px; width: 50%;">Nhóm quyền được áp dụng</th>
                                     </tr>
                                 </thead>
                                 <!-- Table head -->
                                 <!-- Table body -->
                                 <tbody>
                                     <tr>
-                                        <td style="border-bottom: none; border-top: none; vertical-align: top !important;">
+                                        <td style="border: none; vertical-align: top !important; border-radius: 10px; width: 50%;">
                                             <div class="list-group ">
                                                 <a *ngFor="let item of lstRoleList; let i = index" class="list-group-item list-group-item-action" aria-controls="messages" (click)="rowClick(lstRoleList, i)">
                                                     <div class="custom-control custom-checkbox mb-3">
@@ -77,7 +77,7 @@
                                                 </a>
                                             </div>
                                         </td>
-                                        <td style="border-bottom: none; border-top: none; width: 60px;">
+                                        <td style="border: none; width: 60px;">
                                             <div>
                                                 <button type="button" class="btn btn-info btn-sm" style="font-size: 14px; width: 50px;" (click)="addRole()">
                                                         <i class="fas fa-angle-double-right" style="vertical-align: middle;"></i>
@@ -89,7 +89,7 @@
                                                 </button>
                                             </div>
                                         </td>
-                                        <td style="border-bottom: none; border-top: none; vertical-align: top !important;">
+                                        <td style="border:none; vertical-align: top !important; width: 50%;">
                                             <div class="list-group">
                                                 <a *ngFor="let item of lstRoleUser; let i = index" class="list-group-item list-group-item-action" aria-controls="messages" (click)="rowClick(lstRoleUser, i)">
                                                     <div class="custom-control custom-checkbox mb-3">
@@ -164,7 +164,7 @@
                                             <td class="order-number">{{i + 1}}</td>
                                             <td class="col-name"><a>{{row.PageName}}</a></td>
                                             <td *ngFor="let item of lstFunction; let j = index" style="width: 70px;">
-                                                <div *ngIf="checkIssueFunctionID(row.lstFunction, item.FunctionId)" class="custom-control custom-checkbox mb-3">
+                                                <div *ngIf="checkIssueFunctionID(row.lstFunction, item.FunctionId)" class="custom-control custom-checkbox">
                                                     <input type="checkbox" class="custom-control-input" [(ngModel)]="row.lstFunction[j].IsRole" id="row{{i}}.lstFunction[{{j}}].IsRole" name="row{{i}}.lstFunction[{{j}}].IsRole">
                                                     <label class="custom-control-label" for="row{{i}}.lstFunction[{{j}}].IsRole"></label>
                                                 </div>

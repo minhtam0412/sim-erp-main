@@ -24,8 +24,7 @@
             <button type="button" class="btn btn-success btn-sm" (click)="searchData()" *appCheckpermission="['VIEW']">
               <i class="fab fa-searchengin"></i> Tìm kiếm
             </button>&nbsp;
-            <button type="button" class="btn btn-primary btn-sm" *appCheckpermission="['ADD']"
-                    (click)="openDialog()">
+            <button type="button" class="btn btn-primary btn-sm" *appCheckpermission="['ADD']" (click)="openDialog()">
               <i class="fas fa-plus-circle"></i> Thêm mới
             </button>&nbsp;
           </div>
@@ -100,8 +99,8 @@
             <a (click)="openDialog(row)"> {{row.CurrencyId}}</a>
           </td>
           <td class="col-name">{{row.CurrencyName}}</td>
-          <td class="col-name" style="text-align: center">{{row.ExchangeDate|date:"dd/MM/yyyy"}}</td>
-          <td class="col-name">{{row.ExchangeRating}}</td>
+          <td class="col-name-center" style="text-align: center">{{row.ExchangeDate}}</td>
+          <td class="col-name-right">{{row.ExchangeRating}}</td>
           <td class="col-note">{{row.Notes}}</td>
 
           <td class="col-action">
@@ -120,4 +119,3 @@
                     [pagesToShow]="5 " [page]="page" [perPage]="limit" [count]="total"></app-pagination>
   </section>
 </div>
-

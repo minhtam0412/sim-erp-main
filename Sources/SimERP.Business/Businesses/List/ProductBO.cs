@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using Dapper;
+﻿using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using SimERP.Business.Interfaces.List;
 using SimERP.Business.Models.MasterData.ListDTO;
 using SimERP.Data;
 using SimERP.Data.DBEntities;
-using AttachFile = SimERP.Business.Models.MasterData.ListDTO.AttachFile;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using Product = SimERP.Business.Models.MasterData.ListDTO.Product;
 
 namespace SimERP.Business.Businesses.List
@@ -67,6 +66,7 @@ namespace SimERP.Business.Businesses.List
                                                 ,c.CountryName
                                                 ,v.VendorName
                                                 ,p.IsActive
+                                                ,p.TaxId
                                                 FROM item.Product p
                                                 LEFT JOIN item.Unit u
                                                 ON p.UnitId = u.UnitId
@@ -267,6 +267,6 @@ namespace SimERP.Business.Businesses.List
             }
         }
 
-        #endregion
+        #endregion Private methods
     }
 }

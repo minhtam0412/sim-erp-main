@@ -108,7 +108,7 @@
 .sm-blue ul a:focus,
 .sm-blue ul a:active {
     background: transparent;
-    color: #2b82ac;
+    color: #343a40;
     font-size: 13px;
     text-shadow: none;
     border-left: 8px solid transparent;
@@ -280,7 +280,7 @@
         border: 0 !important;
         padding: 9px 23px;
         background: transparent;
-        color: #2b82ac;
+        color: #343a40;
         border-radius: 0 !important;
     }
     .sm-blue ul a:hover,

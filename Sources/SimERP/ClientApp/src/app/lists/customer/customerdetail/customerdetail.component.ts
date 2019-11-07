@@ -19,12 +19,13 @@ import { ListItemType } from 'src/app/common/masterdata/commondata';
 import { User } from 'src/app/systems/user';
 import { UserService } from 'src/app/systems/user.service';
 import { ComfirmDialogComponent } from 'src/app/common/comfirm-dialog/comfirm-dialog.component';
-import { Guid } from 'guid-typescript';
 import { CustomerSale } from '../model/customersale';
 import { CustomerCommission } from '../model/customercommission';
 import { CustomerDelivery } from '../model/customerdelivery';
 import { AuthenService } from 'src/app/systems/authen.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Globalfunctions } from 'src/app/common/globalfunctions/globalfunctions';
+import { deepEqual } from 'fast-equals';
 
 @Component({
   selector: 'app-customerdetail',
@@ -35,6 +36,7 @@ export class CustomerdetailComponent implements OnInit {
 
   customerId: number;
   objData: Customer;
+  objDataBackup = Object.assign({}, this.objData);
   currentIndexAttachFile = -1;
   isNewModel: boolean;
   indexEdit: number;
@@ -115,7 +117,8 @@ export class CustomerdetailComponent implements OnInit {
 
   constructor(private customerService: CustomerService, private customertypeService: CustomertypeService, private productCategoryService: ProductCategoryService,
     private spinnerService: Ng4LoadingSpinnerService, private modalService: NgbModal, private toastr: ToastrService, private notificationService: NotificationService,
-    private productService: ProductService, private userService: UserService, private calendar: NgbCalendar, private authen: AuthenService, private activatedRoute: ActivatedRoute,) {
+    private productService: ProductService, private userService: UserService, private calendar: NgbCalendar, private authen: AuthenService, private activatedRoute: ActivatedRoute,
+    private router: Router) {
 
     this.objData = new Customer();
     this.objModelProduct = new CustomerProduct();
@@ -168,13 +171,21 @@ export class CustomerdetailComponent implements OnInit {
             this.lstObjProduct = Object.assign([], this.objData.objProduct);
             this.lstObjSaler = Object.assign([], this.objData.objSaler);
             this.lstObjCommission = Object.assign([], this.objData.objCommission);
+
+            this.objData.ListAttachFile.forEach((attachfile) => {
+              if (!Globalfunctions.checkIsImageByExtension(attachfile.FilePath)) {
+                attachfile.FilePathPreview = Key_DefaultAttachFile;
+              } else {
+                attachfile.FilePathPreview = attachfile.FilePath;
+              }
+            });
           }
         },
         error: (err) => {
           console.log(err);
         },
         complete: () => {
-          
+          this.objDataBackup = Object.assign({}, this.objData);
         }
       }
     );
@@ -259,7 +270,10 @@ export class CustomerdetailComponent implements OnInit {
         } else {
           this.toastr.success(this.isNewModel ? 'Thêm dữ liệu thành công' : 'Dữ liệu đã được chỉnh sửa', 'Thông báo!');
           if (isclose) {
-            this.closePageDetail.nativeElement.click();
+            this.router.navigate(['customer']);
+          }
+          else{
+            this.clearObjData();
           }
         }
       } else {
@@ -268,6 +282,27 @@ export class CustomerdetailComponent implements OnInit {
     }, err => {
       console.log(err);
     });
+  }
+
+  clearObjData(){
+    this.objData = new Customer();
+    this.objModelProduct = new CustomerProduct();
+    this.objModelCommission = new CustomerCommission();
+    this.objModelDelivery = new CustomerDelivery();
+    this.objData.PaymentTermId = 50;
+
+    this.lstObjProduct = [];
+    this.lstObjSaler = [];
+    this.lstObjCommission = [];
+
+    this.dataSerachProduct = "";
+    this.dataSerachEmployee = "";
+    this.dataProductCategoryFilter = "-1";
+    this.dataProductIsActiveFilter = -1;
+    this.dataSalerIsActiveFilter = -1;
+    this.dataCommissionIsActiveFilter = -1;
+    this.indexEdit = -1;
+    this.IsToDate = false;
   }
 
   checkValidateAction(){
@@ -576,6 +611,7 @@ export class CustomerdetailComponent implements OnInit {
     modalRef.result.then((result) => {
       if (result != undefined && result == true) {
         this.lstObjCommission.splice(this.lstObjCommission.findIndex(x => x.PhoneNumber == PhoneNumber), 1);
+        this.objData.objCommission.splice(this.objData.objCommission.findIndex(x => x.PhoneNumber == PhoneNumber), 1);
       }
     });
   }
@@ -806,4 +842,23 @@ export class CustomerdetailComponent implements OnInit {
     });
   }
 
+  goBack() {
+    const isEqualObject = deepEqual(this.objData, this.objDataBackup);
+    if (!isEqualObject) {
+      const modalRef = this.modalService.open(ComfirmDialogComponent, {
+        backdrop: 'static', scrollable: false, centered: true, backdropClass: 'backdrop-modal', size: 'sm'
+      });
+      modalRef.componentInstance.contentMessage = 'Dữ liệu đã bị thay đổi. Bạn có muốn tiếp tục hay không?';
+      // xử lý sau khi đóng dialog, thực hiện load lại dữ liệu nếu muốn
+      modalRef.result.then((result) => {
+        if (result !== undefined && result != null && result === true) {
+          this.router.navigate(['customer']);
+        }
+      }, (reason) => {
+        console.log(reason);
+      });
+    } else {
+      this.router.navigate(['customer']);
+    }
+  }
 }

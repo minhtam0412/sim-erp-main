@@ -1,0 +1,314 @@
+<section class="form_content">
+  <form #form="ngForm">
+    <!--    Buttons-->
+    <div class="row">
+      <div class="col-sm-4 text-left">
+        <p class="text-uppercase"
+           style="font-size:18px;color: #587792; font-weight:bold; font-family: 'Lato', sans-serif;">
+          <span>{{isAddState ? 'Thêm mới' : 'Chỉnh sửa'}} ĐƠN ĐẶT HÀNG</span></p>
+      </div>
+      <div class="col-sm-8 text-right">
+        <div class="form-group">
+          <button type="button" class="btn btn-success btn-sm" [disabled]="form.invalid" *appCheckpermission="['SAVE']"
+                  (click)="saveData(false)">
+            <i class="far fa-save"></i> Lưu
+          </button>&nbsp;
+          <button type="button" class="btn btn-success btn-sm" [disabled]="form.invalid"
+                  *appCheckpermission="['SAVE', 'POST']"
+                  (click)="saveData(true)">
+            <i class="fas fa-book"></i> Lưu & Ghi sổ
+          </button>&nbsp;
+          <button type="button" class="btn btn-success btn-sm" [disabled]="form.invalid"
+                  *appCheckpermission="['POST']"
+                  (click)="saveData(true)">
+            <i class="fas fa-book"></i> Ghi sổ
+          </button>&nbsp;
+          <button type="button" class="btn btn-success btn-sm"
+                  *appCheckpermission="['PRINT']">
+            <i class="fas fa-print"></i> In
+          </button>&nbsp;
+          <button type="button" class="btn btn-success btn-sm"
+                  *appCheckpermission="['ADD']" (click)="resetForm()">
+            <i class="fas fa-plus-circle"></i> Thêm mới
+          </button>&nbsp;
+          <button type="button" class="btn btn-primary btn-sm"
+                  (click)="goBack()">
+            <i class="fas fa-long-arrow-alt-left"></i> Trở về
+          </button>
+        </div>
+      </div>
+    </div>
+    <!--    Blank Row-->
+    <div class="row">
+      <div class="col-sm-12">
+        <div style="border-top:0.5px solid #d6d6d6; margin:3px 0"></div>
+      </div>
+    </div>
+    <!--    Info-->
+    <div class="row">
+
+      <div class="col-sm-6">
+        <div class="form-horizontal">
+          <div class="row">
+            <label class="col-sm-5 control-label text-right">Khách hàng<span
+              class="control-label-require">*</span></label>
+            <div class="col-sm-7">
+              <input type="text" class="form-control form-control-sm" [(ngModel)]='model.CustomerName'
+                     name="CustomerName" required
+                     select-value-of="CustomerId" ngui-auto-complete
+                     [source]="this.lstCustomer" [accept-user-input]="true" [list-formatter]="renderDataRowAutoComplete"
+                     placeholder="Mã/tên khách hàng" display-property-name="CustomerName"
+                     (valueChanged)="autocompleteCallback($event)" [header-item-template]="autocompleteHeaderTemplate"
+                     no-match-found-text='Không có dữ liệu' value-property-name="CustomerId"
+                     max-num-list='10' tab-to-select='true'
+                     style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-5 control-label text-right">Địa chỉ KH<span
+              class="control-label-require">*</span></label>
+            <div class="col-sm-7">
+              <input type="text" class="form-control form-control-sm" [(ngModel)]="model.CustomerAddress" name="Address"
+                     maxlength="250" required
+                     style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-5 control-label text-right">Điện thoại</label>
+            <div class="form-inline col-sm-7" style="padding-left: 0px;padding-right: 0px;">
+              <div class="col-sm-6">
+                <input [(ngModel)]="model.CustomerPhone" name="CustomerPhone" type="text"
+                       class="col-sm-10 form-control form-control-sm" maxlength="250"
+                       style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+              </div>
+              <div class="row col-sm-6" style="margin-right: 0px;padding-right: 0px;">
+                <label class="col-sm-3 control-label">Fax</label>
+                <input [(ngModel)]="model.CustomerFax" name="CustomerFax" type="text"
+                       class="col-sm-8 col-md-9 col form-control form-control-sm" maxlength="250"
+                       style="box-shadow: none; border-top: none; border-left: none; border-right: none;">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-5 control-label text-right">Nhân viên sale</label>
+            <div class="col-sm-7">
+              <ng-select [(ngModel)]="model.SaleRefId" name="SaleRefId" class="select-custom select-bottom-border"
+                         (clear)="clearSaler()">
+                <ng-option [value]='-1'>--Chọn nhân viên sale--</ng-option>
+                <ng-option *ngFor="let saler of lstCustomerSale"
+                           [value]="saler.SaleId">{{saler.FullName}}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-5 control-label text-right">Địa chỉ giao hàng</label>
+            <div class="col-sm-7">
+              <ng-select [(ngModel)]="model.DeliveryId" (ngModelChange)="changeDelivery($event)" name="DeliveryId"
+                         class="select-custom select-bottom-border"
+                         (clear)="clearDelivery()">
+                <ng-option [value]='-1'>--Chọn địa chỉ giao hàng--</ng-option>
+                <ng-option *ngFor="let delivery of lstCustomerDelivery"
+                           [value]="delivery.RowId">{{delivery.DeliveryAddress}}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-5 text-right"><label control-label>Ghi chú</label></div>
+            <div class="col-sm-7">
+                        <textarea [(ngModel)]="model.Notes" name="Notes" type="text"
+                                  style="border-bottom: 1px solid #ced4da;" rows="3"
+                                  class="form-control-plaintext"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <div class="form-horizontal">
+          <div class="row">
+            <label class="col-sm-5 control-label text-right">Mã chứng từ<span
+              class="control-label-require">*</span></label>
+            <div class="col-sm-7">
+              <input type="text" required class="form-control form-control-sm" [(ngModel)]="model.SaleInvoiceCode"
+                     maxlength="50"
+                     style="box-shadow: none; border-top: none; border-left: none; border-right: none"
+                     name="SaleInvoiceCode"
+                     [disabled]="!this.isAddState">
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-5 control-label text-right">Ngày chứng từ<span
+              class="control-label-require">*</span></label>
+            <div class="col-sm-7">
+              <input [(ngModel)]="model.VoucherDate" name="VoucherDate"
+                     style="box-shadow: none; border-top: none; border-left: none;border-right: none" required
+                     placeholder="Chọn ngày" type="text" class="form-control" bsDatepicker
+                     [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass:colorTheme, showWeekNumbers:false }">
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-5 control-label text-right">Người tạo</label>
+            <div class="col-sm-7">
+              <input [(ngModel)]="model.UserName" name="UserName" type="text" class="form-control form-control-sm"
+                     maxlength="50" disabled
+                     style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-5 control-label text-right">Ngày tạo</label>
+            <div class="col-sm-7">
+              <input [(ngModel)]="model.CreatedDate" name="CreatedDate" #dpCreateDate="bsDatepicker"
+                     style="box-shadow: none; border-top: none; border-left: none;border-right: none"
+                     placeholder="Chọn ngày" disabled type="text" class="form-control" bsDatepicker
+                     [bsConfig]="bsConfig">
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-5 control-label text-right">Hình thức TT</label>
+            <div class="col-sm-7">
+              <ng-select [(ngModel)]="model.PaymentMethodId" name="PaymentMethodId"
+                         class="select-custom select-bottom-border" (clear)="clearPaymentMethod()">
+                <ng-option [value]='-1'>--Chọn hình thức TT--</ng-option>
+                <ng-option *ngFor="let paymentMethod of lstPaymentMethod"
+                           [value]="paymentMethod.PaymentMethodId"> {{paymentMethod.PaymentMethodName}}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-5 control-label text-right">Tên kho xuất</label>
+            <div class="col-sm-7">
+              <ng-select [(ngModel)]="model.StockId" name="StockId" class="select-custom select-bottom-border"
+                         (clear)="clearStock()">
+                <ng-option [value]='-1'>--Chọn kho xuất--</ng-option>
+                <ng-option *ngFor="let stock of lstStock"
+                           [value]="stock.StockId">{{stock.StockName}}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-5 control-label text-right">Loại tiền</label>
+            <div class="col-sm-7">
+              <ng-select [(ngModel)]="model.CurrencyId" name="CurrencyId" class="select-custom select-bottom-border"
+                         (clear)="clearCurrency()" (change)="changeCurrency($event)">
+                <ng-option [value]='-1'>--Chọn loại tiền--</ng-option>
+                <ng-option *ngFor="let status of lstExchangeRate"
+                           [value]="status.CurrencyId">{{status.CurrencyId}} / {{status.CurrencyName}}</ng-option>
+              </ng-select>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-5 control-label text-right">Tỷ giá</label>
+            <div class="col-sm-7">
+              <input [(ngModel)]="model.ExchangeRate" name="ExchangeRate" type="text"
+                     class="form-control form-control-sm"
+                     maxlength="50"
+                     style="box-shadow: none; border-top: none; border-left: none; border-right: none">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-5 text-right"><label control-label>Công nợ hiện tại</label></div>
+            <div class="col-sm-7">
+              <label control-label style="color: red;">{{model.TotalStandardCost}} VND</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--    Tabs-->
+    <div class="row" style="margin-top: 10px; margin-bottom: 10px">
+      <div class="col-sm-12">
+        <div class="table-responsive" style="margin-top: 10px;">
+
+          <!-- Table  -->
+          <table class="table table-bordered table-striped table-hover table-fixed">
+
+            <!-- Table head -->
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>Mã hàng hoá</th>
+              <th>Tên hàng hoá</th>
+              <th>ĐVT</th>
+              <th>SL</th>
+              <th>Đơn giá</th>
+              <th>Thành tiền</th>
+              <th>Giảm giá</th>
+              <th>VAT(%)</th>
+              <th>Tiền thuế</th>
+              <th>Tổng tiền</th>
+              <th>HSD</th>
+              <th>Số lô</th>
+              <th></th>
+            </tr>
+            </thead>
+            <!-- Table head -->
+
+            <!-- Table body -->
+            <tbody>
+            <tr *ngIf="model?.ListSaleOrderDetail.length <= 0">
+              <td colspan="14" class="datarow-null">Dữ liệu không tồn tại</td>
+            </tr>
+            <tr *ngFor="let row of model?.ListSaleOrderDetail; let index = index">
+              <td class="order-number">{{index + 1}}</td>
+              <td class="col-code">{{row.ProductCode}}</td>
+              <td class="col-name">{{row.ProductName}}</td>
+              <td class="col-name" style="text-align: center">{{row.UnitName}}</td>
+              <td class="col-name" style="text-align: center">
+                <input type="text" style="text-align: right" [(ngModel)]="row.Quantity" name="Quantity{{index}}"
+                       class="form-control form-control-sm" (keyup)="calcAmount(row)"
+                       maxlength="250">
+              </td>
+              <td class="col-name" style="text-align: center">
+                <input type="text" style="text-align: right" [(ngModel)]="row.Price" name="Price{{index}}"
+                       (keyup)="calcAmount(row)"
+                       class="form-control form-control-sm"
+                       maxlength="250">
+              </td>
+              <td class="col-name">
+                <input type="text" style="text-align: right" [(ngModel)]="row.Amount" (keyup)="calcTotalAmount(row)"
+                       (ngModelChange)="calcTotalAmount(row)"
+                       name="Amount{{index}}" class="form-control form-control-sm"
+                       maxlength="250">
+              </td>
+              <td class="col-name">
+                <input type="text" style="text-align: right" [(ngModel)]="row.DiscountAmount"
+                       (keyup)="calcTotalAmount(row)"
+                       name="DiscountAmount{{index}}"
+                       class="form-control form-control-sm"
+                       maxlength="250">
+              </td>
+              <td class="col-name">
+                <input type="text" style="text-align: right" [(ngModel)]="row.TaxPercent" (keyup)="calcTotalAmount(row)"
+                       name="TaxPercent{{index}}"
+                       class="form-control form-control-sm"
+                       maxlength="250">
+              </td>
+              <td class="col-name-right">{{row.TaxAmount|number}}</td>
+              <td class="col-name-right">{{row.TotalAmount|number}}
+              </td>
+              <td class="col-name">{{row.ExpireDate}}</td>
+              <td class="col-name">{{row.LotNumber}}</td>
+              <td class="col-action">
+                <a (click)="confirmDeleteProduct(index)"><i class="far fa-trash-alt"
+                                                            style='color:#337ab7;'></i></a>
+              </td>
+            </tr>
+            <tr style="line-height: 20px">
+              <td colspan="6" class="col-name-right" style="font-weight: bold">Tổng tiền</td>
+              <td class="col-name-right" style="font-weight: bold">{{model.Amount|number}}</td>
+              <td class="col-name-right" style="font-weight: bold">{{model.DiscountAmount|number}}</td>
+              <td></td>
+              <td class="col-name-right" style="font-weight: bold">{{model.TaxAmount|number}}</td>
+              <td class="col-name-right" style="font-weight: bold">{{model.TotalAmount|number}}</td>
+              <td colspan="3"></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <button type="button" class="btn btn-info btn-sm" (click)="addProduct()">
+          <i class="fas fa-plus"></i> Thêm hàng hoá
+        </button>&nbsp;
+      </div>
+    </div>
+  </form>
+</section>

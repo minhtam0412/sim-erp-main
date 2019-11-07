@@ -74,10 +74,7 @@ namespace SimERP.Business
                             this.AddMessage("000004", "Mã quốc gia đã tồn tại, vui lòng chọn mã khác!");
                             return false;
                         }
-
-                        country.SortOrder = db.CustomerType.Max(u => (int?) u.SortOrder) != null
-                            ? db.CustomerType.Max(u => (int?) u.SortOrder) + 1
-                            : 1;
+                        country.SortOrder = this.GetMaxSortOrder(m => m.SortOrder ?? 1);
                         db.Country.Add(country);
                     }
                     else

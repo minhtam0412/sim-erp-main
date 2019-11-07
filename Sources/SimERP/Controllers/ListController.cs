@@ -232,8 +232,7 @@ namespace SimERP.Controllers
             try
             {
                 //Check security & data request
-                var repData = this.CheckSign(reqData, reqData.AuthenParams.ClientUserName,
-                    reqData.AuthenParams.ClientPassword, reqData.AuthenParams.Sign);
+                var repData = this.CheckSign(reqData, reqData.AuthenParams.ClientUserName, reqData.AuthenParams.ClientPassword, reqData.AuthenParams.Sign);
                 if (repData == null || !repData.IsOk)
                     return repData;
                 var dataResult = unitBO.GetData(ReplaceUnicode(reqData.SearchString), reqData.StartRow, reqData.MaxRow);
@@ -1618,8 +1617,17 @@ namespace SimERP.Controllers
                 var dataResult = customerBO.GetCustomerDetail(Convert.ToInt32(reqData.SearchString));
                 if (dataResult != null)
                 {
+                    ReqListSearch reqListSearch = new ReqListSearch();
+                    reqListSearch.AddtionParams = new Dictionary<string, dynamic>();
+                    reqListSearch.AddtionParams.Add("KeyValue", dataResult.CustomerId);
+                    reqListSearch.AddtionParams.Add("OptionName", "CUSTOMER");
+
+                    var lstAttachFile = this.attachFileBO.GetData(reqListSearch);
+
+                    dataResult.ListAttachFile = lstAttachFile;
                     repData.RepData = dataResult;
                 }
+
                 else
                     this.AddResponeError(ref repData, customerBO.getMsgCode(),
                         customerBO.GetMessage(this.customerBO.getMsgCode(), this.LangID));
@@ -2446,6 +2454,40 @@ namespace SimERP.Controllers
                 else
                     this.AddResponeError(ref repData, this.exchangeRateBO.getMsgCode(),
                         this.exchangeRateBO.GetMessage(this.exchangeRateBO.getMsgCode(), this.LangID));
+
+                return repData;
+            }
+            catch (Exception ex)
+            {
+                this.responeResult = this.CreateResponeResultError(MsgCodeConst.Msg_RequestDataInvalid,
+                    MsgCodeConst.Msg_RequestDataInvalidText, ex.Message, null);
+                Logger.Error("EXCEPTION-CALL API", ex);
+                return responeResult;
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("api/list/exchangeratelastest")]
+        public ResponeResult GetExchangeRateLastestData([FromBody] ReqListSearch objReqListSearch)
+        {
+            try
+            {
+                //Check security & data request
+                var repData = this.CheckAuthen();
+                if (repData == null || !repData.IsOk)
+                    return repData;
+
+                objReqListSearch.SearchString = ReplaceUnicode(objReqListSearch.SearchString);
+                var dataResult = this.exchangeRateBO.GetLastestData(objReqListSearch);
+                if (dataResult != null)
+                {
+                    repData.RepData = dataResult;
+                    repData.TotalRow = this.exchangeRateBO.TotalRows;
+                }
+                else
+                    this.AddResponeError(ref repData, exchangeRateBO.getMsgCode(),
+                        exchangeRateBO.GetMessage(this.exchangeRateBO.getMsgCode(), this.LangID));
 
                 return repData;
             }

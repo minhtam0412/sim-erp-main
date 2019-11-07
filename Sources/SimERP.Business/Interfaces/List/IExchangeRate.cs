@@ -10,5 +10,7 @@ namespace SimERP.Business.Interfaces.List
 
         bool Save(ExchangeRate rowData, bool isNew);
         bool DeleteExchangeRate(int id);
+
+        List<ExchangeRate> GetLastestData(ReqListSearch reqListSearch);
     }
 }

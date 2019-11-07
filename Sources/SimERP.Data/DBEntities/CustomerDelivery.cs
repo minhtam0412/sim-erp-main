@@ -6,6 +6,7 @@ namespace SimERP.Data.DBEntities
     public partial class CustomerDelivery
     {
         public long RowId { get; set; }
+        public int CustomerId { get; set; }
         public string DeliveryPlace { get; set; }
         public string DeliveryAddress { get; set; }
         public string Notes { get; set; }
@@ -15,7 +16,6 @@ namespace SimERP.Data.DBEntities
         public int? WardId { get; set; }
         public decimal? Latitude { get; set; }
         public decimal? Longitude { get; set; }
-        public int CustomerId { get; set; }
         public int? GroupCompanyId { get; set; }
         public DateTimeOffset? CreatedDate { get; set; }
         public int? CreatedBy { get; set; }
