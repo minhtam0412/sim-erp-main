@@ -7,5 +7,8 @@ export const Key_FunctionId_View = 'VIEW';
 export const Key_FunctionId_Edit = 'EDIT';
 export const Key_Locale_BsDatePicker = 'vi';
 export const Key_Theme_BsDatePicker = 'theme-blue';
+export const Key_Id_PrintReport = 'printsection';
+export const Key_Id_OtherReport = 'otherprintsection';
+export const Key_Id_NotPrintReport = 'notprintsection';
 export const Key_WhiteListURL = ['rolelist', 'userpermission', 'pagelist'];
 

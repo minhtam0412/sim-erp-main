@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {ListPaymentMethod} from '../../../common/masterdata/commondata';
 import {PaymentTerm} from '../../../lists/paymentterm/model/paymentterm';
 import {NotificationService} from '../../../common/notifyservice/notification.service';
@@ -29,6 +29,8 @@ import {SaleInvoiceDetail} from '../model/saleorderdetail';
 import {SaleorderService} from '../saleorder.service';
 import moment from 'moment';
 import 'moment/locale/vi';
+import {Key_Id_OtherReport, Key_Id_PrintReport} from '../../../common/config/globalconfig';
+import {ReportsaleorderComponent} from '../printtemplate/reportsaleorder/reportsaleorder.component';
 
 
 @Component({
@@ -36,7 +38,7 @@ import 'moment/locale/vi';
   templateUrl: './saleorderdetail.component.html',
   styleUrls: ['./saleorderdetail.component.css']
 })
-export class SaleorderdetailComponent implements OnInit {
+export class SaleorderdetailComponent implements OnInit, AfterViewInit {
 
   @Input() lstPaymentTerm: PaymentTerm[] = [];
   model: SaleInvoice = new SaleInvoice();
@@ -65,12 +67,15 @@ export class SaleorderdetailComponent implements OnInit {
   lstStock: Stock[] = [];
   sessionUser: User;
   lstTax: Tax[] = [];
+  @ViewChild('reportsaleorder', {static: false}) reportsaleorder: ElementRef;
+  @ViewChild('reportsaleordercancel', {static: false}) reportsaleordercancel: ElementRef;
+  lstReportComponent: ElementRef[] = [];
 
   constructor(private notificationService: NotificationService, private service: SaleorderService,
               private uploadfileService: UploadfileService, private activatedRoute: ActivatedRoute,
               private masterdataService: MasterdataService, private modalService: NgbModal, private router: Router,
               private localeService: BsLocaleService, private customerService: CustomerService,
-              private authenService: AuthenService) {
+              private authenService: AuthenService, private renderer2: Renderer2) {
     this.loadCommonData().subscribe(res => {
       this.lstCustomer = (res[0] as ResponeResult).RepData;
       this.lstExchangeRate = (res[1] as ResponeResult).RepData;
@@ -556,5 +561,39 @@ export class SaleorderdetailComponent implements OnInit {
       this.model.Longitude = null;
       this.model.Latitude = null;
     }
+  }
+
+  printSaleOrder() {
+    // const modalRef = this.modalService.open(ReportsaleorderComponent, {
+    //   backdrop: 'static', scrollable: false, centered: true, backdropClass: 'backdrop-modal', size: 'xl'
+    // });
+    //
+    // modalRef.componentInstance.model = this.model;
+    this.printReport(this.lstReportComponent, this.reportsaleorder);
+  }
+
+  ngAfterViewInit(): void {
+    this.lstReportComponent.push(this.reportsaleorder);
+    this.lstReportComponent.push(this.reportsaleordercancel);
+  }
+
+  setPrintComponent(component: ElementRef, isPrint: boolean) {
+    if (component !== undefined) {
+      if (isPrint) {
+        this.renderer2.setProperty(component.nativeElement, 'id', Key_Id_PrintReport);
+      } else {
+        this.renderer2.setProperty(component.nativeElement, 'id', Key_Id_OtherReport);
+      }
+    }
+  }
+
+  printReport(lstComponent: ElementRef[], component: ElementRef) {
+    lstComponent.forEach(value => {
+      if (component !== value) {
+        this.setPrintComponent(value, false);
+      }
+    });
+    this.setPrintComponent(component, true);
+    window.print();
   }
 }

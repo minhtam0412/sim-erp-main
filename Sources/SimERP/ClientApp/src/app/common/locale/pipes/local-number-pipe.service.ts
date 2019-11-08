@@ -13,7 +13,7 @@ import { SessionService } from '../session-service.service';
 export class LocalNumberPipe implements PipeTransform {
   constructor(private session: SessionService) {}
 
-  transform(value: any, format: string) {
+  transform(value: any, format?: string) {
     if (value == null) {
       return '';
     } // !value would also react to zeros.

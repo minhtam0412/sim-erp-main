@@ -44,6 +44,7 @@
     "ng-multiselect-dropdown": "^0.2.4",
     "ng-zorro-antd": "^8.4.1",
     "ng4-loading-spinner": "^1.2.3",
+    "ngx-barcode": "^0.2.4",
     "ngx-bootstrap": "^5.2.0",
     "ngx-cookie-service": "^2.2.0",
     "ngx-toastr": "^11.0.0",

@@ -10,7 +10,7 @@ declare var $: any;
       <app-loading *ngIf="loaderService.isLoading$ | async"></app-loading>
       <div class='supperbody'>
           <div class='main_header'>
-              <app-header></app-header>
+              <app-header [attr.id]="'notprintsection'"></app-header>
           </div>
           <div>
               <router-outlet></router-outlet>

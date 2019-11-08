@@ -58,7 +58,7 @@ fieldset {
 /*Custom Zorro Style*/
 svg {
   overflow: hidden;
-  vertical-align: initial !important;
+  vertical-align: center;
 }
 
 .ant-btn {
@@ -111,3 +111,19 @@ svg {
 
 /*End custom Zorro Style*/
 
+#printsection, #otherprintsection {
+  /* hide the printing component from @media screen */
+  display: none;
+}
+
+@media print {
+  /* invert the display (show/hide) properties of the main */
+  /* aplication component and the printing component       */
+  #printsection {
+    display: block;
+  }
+
+  #notprintsection, #otherprintsection {
+    display: none;
+  }
+}

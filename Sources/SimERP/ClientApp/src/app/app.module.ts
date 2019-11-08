@@ -71,6 +71,9 @@ import {viLocale} from 'ngx-bootstrap/locale';
 import {SaleorderdetailComponent} from './vouchers/saleorder/saleorderdetail/saleorderdetail.component';
 import {SaleorderlistComponent} from './vouchers/saleorder/saleorderlist/saleorderlist.component';
 import {LibLocaleModule} from './common/locale/lib-locale/lib-locale.module';
+import {ReportsaleorderComponent} from './vouchers/saleorder/printtemplate/reportsaleorder/reportsaleorder.component';
+import {NgxBarcodeModule} from 'ngx-barcode';
+import {ReportsaleordercancelComponent} from './vouchers/saleorder/printtemplate/reportsaleordercancel/reportsaleordercancel.component';
 
 registerLocaleData(vi);
 
@@ -130,6 +133,8 @@ export function tokenGetter() {
     ExchangeratedetailComponent,
     SaleorderlistComponent,
     SaleorderdetailComponent,
+    ReportsaleorderComponent,
+    ReportsaleordercancelComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
@@ -159,7 +164,8 @@ export function tokenGetter() {
     IconsProviderModule,
     NzIconModule,
     BsDatepickerModule.forRoot(),
-    LibLocaleModule
+    LibLocaleModule,
+    NgxBarcodeModule
   ],
   providers: [AuthGuard,
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
@@ -179,7 +185,8 @@ export function tokenGetter() {
       StockdetailComponent,
       CurrencydetailComponent,
       ExchangeratedetailComponent,
-      SaleorderdetailComponent
+      SaleorderdetailComponent,
+      ReportsaleorderComponent
     ],
 
 })

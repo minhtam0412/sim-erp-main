@@ -1,0 +1,59 @@
+.container {
+  width: 800px;
+  padding: 10px;
+  font-size: 12px;
+}
+
+.clear {
+  clear: both
+}
+
+.img-left {
+  height: 20%;
+  float: left;
+}
+
+.img-right {
+  float: right;
+}
+
+h4.report-title {
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+}
+
+.report-sub-title {
+  width: 100%;
+  font-size: 16px;
+  text-align: center;
+}
+
+.text-right {
+  width: 100%;
+  float: right;
+}
+
+.text-center {
+  width: 100%;
+}
+
+.cell-left {
+  text-align: left;
+}
+
+.cell-center {
+  text-align: center;
+}
+
+.cell-right {
+  text-align: right;
+}
+
+th {
+  text-align: center;
+}
+
+.text-label {
+  font-weight: unset;
+}

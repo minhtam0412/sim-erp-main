@@ -30,6 +30,7 @@ import {CurrencylistComponent} from '../lists/currency/currencylist/currencylist
 import {ExchangeratelistComponent} from '../lists/exchangerate/exchangeratelist/exchangeratelist.component';
 import {SaleorderlistComponent} from '../vouchers/saleorder/saleorderlist/saleorderlist.component';
 import {SaleorderdetailComponent} from '../vouchers/saleorder/saleorderdetail/saleorderdetail.component';
+import {ReportsaleorderComponent} from '../vouchers/saleorder/printtemplate/reportsaleorder/reportsaleorder.component';
 
 
 const routes: Routes = [
